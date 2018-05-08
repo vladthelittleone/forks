@@ -23,9 +23,15 @@ public class FutureMatch extends Identifiable {
     Team guestTeam;
 
     @NotNull
-    String flashscoreCode;
+    String flashscoreId;
 
     @NotNull
     LocalDateTime date;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    SportType sportType;
+
+
 
 }
