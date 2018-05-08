@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 
 @NoRepositoryBean
-public interface JpaEntryRepository<T extends Identifiable>
+public interface JpaEntryRepository<T>
         extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
 
     default Page<T> findAll(Filter<T> filter, Pageable pageable) {
@@ -40,9 +40,6 @@ public interface JpaEntryRepository<T extends Identifiable>
     @Query("SELECT e FROM #{#entityName} e WHERE e.id = ?1")
     Optional<T> getOneById(Long id);
 
-    default Optional<T> getOne(T entity) {
-        return getOneById(entity == null ? null : entity.getId());
-    }
 
     @Query("SELECT e FROM #{#entityName} e")
     Stream<T> streamAll();
@@ -50,6 +47,4 @@ public interface JpaEntryRepository<T extends Identifiable>
     @Query("SELECT e FROM #{#entityName} e")
     Stream<T> streamAll(Pageable pageable);
 
-    @Modifying
-    void deleteByIdIn(List<Long> ids);
 }
