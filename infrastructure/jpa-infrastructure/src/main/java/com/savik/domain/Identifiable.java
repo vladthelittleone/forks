@@ -2,10 +2,7 @@ package com.savik.domain;
 
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.Objects;
 
 
@@ -18,6 +15,7 @@ import java.util.Objects;
 public abstract class Identifiable {
 
     @Id
+    @SequenceGenerator(name="sequence_id", sequenceName="sequence_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_id")
     private Long id;
 
