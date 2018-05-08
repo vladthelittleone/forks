@@ -1,7 +1,6 @@
 package com.savik;
 
 
-import com.savik.domain.Identifiable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -12,7 +11,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @EqualsAndHashCode
-public class FutureMatch extends Identifiable {
+public class FutureMatch {
+
+    @Id
+    String flashscoreId;
 
     @NotNull
     @OneToOne
@@ -23,14 +25,15 @@ public class FutureMatch extends Identifiable {
     Team guestTeam;
 
     @NotNull
-    String flashscoreId;
-
-    @NotNull
     LocalDateTime date;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     SportType sportType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    MatchStatus matchStatus;
 
 
 

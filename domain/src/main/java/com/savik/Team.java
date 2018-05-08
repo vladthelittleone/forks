@@ -1,15 +1,14 @@
 package com.savik;
 
-import com.savik.domain.Identifiable;
-
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-public class Team extends Identifiable {
+public class Team {
 
-    private String name;
-
+    @Id
     private String flashcoreId;
 
+    private String name;
 
 }
