@@ -1,5 +1,7 @@
 package com.savik;
 
+import com.savik.flashscore.Parser;
+import com.savik.flashscore.SportConfig;
 import com.savik.repository.FutureMatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class Application {
@@ -18,21 +21,15 @@ public class Application {
     }
 
     @Autowired
-    FutureMatchRepository futureMatchRepository;
+    Parser parser;
+
+    @Autowired
+    List<SportConfig> sportConfigs;
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-
-
-            FutureMatch futureMatch = FutureMatch.builder()
-                    .matchStatus(MatchStatus.FINISHED)
-                    .flashscoreId("test")
-                    .sportType(SportType.FOOTBALL)
-                    .build();
-
-            futureMatchRepository.save(futureMatch);
-
+            parser.parse(sportConfigs);
         };
     }
 

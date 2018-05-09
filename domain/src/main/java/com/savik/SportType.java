@@ -1,5 +1,6 @@
 package com.savik;
 
 public enum SportType {
-    FOOTBALL
+    FOOTBALL,
+    HOCKEY
 }
