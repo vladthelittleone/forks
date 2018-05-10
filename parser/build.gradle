@@ -5,4 +5,5 @@ plugins {
 dependencies {
     compile project(':domain-jpa')
     compile('org.springframework.boot:spring-boot-starter:2.0.1.RELEASE')
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }

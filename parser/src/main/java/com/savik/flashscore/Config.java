@@ -14,8 +14,8 @@ public class Config {
     @Bean
     public List<SportConfig> sportConfigs() {
         return Arrays.asList(
-                new SportConfig(SportType.FOOTBALL, "football"),
-                new SportConfig(SportType.HOCKEY, "hockey")
+                new SportConfig(SportType.FOOTBALL, "1"),
+                new SportConfig(SportType.HOCKEY, "4")
         );
     }
 }
