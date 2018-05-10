@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     compile project(':domain-jpa')
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.0.1.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter:2.0.1.RELEASE')
 }

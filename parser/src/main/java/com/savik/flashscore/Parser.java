@@ -16,7 +16,7 @@ public class Parser {
     }
 
     private void parseConfig(SportConfig sportConfig) {
-        log.debug(sportConfig);
-        System.out.println(sportConfig);
+        log.debug("Start parse sportConfig - " + sportConfig);
+        log.debug("Finished parse sportConfig");
     }
 }
