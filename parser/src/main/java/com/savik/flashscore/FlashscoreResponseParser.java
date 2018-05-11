@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class FlashscoreResponseParser {
                         )
                         .date(LocalDateTime.ofInstant(
                                 Instant.ofEpochSecond(Long.valueOf(tmp.get(DATE_INDEX))),
-                                ZoneId.systemDefault()
+                                ZoneOffset.UTC
                         ))
                         .build();
                 eventItems.add(event);
