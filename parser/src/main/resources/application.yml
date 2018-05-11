@@ -1,9 +1,14 @@
 spring:
     datasource:
+        hikari:
+                    minimum-idle: 1
+                    maximum-pool-size: 5
+                    pool-name: forks-pool
         url: jdbc:h2:file:./stats;AUTO_SERVER=TRUE;FILE_LOCK=SOCKET
         driver-class-name: org.h2.Driver
         user: sa
         password:
+        type: com.zaxxer.hikari.HikariDataSource
     jpa:
         properties:
               hibernate:

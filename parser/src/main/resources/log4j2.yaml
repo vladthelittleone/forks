@@ -46,7 +46,19 @@ Configutation:
           AppenderRef:
             - ref: Console_Appender
               level: debug
-            - ref: File_Appender
-              level: error
             - ref: RollingFile_Appender
               level: debug
+
+        - name: org.hibernate
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: File_Appender
+              level: trace
+
+        - name: com.zaxxer.hikari
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: File_Appender
+              level: trace
