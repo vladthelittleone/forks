@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.FutureMatch;
+import com.savik.Match;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ public class Parser {
         log.debug("Start parse sportConfig - " + sportConfig);
 
         Document document = downloader.downloadSportMatchesSchedule(sportConfig, 0);
-        List<FutureMatch> futureMatches = flashscoreResponseParser.parse(document);
-        flashscoreResponseProcessor.process(sportConfig, futureMatches);
+        List<Match> matches = flashscoreResponseParser.parse(document);
+        flashscoreResponseProcessor.process(sportConfig, matches);
 
         log.debug("Finished parse sportConfig");
     }

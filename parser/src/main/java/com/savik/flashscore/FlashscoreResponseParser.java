@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.FutureMatch;
+import com.savik.Match;
 import com.savik.MatchStatus;
 import com.savik.Team;
 import org.jsoup.nodes.Document;
@@ -42,14 +42,14 @@ public class FlashscoreResponseParser {
     private static final List<String> liveStageIds = Arrays.asList("12", "13", "36");
     private static final List<String> prematchStageIds = Arrays.asList("1", "4", "43");
 
-    public List<FutureMatch> parse(Document document) {
+    public List<Match> parse(Document document) {
         return parse(document.body().text());
     }
 
-    public List<FutureMatch> parse(String response) {
+    public List<Match> parse(String response) {
         List<String> rows = Arrays.asList(response.split(JS_ROW_END));
         String leagueId = null;
-        List<FutureMatch> eventItems = new ArrayList<>();
+        List<Match> eventItems = new ArrayList<>();
         for (String s : rows) {
             List<String> row = Arrays.asList(s.split(JS_CELL_END));
             List<String> index = Arrays.asList(row.get(0).split(JS_INDEX));
@@ -78,7 +78,7 @@ public class FlashscoreResponseParser {
                 }
 
 
-                FutureMatch event = FutureMatch
+                Match event = Match
                         .builder()
                         .homeTeam(Team.builder().name(tmp.get(HOME_INDEX)).build())
                         .guestTeam(Team.builder().name(tmp.get(GUEST_INDEX)).build())

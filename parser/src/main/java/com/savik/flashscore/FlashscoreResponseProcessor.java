@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.FutureMatch;
+import com.savik.Match;
 import com.savik.repository.FutureMatchRepository;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Document;
@@ -22,41 +22,49 @@ public class FlashscoreResponseProcessor {
     Downloader downloader;
 
 
-    public void process(SportConfig sportConfig, List<FutureMatch> futureMatches) {
+    public void process(SportConfig sportConfig, List<Match> matches) {
 
-        List<FutureMatch> dbFutureMatches = futureMatchRepository.findAllById(futureMatches.stream()
-                .map(FutureMatch::getFlashscoreId).collect(Collectors.toList()));
+        List<Match> dbMatches = futureMatchRepository.findAllById(matches.stream()
+                .map(Match::getFlashscoreId).collect(Collectors.toList()));
 
-        for (final FutureMatch futureMatch : futureMatches) {
-            log.debug("Start process future match - " + futureMatch.getFlashscoreId());
-            futureMatch.setSportType(sportConfig.getSportType());
+        for (final Match match : matches) {
+            log.debug("Start process future match - " + match.getFlashscoreId());
+            match.setSportType(sportConfig.getSportType());
 
-            Optional<FutureMatch> dbMatch = dbFutureMatches.stream()
-                    .filter(dbM -> dbM.getFlashscoreId().equals(futureMatch.getFlashscoreId())).findFirst();
+            Optional<Match> dbMatchOptional = dbMatches.stream()
+                    .filter(dbM -> dbM.getFlashscoreId().equals(match.getFlashscoreId())).findFirst();
 
-            if(dbMatch.isPresent()) {
-                log.debug("Match was found in db - " + dbMatch.get());
+            if (dbMatchOptional.isPresent()) {
+                Match dbMatch = dbMatchOptional.get();
+                log.debug("Match was found in db - " + dbMatch);
+                if (dbMatch.getMatchStatus() != match.getMatchStatus()) {
+                    log.debug("Match status was changed: old: " + dbMatch.getMatchStatus() +
+                            ", new: " + match.getMatchStatus());
+
+                    dbMatch.setMatchStatus(match.getMatchStatus());
+                    futureMatchRepository.save(dbMatch);
+                }
             } else {
                 log.debug("Match wasn't found in db");
-                FutureMatch readyToSave = fillData(futureMatch);
-                FutureMatch saved = futureMatchRepository.save(readyToSave);
+                Match readyToSave = fillData(match);
+                Match saved = futureMatchRepository.save(readyToSave);
                 log.debug("Match was saved into db: " + saved);
             }
 
-            log.debug("Finished process future match - " + futureMatch.getFlashscoreId());
+            log.debug("Finished process future match - " + match.getFlashscoreId());
         }
     }
 
 
-    private FutureMatch fillData(FutureMatch futureMatch) {
-        Document html = downloader.downloadMatchHtml(futureMatch.getFlashscoreId());
+    private Match fillData(Match match) {
+        Document html = downloader.downloadMatchHtml(match.getFlashscoreId());
         String homeTeamId = FlashscoreUtils.getHomeTeamId(html);
         String guestTeamId = FlashscoreUtils.getGuestTeamId(html);
-        futureMatch.getHomeTeam().setFlashscoreId(homeTeamId);
-        futureMatch.getHomeTeam().setSportType(futureMatch.getSportType());
-        futureMatch.getGuestTeam().setFlashscoreId(guestTeamId);
-        futureMatch.getGuestTeam().setSportType(futureMatch.getSportType());
-        return futureMatch;
+        match.getHomeTeam().setFlashscoreId(homeTeamId);
+        match.getHomeTeam().setSportType(match.getSportType());
+        match.getGuestTeam().setFlashscoreId(guestTeamId);
+        match.getGuestTeam().setSportType(match.getSportType());
+        return match;
     }
 
 }

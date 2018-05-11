@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FutureMatch {
+public class Match {
 
     @Id
     String flashscoreId;
@@ -23,11 +23,11 @@ public class FutureMatch {
     String flashscoreLeagueId;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     Team homeTeam;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     Team guestTeam;
 
     @NotNull
@@ -39,6 +39,7 @@ public class FutureMatch {
     SportType sportType;
 
     @NotNull
+    @Setter
     @Enumerated(EnumType.STRING)
     MatchStatus matchStatus;
 
