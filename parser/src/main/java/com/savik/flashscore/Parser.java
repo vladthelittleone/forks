@@ -21,16 +21,16 @@ public class Parser {
     @Autowired
     FlashscoreResponseProcessor flashscoreResponseProcessor;
 
-    public void parse(List<SportConfig> sportConfigs) {
+    public void parse(List<SportConfig> sportConfigs, int day) {
         for (SportConfig sportConfig : sportConfigs) {
-            parseConfig(sportConfig);
+            parseConfig(sportConfig, day);
         }
     }
 
-    private void parseConfig(SportConfig sportConfig) {
+    private void parseConfig(SportConfig sportConfig, int day) {
         log.debug("Start parse sportConfig - " + sportConfig);
 
-        Document document = downloader.downloadSportMatchesSchedule(sportConfig, 0);
+        Document document = downloader.downloadSportMatchesSchedule(sportConfig, day);
         List<Match> matches = flashscoreResponseParser.parse(document);
         flashscoreResponseProcessor.process(sportConfig, matches);
 
