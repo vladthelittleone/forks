@@ -25,6 +25,10 @@ public class Downloader {
         return download(String.format(configuration.getSportMatches(), sportConfig.getFlashscoreSportId(), day));
     }
 
+    public Document downloadMatchHtml(String flashscoreMatchId) {
+        return download(String.format(configuration.getMatchUrl(), flashscoreMatchId));
+    }
+
 
     public Document download(String url) {
         try {

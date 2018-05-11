@@ -3,6 +3,7 @@ package com.savik.flashscore;
 import com.savik.FutureMatch;
 import com.savik.repository.FutureMatchRepository;
 import lombok.extern.log4j.Log4j2;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,18 @@ public class FlashscoreResponseProcessor {
     @Autowired
     FutureMatchRepository futureMatchRepository;
 
+    @Autowired
+    Downloader downloader;
 
-    public void process(List<FutureMatch> futureMatches) {
-        for (FutureMatch futureMatch : futureMatches) {
+
+    public void process(SportConfig sportConfig, List<FutureMatch> futureMatches) {
+
+        List<FutureMatch> dbFutureMatches = futureMatchRepository.findAllById(futureMatches.stream()
+                .map(FutureMatch::getFlashscoreId).collect(Collectors.toList()));
+
+        for (final FutureMatch futureMatch : futureMatches) {
             log.debug("Start process future match - " + futureMatch.getFlashscoreId());
-
-            List<FutureMatch> dbFutureMatches = futureMatchRepository.findAllById(futureMatches.stream()
-                    .map(FutureMatch::getFlashscoreId).collect(Collectors.toList()));
+            futureMatch.setSportType(sportConfig.getSportType());
 
             Optional<FutureMatch> dbMatch = dbFutureMatches.stream()
                     .filter(dbM -> dbM.getFlashscoreId().equals(futureMatch.getFlashscoreId())).findFirst();
@@ -32,10 +38,25 @@ public class FlashscoreResponseProcessor {
                 log.debug("Match was found in db - " + dbMatch.get());
             } else {
                 log.debug("Match wasn't found in db");
+                FutureMatch readyToSave = fillData(futureMatch);
+                FutureMatch saved = futureMatchRepository.save(readyToSave);
+                log.debug("Match was saved into db: " + saved);
             }
 
             log.debug("Finished process future match - " + futureMatch.getFlashscoreId());
         }
+    }
+
+
+    private FutureMatch fillData(FutureMatch futureMatch) {
+        Document html = downloader.downloadMatchHtml(futureMatch.getFlashscoreId());
+        String homeTeamId = FlashscoreUtils.getHomeTeamId(html);
+        String guestTeamId = FlashscoreUtils.getGuestTeamId(html);
+        futureMatch.getHomeTeam().setFlashscoreId(homeTeamId);
+        futureMatch.getHomeTeam().setSportType(futureMatch.getSportType());
+        futureMatch.getGuestTeam().setFlashscoreId(guestTeamId);
+        futureMatch.getGuestTeam().setSportType(futureMatch.getSportType());
+        return futureMatch;
     }
 
 }

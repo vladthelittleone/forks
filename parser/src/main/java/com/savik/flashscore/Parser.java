@@ -32,7 +32,7 @@ public class Parser {
 
         Document document = downloader.downloadSportMatchesSchedule(sportConfig, 0);
         List<FutureMatch> futureMatches = flashscoreResponseParser.parse(document);
-        flashscoreResponseProcessor.process(futureMatches);
+        flashscoreResponseProcessor.process(sportConfig, futureMatches);
 
         log.debug("Finished parse sportConfig");
     }

@@ -13,6 +13,9 @@ public class DownloaderConfiguration {
     @Value("${url.sportMatches}")
     private String sportMatches;
 
+    @Value("${url.matchUrl}")
+    private String matchUrl;
+
     @Value("${fsign}")
     private String fsign;
 

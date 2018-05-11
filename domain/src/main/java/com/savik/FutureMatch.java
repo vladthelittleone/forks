@@ -23,17 +23,18 @@ public class FutureMatch {
     String flashscoreLeagueId;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     Team homeTeam;
 
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     Team guestTeam;
 
     @NotNull
     LocalDateTime date;
 
     @NotNull
+    @Setter
     @Enumerated(EnumType.STRING)
     SportType sportType;
 

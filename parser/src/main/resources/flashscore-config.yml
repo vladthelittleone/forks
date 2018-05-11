@@ -1,4 +1,5 @@
 fsign: SW9D1eZo
 url:
   sportMatches: http://d.flashscore.com/x/feed/f_%s_%s_3_en_1
+  matchUrl: https://www.flashscore.com/match/%s/
 
