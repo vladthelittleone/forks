@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface FutureMatchRepository extends JpaEntryRepository<Match, String> {
+public interface MatchRepository extends JpaEntryRepository<Match, String> {
 
     Match findByFlashscoreId(String code);
 

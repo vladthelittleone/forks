@@ -1,7 +1,7 @@
 package com.savik.flashscore;
 
 import com.savik.Match;
-import com.savik.repository.FutureMatchRepository;
+import com.savik.repository.MatchRepository;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class FlashscoreResponseProcessor {
 
     @Autowired
-    FutureMatchRepository futureMatchRepository;
+    MatchRepository matchRepository;
 
     @Autowired
     Downloader downloader;
@@ -24,7 +24,7 @@ public class FlashscoreResponseProcessor {
 
     public void process(SportConfig sportConfig, List<Match> matches) {
 
-        List<Match> dbMatches = futureMatchRepository.findAllById(matches.stream()
+        List<Match> dbMatches = matchRepository.findAllById(matches.stream()
                 .map(Match::getFlashscoreId).collect(Collectors.toList()));
 
         for (final Match match : matches) {
@@ -50,14 +50,14 @@ public class FlashscoreResponseProcessor {
                     ", new: " + flashscoreMatch.getMatchStatus());
 
             dbMatch.setMatchStatus(flashscoreMatch.getMatchStatus());
-            futureMatchRepository.save(dbMatch);
+            matchRepository.save(dbMatch);
         }
     }
 
     private void processNonexistentMatch(SportConfig sportConfig, Match match) {
         log.debug("Match wasn't found in db");
         Match readyToSave = fillData(sportConfig, match);
-        Match saved = futureMatchRepository.save(readyToSave);
+        Match saved = matchRepository.save(readyToSave);
         log.debug("Match was saved into db: " + saved);
     }
 
