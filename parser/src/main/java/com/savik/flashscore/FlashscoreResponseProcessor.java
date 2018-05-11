@@ -35,28 +35,45 @@ public class FlashscoreResponseProcessor {
                     .filter(dbM -> dbM.getFlashscoreId().equals(match.getFlashscoreId())).findFirst();
 
             if (dbMatchOptional.isPresent()) {
-                Match dbMatch = dbMatchOptional.get();
-                log.debug("Match was found in db - " + dbMatch);
-                if (dbMatch.getMatchStatus() != match.getMatchStatus()) {
-                    log.debug("Match status was changed: old: " + dbMatch.getMatchStatus() +
-                            ", new: " + match.getMatchStatus());
-
-                    dbMatch.setMatchStatus(match.getMatchStatus());
-                    futureMatchRepository.save(dbMatch);
-                }
+                processExistentMatch(match, dbMatchOptional.get());
             } else {
-                log.debug("Match wasn't found in db");
-                Match readyToSave = fillData(match);
-                Match saved = futureMatchRepository.save(readyToSave);
-                log.debug("Match was saved into db: " + saved);
+                processNonexistentMatch(sportConfig, match);
             }
-
             log.debug("Finished process future match - " + match.getFlashscoreId());
         }
     }
 
+    private void processExistentMatch(Match flashscoreMatch, Match dbMatch) {
+        log.debug("Match was found in db - " + dbMatch);
+        if (dbMatch.getMatchStatus() != flashscoreMatch.getMatchStatus()) {
+            log.debug("Match status was changed: old: " + dbMatch.getMatchStatus() +
+                    ", new: " + flashscoreMatch.getMatchStatus());
 
-    private Match fillData(Match match) {
+            dbMatch.setMatchStatus(flashscoreMatch.getMatchStatus());
+            futureMatchRepository.save(dbMatch);
+        }
+    }
+
+    private void processNonexistentMatch(SportConfig sportConfig, Match match) {
+        log.debug("Match wasn't found in db");
+        Match readyToSave = fillData(sportConfig, match);
+        Match saved = futureMatchRepository.save(readyToSave);
+        log.debug("Match was saved into db: " + saved);
+    }
+
+
+    private Match fillData(SportConfig sportConfig, Match match) {
+        fillMatch(sportConfig, match);
+        fillTeams(match);
+        return match;
+    }
+
+
+    private void fillMatch(SportConfig sportConfig, Match match) {
+        match.setSportType(sportConfig.getSportType());
+    }
+
+    private void fillTeams(Match match) {
         Document html = downloader.downloadMatchHtml(match.getFlashscoreId());
         String homeTeamId = FlashscoreUtils.getHomeTeamId(html);
         String guestTeamId = FlashscoreUtils.getGuestTeamId(html);
@@ -64,7 +81,6 @@ public class FlashscoreResponseProcessor {
         match.getHomeTeam().setSportType(match.getSportType());
         match.getGuestTeam().setFlashscoreId(guestTeamId);
         match.getGuestTeam().setSportType(match.getSportType());
-        return match;
     }
 
 }
