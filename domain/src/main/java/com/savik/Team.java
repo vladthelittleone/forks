@@ -1,5 +1,6 @@
 package com.savik;
 
+import com.savik.validation.FlashscoreId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotNull;
 public class Team {
 
     @Id
+    @FlashscoreId
     String flashscoreId;
 
     @NotNull

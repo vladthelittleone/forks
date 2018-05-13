@@ -1,6 +1,7 @@
 package com.savik;
 
 
+import com.savik.validation.FlashscoreId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,9 +18,11 @@ import java.time.LocalDateTime;
 public class Match {
 
     @Id
+    @FlashscoreId
     String flashscoreId;
 
     @NotNull
+    @FlashscoreId
     String flashscoreLeagueId;
 
     @NotNull
@@ -42,7 +45,6 @@ public class Match {
     @Setter
     @Enumerated(EnumType.STRING)
     MatchStatus matchStatus;
-
 
 
 }

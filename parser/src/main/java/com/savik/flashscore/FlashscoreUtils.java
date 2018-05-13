@@ -19,9 +19,6 @@ public class FlashscoreUtils {
         Elements teams = matchHtml.getElementsByClass("tomyteams");
         String htmlElementId = teams.get(teamIndex).attr("id");
         String teamId = htmlElementId.substring(htmlElementId.length() - 8);
-        if(!teamId.matches("[a-zA-Z0-9]{8}")) {
-            throw new ParseException("team id is invalid: " + teamId);
-        }
         return teamId;
     }
 }
