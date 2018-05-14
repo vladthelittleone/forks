@@ -16,6 +16,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
 
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
         threadPoolTaskScheduler.setThreadNamePrefix("forks-task-pool-");
+        threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.initialize();
 
         scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
