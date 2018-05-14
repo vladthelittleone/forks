@@ -3,4 +3,5 @@ include 'domain'
 include 'infrastructure:jpa-infrastructure'
 include 'parser'
 include 'domain-jpa'
+include 'discovery'
 
