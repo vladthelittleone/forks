@@ -10,6 +10,7 @@ buildscript {
     }
     dependencies {
         classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.2.RELEASE"
     }
 }
 
@@ -38,6 +39,20 @@ subprojects {
     repositories {
         maven {
             url 'https://repo.spring.io/libs-milestone'
+        }
+    }
+}
+
+
+["discovery","parser"].each { name ->
+    project(":$name") {
+        apply plugin: "org.springframework.boot"
+
+
+        dependencyManagement {
+            imports {
+                mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RC1'
+            }
         }
     }
 }
