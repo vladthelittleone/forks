@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.Match;
+import com.savik.domain.Match;
 import com.savik.repository.MatchRepository;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Document;

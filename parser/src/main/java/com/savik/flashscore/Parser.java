@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.Match;
+import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;

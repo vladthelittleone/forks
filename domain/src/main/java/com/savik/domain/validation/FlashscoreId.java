@@ -1,4 +1,4 @@
-package com.savik.validation;
+package com.savik.domain.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,7 +1,7 @@
 package com.savik.flashscore;
 
 
-import com.savik.SportType;
+import com.savik.domain.SportType;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

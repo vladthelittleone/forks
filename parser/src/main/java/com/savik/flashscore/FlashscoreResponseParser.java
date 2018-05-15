@@ -1,8 +1,8 @@
 package com.savik.flashscore;
 
-import com.savik.Match;
-import com.savik.MatchStatus;
-import com.savik.Team;
+import com.savik.domain.Match;
+import com.savik.domain.MatchStatus;
+import com.savik.domain.Team;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

@@ -1,6 +1,6 @@
 package com.savik.repository;
 
-import com.savik.Match;
+import com.savik.domain.Match;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.savik;
+package com.savik.domain;
 
 public enum MatchStatus {
     PREMATCH,

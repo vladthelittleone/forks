@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.SportType;
+import com.savik.domain.SportType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
