@@ -1,14 +1,19 @@
-package com.savik.flashscore.rest;
+package com.savik.filter;
 
 import com.savik.domain.Match;
 import com.savik.domain.MatchStatus;
-import com.savik.filter.Filter;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 import static com.savik.specifications.MatchSpec.isMatchStatus;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Builder
 public class MatchFilter implements Filter<Match> {
 
     private MatchStatus matchStatus;

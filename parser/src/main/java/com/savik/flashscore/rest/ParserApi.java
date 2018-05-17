@@ -1,6 +1,7 @@
 package com.savik.flashscore.rest;
 
 import com.savik.domain.Match;
+import com.savik.filter.MatchFilter;
 import com.savik.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

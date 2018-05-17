@@ -4,7 +4,7 @@ package com.savik.flashscore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.savik.domain.Match;
-import com.savik.flashscore.rest.MatchFilter;
+import com.savik.filter.MatchFilter;
 import com.savik.flashscore.rest.ParserApi;
 import com.savik.repository.MatchRepository;
 import org.junit.Assert;
