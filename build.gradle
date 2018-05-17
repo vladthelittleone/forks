@@ -45,7 +45,7 @@ subprojects {
 }
 
 
-["discovery","parser"].each { name ->
+["discovery","parser", "engine"].each { name ->
     project(":$name") {
         apply plugin: "org.springframework.boot"
 
