@@ -24,6 +24,7 @@ public class Scheduler {
         log.info("Current Thread : {}", Thread.currentThread().getName());
 
         List<Match> matches = parserClient.getMatches(MatchFilter.builder().matchStatus(MatchStatus.PREMATCH).build());
+        log.info("matches were received: " + matches.size());
 
         log.info("finished scheduling task for today matches");
     }
