@@ -9,4 +9,8 @@ public class SbobetBookmakerService extends BookmakerService {
     BookmakerType getBookmakerType() {
         return BookmakerType.SBOBET;
     }
+
+    @Override
+    void handle(BookmakerMatch match) {
+    }
 }
