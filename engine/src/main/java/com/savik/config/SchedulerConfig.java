@@ -1,4 +1,4 @@
-package com.savik.scheduler;
+package com.savik.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
