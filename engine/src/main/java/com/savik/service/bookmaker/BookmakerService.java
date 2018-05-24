@@ -11,14 +11,13 @@ public abstract class BookmakerService {
     @Autowired
     BookmakerMatchService bookmakerMatchService;
 
-    abstract BookmakerType getBookmakerType();
+    protected abstract BookmakerType getBookmakerType();
 
-    abstract void handle(BookmakerMatch match);
+    protected abstract void handle(BookmakerMatch match);
 
     public void handle(Match match) {
         BookmakerMatch bookmakerMatch = bookmakerMatchService.createFromMatch(match, getBookmakerType());
         handle(bookmakerMatch);
     }
 
-    ;
 }

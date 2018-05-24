@@ -4,6 +4,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter:2.0.1.RELEASE')
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
     compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.0.RELEASE'
+    compile group: 'org.json', name: 'json', version: '20180130'
 }

@@ -27,5 +27,9 @@ public class EngineService {
         log.info("Matches were handled successfully, size = " + matches.size());
 
 
+        bookmakerAggregationService.handle(null);
+
+
+
     }
 }
