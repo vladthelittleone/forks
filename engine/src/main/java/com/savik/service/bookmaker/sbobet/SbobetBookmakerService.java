@@ -43,17 +43,13 @@ public class SbobetBookmakerService extends BookmakerService {
 
     @Override
     public void handle(BookmakerMatch bookmakerMatch) {
-
         Match match = bookmakerMatch.getMatch();
         SportType sportType = match.getSportType();
 
-        if (sportType == SportType.FOOTBALL) {
-            Document download = downloader.download("https://www.sbobet.com/euro/football");
-            List<BookmakerMatchResponse> matches = getMatches(download);
+        Document download = downloader.download(sportType, bookmakerMatch.getDaysFromToday());
+        List<BookmakerMatchResponse> matches = getMatches(download);
 
-            String a = "";
-        }
-
+        String a = "";
     }
 
     private List<BookmakerMatchResponse> getMatches(Document download) {

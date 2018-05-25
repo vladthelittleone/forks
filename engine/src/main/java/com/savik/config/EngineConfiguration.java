@@ -1,7 +1,10 @@
 package com.savik.config;
 
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -19,5 +22,16 @@ public class EngineConfiguration {
         executor.setThreadNamePrefix("Engine-");
         executor.initialize();
         return executor;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer properties() {
+        PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(
+                new ClassPathResource("config/bookmakers/sbobet/sbobet-config.yml")
+        );
+        propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
+        return propertySourcesPlaceholderConfigurer;
     }
 }

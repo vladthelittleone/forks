@@ -1,0 +1,4 @@
+sbobet:
+  url: https://www.sbobet.com/
+  prefixes:
+    football: /euro/football

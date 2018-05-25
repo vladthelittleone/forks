@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -34,7 +35,7 @@ public class BookmakerAggregationService {
     public void handle(Match match) {
         sbobetBookmakerService.handle(
                 BookmakerMatch.builder()
-                        .match(Match.builder().sportType(SportType.FOOTBALL).build())
+                        .match(Match.builder().sportType(SportType.FOOTBALL).date(LocalDateTime.now()).build())
                         .build()
         );
 
