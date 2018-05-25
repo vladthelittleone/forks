@@ -10,10 +10,10 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookmakerTeamPK implements Serializable {
+public class BookmakerPK implements Serializable {
 
     @FlashscoreId
-    String teamFlashscoreId;
+    String itemFlashscoreId;
 
     @Enumerated(EnumType.STRING)
     BookmakerType bookmakerType;

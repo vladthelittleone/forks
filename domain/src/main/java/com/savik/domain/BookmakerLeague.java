@@ -1,11 +1,6 @@
 package com.savik.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -18,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class BookmakerTeam {
+public class BookmakerLeague {
 
     @EmbeddedId
     BookmakerPK id;

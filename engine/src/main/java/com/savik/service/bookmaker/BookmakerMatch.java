@@ -1,5 +1,6 @@
 package com.savik.service.bookmaker;
 
+import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
 import com.savik.domain.Match;
 import lombok.Builder;
@@ -17,6 +18,8 @@ public class BookmakerMatch {
     BookmakerTeam homeTeam;
 
     BookmakerTeam guestTeam;
+
+    BookmakerLeague bookmakerLeague;
 
     public int getDaysFromToday() {
         LocalDateTime matchDate = match.getDate();
