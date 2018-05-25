@@ -19,7 +19,7 @@ public class FlashscoreResponseProcessor {
     MatchRepository matchRepository;
 
     @Autowired
-    Downloader downloader;
+    ParserDownloader downloader;
 
 
     public void process(SportConfig sportConfig, List<Match> matches) {

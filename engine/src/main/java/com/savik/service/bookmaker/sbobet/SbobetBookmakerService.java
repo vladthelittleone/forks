@@ -8,7 +8,6 @@ import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import com.savik.service.bookmaker.CoeffType;
-import com.savik.service.bookmaker.Downloader;
 import org.json.JSONArray;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @Service
 public class SbobetBookmakerService extends BookmakerService {
-
     public static final int LIVE_AND_PREMATCH_INDEX = 2;
     public static final int LEAGUE_ID_INDEX = 1;
     public static final int MATCH_INFO_INDEX = 2;
@@ -34,8 +32,9 @@ public class SbobetBookmakerService extends BookmakerService {
     public static final int LIVE_MATCHES_INDEX = 0;
     public static final int PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX = 1;
     public static final int PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX = 0;
+
     @Autowired
-    Downloader downloader;
+    SbobetDownloader downloader;
 
     @Override
     protected BookmakerType getBookmakerType() {

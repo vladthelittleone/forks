@@ -1,14 +1,13 @@
 package com.savik.flashscore;
 
-import com.savik.flashscore.exception.DownloadException;
+import com.savik.http.Downloader;
 import lombok.AllArgsConstructor;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Savushkin Yauheni
@@ -16,7 +15,7 @@ import java.io.IOException;
  */
 @AllArgsConstructor
 @Service
-public class Downloader {
+public class ParserDownloader extends Downloader {
 
     @Autowired
     private DownloaderConfiguration configuration;
@@ -31,26 +30,11 @@ public class Downloader {
 
 
     public Document download(String url) {
-        try {
-            return Jsoup.connect(url).header("X-Fsign", configuration.getFsign()).get();
-        } catch (IOException e) {
-            throw new DownloadException(e);
-        }
-    }
-
-    public String getJson(String url) {
-        try {
-            return Jsoup.connect(url).ignoreContentType(true).execute().body();
-        } catch (IOException e) {
-            throw new DownloadException(e);
-        }
-    }
-
-    public Document downloadFile(File file) {
-        try {
-            return Jsoup.parse(file, "UTF-8");
-        } catch (IOException e) {
-            throw new DownloadException(e);
-        }
+        Map<String, String> headers = new HashMap<String, String>() {
+            {
+                put("X-Fsign", configuration.getFsign());
+            }
+        };
+        return download(url, headers);
     }
 }

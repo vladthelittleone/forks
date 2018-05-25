@@ -13,7 +13,7 @@ import java.util.List;
 public class Parser {
 
     @Autowired
-    Downloader downloader;
+    ParserDownloader downloader;
 
     @Autowired
     FlashscoreResponseParser flashscoreResponseParser;

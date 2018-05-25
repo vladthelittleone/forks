@@ -1,4 +1,4 @@
-package com.savik.service.bookmaker;
+package com.savik.http.exception;
 
 
 public class DownloadException extends RuntimeException {
