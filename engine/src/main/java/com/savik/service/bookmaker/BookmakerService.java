@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 @Log4j2
@@ -14,6 +15,9 @@ public abstract class BookmakerService {
 
     @Autowired
     BookmakerMatchService bookmakerMatchService;
+
+    @Autowired
+    BookmakerEventPublisher bookmakerEventPublisher;
 
     protected abstract BookmakerType getBookmakerType();
 
@@ -27,6 +31,7 @@ public abstract class BookmakerService {
         } else {
             log.info("Match wasn't found:" + match);
         }
+        info.ifPresent(response -> bookmakerEventPublisher.publish(response));
     }
 
 }
