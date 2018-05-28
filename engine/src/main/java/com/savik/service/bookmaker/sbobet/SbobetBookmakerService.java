@@ -51,11 +51,7 @@ public class SbobetBookmakerService extends BookmakerService {
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatch(bookmakerMatch);
-
-        if (bookmakerMatchResponse.isPresent()) {
-
-
-        } else {
+        if (!bookmakerMatchResponse.isPresent()) {
             Match match = bookmakerMatch.getMatch();
             Document download = downloader.download(match.getSportType(), bookmakerMatch.getDaysFromToday());
             List<BookmakerMatchResponse> matches = getMatches(download);
@@ -63,7 +59,9 @@ public class SbobetBookmakerService extends BookmakerService {
             bookmakerMatchResponse = findMatch(bookmakerMatch);
         }
 
-        return bookmakerMatchResponse;
+        return bookmakerMatchResponse.isPresent() ?
+                downloadAndParseSingleMatch(bookmakerMatch, bookmakerMatchResponse.get()) :
+                Optional.empty();
     }
 
     private Optional<BookmakerMatchResponse> findMatch(BookmakerMatch bookmakerMatch) {
@@ -82,17 +80,16 @@ public class SbobetBookmakerService extends BookmakerService {
         return Optional.empty();
     }
 
-    private List<BookmakerMatchResponse> getMatches(Document download) {
-        Element script = download.getElementsByTag("script").last();
-        String scriptText = script.childNodes().get(0).toString();
+    private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
+        Document document = downloader.download(bookmakerMatchResponse, bookmakerMatch);
+        JSONArray jsonArray = extractArrayFromHtml(document);
+        return Optional.empty();
+    }
 
-        String jsArray = scriptText.substring(scriptText.indexOf("onUpdate('od',") + 14, scriptText.indexOf("); }"));
-        JSONArray jsonObject = new JSONArray(jsArray);
-
+    private List<BookmakerMatchResponse> getMatches(Document document) {
+        JSONArray jsonArray = extractArrayFromHtml(document);
         List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
-
-
-        JSONArray liveAndPrematchArrays = jsonObject.getJSONArray(LIVE_AND_PREMATCH_INDEX);
+        JSONArray liveAndPrematchArrays = jsonArray.getJSONArray(LIVE_AND_PREMATCH_INDEX);
         // live and prematch
         if (liveAndPrematchArrays.length() == 2) {
             getMatchesFromArray(liveAndPrematchArrays.getJSONArray(LIVE_MATCHES_INDEX)
@@ -105,6 +102,14 @@ public class SbobetBookmakerService extends BookmakerService {
         }
         return bookmakerMatchResponses;
 
+    }
+
+    private JSONArray extractArrayFromHtml(Document download) {
+        Element script = download.getElementsByTag("script").last();
+        String scriptText = script.childNodes().get(0).toString();
+
+        String jsArray = scriptText.substring(scriptText.indexOf("onUpdate('od',") + 14, scriptText.indexOf("); }"));
+        return new JSONArray(jsArray);
     }
 
     private void getMatchesFromArray(JSONArray matchesArray, List<BookmakerMatchResponse> bookmakerMatchResponses) {

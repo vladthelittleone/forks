@@ -5,6 +5,7 @@ import com.savik.domain.SportType;
 import com.savik.service.bookmaker.sbobet.SbobetBookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class BookmakerAggregationService {
     @Autowired
     SbobetBookmakerService sbobetBookmakerService;
 
+    @Async
     public void handle(Match match) {
         sbobetBookmakerService.handle(
                 BookmakerMatch.builder()
