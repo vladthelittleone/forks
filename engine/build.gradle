@@ -7,4 +7,5 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20180130'
     compile project(':infrastructure:http-infrastructure')
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    compile 'org.flywaydb:flyway-core:4.2.0'
 }

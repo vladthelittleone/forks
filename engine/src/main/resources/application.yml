@@ -1,2 +1,22 @@
 server:
     port: 8002
+
+spring:
+    datasource:
+        hikari:
+                    minimum-idle: 1
+                    maximum-pool-size: 5
+                    pool-name: forks-pool
+        url: jdbc:h2:file:./engine;AUTO_SERVER=TRUE;FILE_LOCK=SOCKET
+        driver-class-name: org.h2.Driver
+        user: sa
+        password:
+        type: com.zaxxer.hikari.HikariDataSource
+    jpa:
+        properties:
+              hibernate:
+                    dialect: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: validate
+            use-new-id-generator-mappings: true
+        show-sql: true
