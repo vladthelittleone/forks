@@ -9,6 +9,7 @@ import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import com.savik.service.bookmaker.CoeffType;
+import lombok.extern.log4j.Log4j2;
 import org.json.JSONArray;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,6 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class SbobetBookmakerService extends BookmakerService {
     public static final int MATCHES_ARRAYS_INDEX = 2;
     public static final int LEAGUE_ID_INDEX = 1;
@@ -50,18 +52,19 @@ public class SbobetBookmakerService extends BookmakerService {
 
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
+        log.debug("Start handling sbobet match: " + bookmakerMatch);
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatch(bookmakerMatch);
         if (!bookmakerMatchResponse.isPresent()) {
             Match match = bookmakerMatch.getMatch();
+            log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
             Document download = downloader.download(match.getSportType(), bookmakerMatch.getDaysFromToday());
             List<BookmakerMatchResponse> matches = getMatches(download);
+            log.debug("Matches were parsed, amount: " + matches.size());
             cache.put(bookmakerMatch.getDaysFromToday(), matches);
             bookmakerMatchResponse = findMatch(bookmakerMatch);
         }
 
-        return bookmakerMatchResponse.isPresent() ?
-                downloadAndParseSingleMatch(bookmakerMatch, bookmakerMatchResponse.get()) :
-                Optional.empty();
+        return bookmakerMatchResponse.flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR));
     }
 
     private Optional<BookmakerMatchResponse> findMatch(BookmakerMatch bookmakerMatch) {
@@ -74,9 +77,11 @@ public class SbobetBookmakerService extends BookmakerService {
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
                     Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerGuestTeamName())) {
+                log.debug("Match info was found in cache: " + cachedMatch);
                 return Optional.of(cachedMatch);
             }
         }
+        log.debug("Match info wasn't found in cache");
         return Optional.empty();
     }
 
@@ -128,6 +133,8 @@ public class SbobetBookmakerService extends BookmakerService {
         return new JSONArray(jsArray);
     }
 
+    private static final int MATCH_HANDICAP = 1;
+
     private List<BookmakerMatchResponse> getMatchesFromArray(JSONArray matchesArray) {
         List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
         for (int i = 0; i < matchesArray.length(); i++) {
@@ -147,9 +154,9 @@ public class SbobetBookmakerService extends BookmakerService {
                 JSONArray coeffArrayContainer = matchCoeffsArray.getJSONArray(j);
                 JSONArray handicapValueArray = coeffArrayContainer.getJSONArray(1);
 
+                int betType = handicapValueArray.getInt(0);
                 double handicapValue = handicapValueArray.getDouble(5);
-                // 0 is 1x2 coeffs. useless for forks
-                if (handicapValue != 0) {
+                if (MATCH_HANDICAP == betType) {
                     JSONArray coeffValueArray = coeffArrayContainer.getJSONArray(2);
                     double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
                     double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
@@ -158,14 +165,14 @@ public class SbobetBookmakerService extends BookmakerService {
                             CoeffType.HOME,
                             new BookmakerCoeff(
                                     CoeffType.MATCH,
-                                    new BookmakerCoeff(CoeffType.HANDICAP, handicapValue, homeCoeffValue)
+                                    new BookmakerCoeff(CoeffType.HANDICAP, -handicapValue, homeCoeffValue)
                             )
                     );
                     BookmakerCoeff guestCoeff = new BookmakerCoeff(
                             CoeffType.GUEST,
                             new BookmakerCoeff(
                                     CoeffType.MATCH,
-                                    new BookmakerCoeff(CoeffType.HANDICAP, -handicapValue, guestCoeffValue)
+                                    new BookmakerCoeff(CoeffType.HANDICAP, handicapValue, guestCoeffValue)
                             )
                     );
                     bookmakerCoeffs.add(homeCoeff);
@@ -181,6 +188,7 @@ public class SbobetBookmakerService extends BookmakerService {
                         .bookmakerMatchId(String.valueOf(matchId))
                         .build();
 
+                log.debug("Match was parsed: " + bookmakerMatchResponse);
                 bookmakerMatchResponses.add(bookmakerMatchResponse);
             }
         }

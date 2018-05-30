@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Match {
 
     @Id
@@ -58,4 +57,16 @@ public class Match {
     MatchStatus matchStatus;
 
 
+    @Override
+    public String toString() {
+        return "Match{" +
+                "id='" + flashscoreId + '\'' +
+                ", leaguedId='" + flashscoreLeagueId + '\'' +
+                ", home=" + homeTeam +
+                ", guest=" + guestTeam +
+                ", date=" + date +
+                ", sport=" + sportType +
+                ", status=" + matchStatus +
+                '}';
+    }
 }

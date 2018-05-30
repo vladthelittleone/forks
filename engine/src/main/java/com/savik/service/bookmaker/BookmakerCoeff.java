@@ -27,4 +27,20 @@ public class BookmakerCoeff {
         this.typeValue = typeValue;
         this.coeffValue = coeffValue;
     }
+
+    @Override
+    public String toString() {
+        BookmakerCoeff temp = child;
+        String typeStr =  type.toString();
+        while (temp.getChild() != null) {
+            typeStr += "." + temp.getType().toString();
+            temp = temp.getChild();
+        }
+        typeStr += "." + temp.getType().toString();
+        return "{" +
+                "type=" + typeStr +
+                ", typeValue=" + temp.getTypeValue() +
+                ", coeff=" + temp.getCoeffValue() +
+                '}';
+    }
 }

@@ -26,4 +26,14 @@ public class BookmakerMatch {
         long between = ChronoUnit.DAYS.between(matchDate, LocalDateTime.now());
         return (int) between;
     }
+
+    @Override
+    public String toString() {
+        return "B.M.{" +
+                "m=" + match +
+                ", hT=" + homeTeam +
+                ", gT=" + guestTeam +
+                ", bL=" + bookmakerLeague +
+                '}';
+    }
 }

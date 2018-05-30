@@ -23,6 +23,14 @@ public class BookmakerLeague {
 
     String bookmakerId;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", bookmakerId='" + bookmakerId + '\'' +
+                '}';
+    }
 }
 
 

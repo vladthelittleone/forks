@@ -17,4 +17,12 @@ public class BookmakerPK implements Serializable {
 
     @Enumerated(EnumType.STRING)
     BookmakerType bookmakerType;
+
+    @Override
+    public String toString() {
+        return "PK{" +
+                "flashId='" + itemFlashscoreId + '\'' +
+                ", bookmakerType=" + bookmakerType +
+                '}';
+    }
 }

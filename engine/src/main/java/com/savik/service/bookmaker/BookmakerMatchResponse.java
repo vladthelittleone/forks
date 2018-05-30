@@ -18,4 +18,15 @@ public class BookmakerMatchResponse {
     String bookmakerGuestTeamName;
 
     List<BookmakerCoeff> bookmakerCoeffs;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "b matchId='" + bookmakerMatchId + '\'' +
+                ", b leagueId='" + bookmakerLeagueId + '\'' +
+                ", home='" + bookmakerHomeTeamName + '\'' +
+                ", guest='" + bookmakerGuestTeamName + '\'' +
+                ", coeffs=" + bookmakerCoeffs +
+                '}';
+    }
 }

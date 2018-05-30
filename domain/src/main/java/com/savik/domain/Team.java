@@ -34,4 +34,11 @@ public class Team {
     @Enumerated(EnumType.STRING)
     SportType sportType;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + flashscoreId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

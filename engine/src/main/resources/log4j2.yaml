@@ -8,6 +8,12 @@ Configutation:
 
   Appenders:
 
+    File:
+      name: Sbobet_File_Appender
+      fileName: ${log-path}/sbobet.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
     Console:
       name: Console_Appender
       target: SYSTEM_OUT
@@ -28,4 +34,11 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Console_Appender
+              level: debug
+
+        - name: com.savik.service.bookmaker.sbobet
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Sbobet_File_Appender
               level: debug
