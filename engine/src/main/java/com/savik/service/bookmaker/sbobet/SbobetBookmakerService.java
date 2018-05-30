@@ -1,7 +1,5 @@
 package com.savik.service.bookmaker.sbobet;
 
-import com.savik.domain.BookmakerLeague;
-import com.savik.domain.BookmakerTeam;
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.service.bookmaker.BookmakerCoeff;
@@ -17,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,10 +35,11 @@ public class SbobetBookmakerService extends BookmakerService {
     public static final int PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX = 1;
     public static final int PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX = 0;
 
-    private Map<Integer, List<BookmakerMatchResponse>> cache = new HashMap<>();
-
     @Autowired
     SbobetDownloader downloader;
+
+    @Autowired
+    SbobetCache cache;
 
     @Override
     protected BookmakerType getBookmakerType() {
@@ -58,7 +54,14 @@ public class SbobetBookmakerService extends BookmakerService {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
         }
 
-        return bookmakerMatchResponse.flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR));
+        return bookmakerMatchResponse
+                .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR))
+                .flatMap(
+                        mR -> {
+                            cache.add(mR);
+                            return Optional.of(mR);
+                        }
+                );
     }
 
     private Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
@@ -67,26 +70,12 @@ public class SbobetBookmakerService extends BookmakerService {
         Document download = downloader.download(match.getSportType(), bookmakerMatch.getDaysFromToday());
         List<BookmakerMatchResponse> matches = getMatches(download);
         log.debug("Matches were parsed, amount: " + matches.size());
-        cache.put(bookmakerMatch.getDaysFromToday(), matches);
+        cache.addAll(matches);
         return findMatchInCache(bookmakerMatch);
     }
 
     private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatch bookmakerMatch) {
-        cache.putIfAbsent(bookmakerMatch.getDaysFromToday(), new ArrayList<>());
-        BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
-        BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
-        BookmakerTeam guestTeam = bookmakerMatch.getGuestTeam();
-        List<BookmakerMatchResponse> cachedMatches = cache.get(bookmakerMatch.getDaysFromToday());
-        for (BookmakerMatchResponse cachedMatch : cachedMatches) {
-            if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
-                    Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
-                    Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerGuestTeamName())) {
-                log.debug("Match info was found in cache: " + cachedMatch);
-                return Optional.of(cachedMatch);
-            }
-        }
-        log.debug("Match info wasn't found in cache");
-        return Optional.empty();
+        return cache.find(bookmakerMatch);
     }
 
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
