@@ -23,7 +23,7 @@ Configutation:
           - ref: Console_Appender
 
       Logger:
-        - name: com.savik.service
+        - name: com.savik.http
           additivity: false
           level: debug
           AppenderRef:

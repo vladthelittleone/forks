@@ -45,9 +45,10 @@ public class SbobetDownloader extends Downloader {
     private String combineMatchUrl(String sbobetUrl, String sportPrefix, String leagueName, String matchId,
                                    String homeName, String guestName) {
 
+        String newLeagueName= leagueName.toLowerCase().replaceAll("\\s+","-");
         String newHomeName = homeName.toLowerCase().replaceAll("\\s+","-");
         String newGuestName = guestName.toLowerCase().replaceAll("\\s+","-");
-        return sbobetUrl + sportPrefix + "/" + leagueName + "/" + matchId + "/" + newHomeName + "-" + newGuestName;
+        return sbobetUrl + sportPrefix + "/" + newLeagueName + "/" + matchId + "/" + newHomeName + "-vs-" + newGuestName;
     }
 
 }

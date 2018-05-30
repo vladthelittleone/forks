@@ -2,6 +2,7 @@ package com.savik.service.bookmaker;
 
 import com.savik.domain.Match;
 import com.savik.domain.SportType;
+import com.savik.domain.Team;
 import com.savik.service.bookmaker.sbobet.SbobetBookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,14 @@ public class BookmakerAggregationService {
 
     @Async
     public void handle(Match match) {
+
         sbobetBookmakerService.handle(
-                BookmakerMatch.builder()
-                        .match(Match.builder().sportType(SportType.FOOTBALL).date(LocalDateTime.now()).build())
+                Match.builder()
+                        .homeTeam(Team.builder().flashscoreId("naHiWdnt").name("Austria").build())
+                        .guestTeam(Team.builder().flashscoreId("hrgrswHh").name("Russia").build())
+                        .flashscoreLeagueId("f1GbGBCd")
+                        .sportType(SportType.FOOTBALL)
+                        .date(LocalDateTime.now())
                         .build()
         );
 

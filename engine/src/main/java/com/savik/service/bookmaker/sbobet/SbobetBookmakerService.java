@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @Service
 public class SbobetBookmakerService extends BookmakerService {
-    public static final int LIVE_AND_PREMATCH_INDEX = 2;
+    public static final int MATCHES_ARRAYS_INDEX = 2;
     public static final int LEAGUE_ID_INDEX = 1;
     public static final int MATCH_INFO_INDEX = 2;
     public static final int MATCH_COEFFS_INDEX = 4;
@@ -66,11 +66,11 @@ public class SbobetBookmakerService extends BookmakerService {
 
     private Optional<BookmakerMatchResponse> findMatch(BookmakerMatch bookmakerMatch) {
         cache.putIfAbsent(bookmakerMatch.getDaysFromToday(), new ArrayList<>());
+        BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
+        BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
+        BookmakerTeam guestTeam = bookmakerMatch.getGuestTeam();
         List<BookmakerMatchResponse> cachedMatches = cache.get(bookmakerMatch.getDaysFromToday());
         for (BookmakerMatchResponse cachedMatch : cachedMatches) {
-            BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
-            BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
-            BookmakerTeam guestTeam = bookmakerMatch.getGuestTeam();
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
                     Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerGuestTeamName())) {
@@ -82,23 +82,40 @@ public class SbobetBookmakerService extends BookmakerService {
 
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
         Document document = downloader.download(bookmakerMatchResponse, bookmakerMatch);
-        JSONArray jsonArray = extractArrayFromHtml(document);
-        return Optional.empty();
+        JSONArray arrayContainer = extractArrayFromHtml(document);
+        JSONArray prematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
+        List<BookmakerMatchResponse> bookmakerMatchResponses = getMatchesFromArray(prematchArrays.getJSONArray(0).getJSONArray(MATCHES_IN_CONTAINER_INDEX));
+        if (bookmakerMatchResponses.isEmpty() || bookmakerMatchResponses.size() != 1) {
+            throw new IllegalStateException("check");
+        }
+        return Optional.of(bookmakerMatchResponses.get(0));
     }
 
     private List<BookmakerMatchResponse> getMatches(Document document) {
-        JSONArray jsonArray = extractArrayFromHtml(document);
+        JSONArray arrayContainer = extractArrayFromHtml(document);
         List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
-        JSONArray liveAndPrematchArrays = jsonArray.getJSONArray(LIVE_AND_PREMATCH_INDEX);
+        JSONArray liveAndPrematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
         // live and prematch
         if (liveAndPrematchArrays.length() == 2) {
-            getMatchesFromArray(liveAndPrematchArrays.getJSONArray(LIVE_MATCHES_INDEX)
-                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX), bookmakerMatchResponses);
-            getMatchesFromArray(liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX)
-                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX), bookmakerMatchResponses);
+            bookmakerMatchResponses.addAll(
+                    getMatchesFromArray(
+                            liveAndPrematchArrays.getJSONArray(LIVE_MATCHES_INDEX)
+                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                    )
+            );
+            bookmakerMatchResponses.addAll(
+                    getMatchesFromArray(
+                            liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX)
+                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                    )
+            );
         } else if (liveAndPrematchArrays.length() == 1) {         // only prematch
-            getMatchesFromArray(liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX)
-                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX), bookmakerMatchResponses);
+            bookmakerMatchResponses.addAll(
+                    getMatchesFromArray(
+                            liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX)
+                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                    )
+            );
         }
         return bookmakerMatchResponses;
 
@@ -107,12 +124,12 @@ public class SbobetBookmakerService extends BookmakerService {
     private JSONArray extractArrayFromHtml(Document download) {
         Element script = download.getElementsByTag("script").last();
         String scriptText = script.childNodes().get(0).toString();
-
         String jsArray = scriptText.substring(scriptText.indexOf("onUpdate('od',") + 14, scriptText.indexOf("); }"));
         return new JSONArray(jsArray);
     }
 
-    private void getMatchesFromArray(JSONArray matchesArray, List<BookmakerMatchResponse> bookmakerMatchResponses) {
+    private List<BookmakerMatchResponse> getMatchesFromArray(JSONArray matchesArray) {
+        List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
         for (int i = 0; i < matchesArray.length(); i++) {
             JSONArray matchArray = matchesArray.getJSONArray(i);
             int sbobetLeagueId = matchArray.getInt(LEAGUE_ID_INDEX);
@@ -144,7 +161,6 @@ public class SbobetBookmakerService extends BookmakerService {
                                     new BookmakerCoeff(CoeffType.HANDICAP, handicapValue, homeCoeffValue)
                             )
                     );
-
                     BookmakerCoeff guestCoeff = new BookmakerCoeff(
                             CoeffType.GUEST,
                             new BookmakerCoeff(
@@ -152,10 +168,8 @@ public class SbobetBookmakerService extends BookmakerService {
                                     new BookmakerCoeff(CoeffType.HANDICAP, -handicapValue, guestCoeffValue)
                             )
                     );
-
                     bookmakerCoeffs.add(homeCoeff);
                     bookmakerCoeffs.add(guestCoeff);
-
                 }
             }
             if (!bookmakerCoeffs.isEmpty()) {
@@ -168,11 +182,8 @@ public class SbobetBookmakerService extends BookmakerService {
                         .build();
 
                 bookmakerMatchResponses.add(bookmakerMatchResponse);
-
-
             }
-
-
         }
+        return bookmakerMatchResponses;
     }
 }
