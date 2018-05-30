@@ -53,21 +53,25 @@ public class SbobetBookmakerService extends BookmakerService {
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
         log.debug("Start handling sbobet match: " + bookmakerMatch);
-        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatch(bookmakerMatch);
+        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
         if (!bookmakerMatchResponse.isPresent()) {
-            Match match = bookmakerMatch.getMatch();
-            log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
-            Document download = downloader.download(match.getSportType(), bookmakerMatch.getDaysFromToday());
-            List<BookmakerMatchResponse> matches = getMatches(download);
-            log.debug("Matches were parsed, amount: " + matches.size());
-            cache.put(bookmakerMatch.getDaysFromToday(), matches);
-            bookmakerMatchResponse = findMatch(bookmakerMatch);
+            bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
         }
 
         return bookmakerMatchResponse.flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR));
     }
 
-    private Optional<BookmakerMatchResponse> findMatch(BookmakerMatch bookmakerMatch) {
+    private Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
+        Match match = bookmakerMatch.getMatch();
+        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
+        Document download = downloader.download(match.getSportType(), bookmakerMatch.getDaysFromToday());
+        List<BookmakerMatchResponse> matches = getMatches(download);
+        log.debug("Matches were parsed, amount: " + matches.size());
+        cache.put(bookmakerMatch.getDaysFromToday(), matches);
+        return findMatchInCache(bookmakerMatch);
+    }
+
+    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatch bookmakerMatch) {
         cache.putIfAbsent(bookmakerMatch.getDaysFromToday(), new ArrayList<>());
         BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();

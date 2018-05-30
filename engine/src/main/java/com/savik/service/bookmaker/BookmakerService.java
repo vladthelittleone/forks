@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Component
 @Log4j2
@@ -28,10 +27,11 @@ public abstract class BookmakerService {
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
         if (info.isPresent()) {
             log.debug("Match was parsed:" + info.get());
+            bookmakerEventPublisher.publishMatchResponse(info.get());
         } else {
             log.info("Match wasn't found:" + match);
+            bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
         }
-        info.ifPresent(response -> bookmakerEventPublisher.publish(response));
     }
 
 }
