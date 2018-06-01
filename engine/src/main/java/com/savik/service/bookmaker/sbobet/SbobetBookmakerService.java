@@ -174,6 +174,7 @@ public class SbobetBookmakerService extends BookmakerService {
             }
             if (!bookmakerCoeffs.isEmpty()) {
                 BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
+                        .bookmakerType(getBookmakerType())
                         .bookmakerCoeffs(bookmakerCoeffs)
                         .bookmakerGuestTeamName(guestTeamName)
                         .bookmakerHomeTeamName(homeTeamName)

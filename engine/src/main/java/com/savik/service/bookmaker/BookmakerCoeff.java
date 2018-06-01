@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -28,19 +31,34 @@ public class BookmakerCoeff {
         this.coeffValue = coeffValue;
     }
 
-    @Override
-    public String toString() {
-        BookmakerCoeff temp = child;
-        String typeStr =  type.toString();
-        while (temp.getChild() != null) {
-            typeStr += "." + temp.getType().toString();
+    public boolean isFork(BookmakerCoeff anotherCoeff) {
+        List<BookmakerCoeff> selfChain = getChain();
+        List<BookmakerCoeff> anotherChain = anotherCoeff.getChain();
+        return true;
+    }
+
+    private List<BookmakerCoeff> getChain() {
+        List<BookmakerCoeff> chain = new ArrayList<>();
+        BookmakerCoeff temp = this;
+        while (temp != null) {
+            chain.add(temp);
             temp = temp.getChild();
         }
-        typeStr += "." + temp.getType().toString();
+        return chain;
+    }
+
+    private BookmakerCoeff getLastChild() {
+        List<BookmakerCoeff> chain = getChain();
+        return chain.get(chain.size() - 1);
+    }
+
+    @Override
+    public String toString() {
+        BookmakerCoeff lastChild = getLastChild();
         return "{" +
-                "type=" + typeStr +
-                ", typeValue=" + temp.getTypeValue() +
-                ", coeff=" + temp.getCoeffValue() +
+                "type=" + getChain().stream().map(BookmakerCoeff::getType).map(t -> toString()).reduce("", (s1, s2) -> s1 + "." + s2) +
+                ", typeValue=" + lastChild.getTypeValue() +
+                ", coeff=" + lastChild.getCoeffValue() +
                 '}';
     }
 }
