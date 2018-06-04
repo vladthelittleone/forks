@@ -67,7 +67,7 @@ public class BookmakerCoeff {
         BookmakerCoeff anotherLastChild = anotherCoeff.getLastChild();
 
         if (selfLastChild.getType() == CoeffType.HANDICAP) {
-            if (selfLastChild.getTypeValue().equals(-anotherLastChild.getTypeValue())) {
+            if (BookmakerUtils.isForkAcceptableTypes(selfLastChild.getTypeValue(), anotherLastChild.getTypeValue())) {
                 return BookmakerUtils.isFork(selfLastChild.getCoeffValue(), anotherLastChild.getCoeffValue());
             }
         }
