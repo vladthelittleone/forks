@@ -1,36 +1,49 @@
 package com.savik.service.bookmaker;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.savik.service.bookmaker.CoeffType.GUEST;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringRunner.class)
 public class BookmakerCoeffTest {
 
 
     /*
-    * Handicap block
-    * */
+     * Handicap block
+     * */
 
-    @Test
-    public void testIsRegularHandicapFork() {
-        BookmakerCoeff original = BookmakerCoeff.of(-0.25, 2., HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, 2.1, HANDICAP, GUEST, MATCH);
+    @DisplayName(" It's a regular handicap fork (with same type value)")
+    @ParameterizedTest(name = "{index} => coeff1={0}, coeff2={1}")
+    @CsvSource({
+            "2., 2.1",
+            "1.8, 2.26"
+    })
+    public void test1(Double coeff1, Double coeff2) {
+        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, GUEST, MATCH);
         assertTrue(target.isFork(original));
     }
 
-    @Test
-    public void testIsNotHandicapFork() {
-        BookmakerCoeff original = BookmakerCoeff.of(-0.25, 2., HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, 2., HANDICAP, GUEST, MATCH);
+
+    @DisplayName(" It's not a handicap forks (with same type value)")
+    @ParameterizedTest(name = "{index} => coeff1={0}, coeff2={1}")
+    @CsvSource({
+            "2., 2.",
+            "2., 1.9",
+            "1.5, 1.5",
+            "1.8, 2.25"
+    })
+    public void test2(Double coeff1, Double coeff2) {
+        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, GUEST, MATCH);
         assertFalse(target.isFork(original));
     }
+
+
 }
