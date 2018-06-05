@@ -1,15 +1,12 @@
 package com.savik.service.bookmaker;
 
 import com.savik.domain.Match;
-import com.savik.domain.SportType;
-import com.savik.domain.Team;
 import com.savik.service.bookmaker.sbobet.SbobetBookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -36,17 +33,10 @@ public class BookmakerAggregationService {
 
     @Async
     public void handle(Match match) {
-
-        sbobetBookmakerService.handle(
-                Match.builder()
-                        .homeTeam(Team.builder().flashscoreId("naHiWdnt").name("Austria").build())
-                        .guestTeam(Team.builder().flashscoreId("hrgrswHh").name("Russia").build())
-                        .flashscoreLeagueId("f1GbGBCd")
-                        .sportType(SportType.FOOTBALL)
-                        .date(LocalDateTime.now())
-                        .build()
-        );
-
-
+        for (BookmakerService bookmakerService : bookmakerServices) {
+            log.info("Start handling match by bookmaker service: " + bookmakerService.getBookmakerType());
+            bookmakerService.handle(match);
+            log.info("Match was handled by bookmaker service: " + bookmakerService.getBookmakerType());
+        }
     }
 }
