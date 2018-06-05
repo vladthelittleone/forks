@@ -1,0 +1,3 @@
+https://api.pinnacle.com/v1/fixtures?sportId=29&oddsFormat=DECIMAL - получение матчей
+https://api.pinnacle.com/v1/odds?sportId=29&oddsFormat=DECIMAL - получение ставок
+

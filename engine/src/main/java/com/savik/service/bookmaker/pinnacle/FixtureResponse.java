@@ -1,0 +1,28 @@
+package com.savik.service.bookmaker.pinnacle;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+public class FixtureResponse {
+    Integer sportId;
+    Integer last;
+    List<FixtureLeague> league;
+}
+
+@Data
+class FixtureLeague {
+    Integer id;
+    String name;
+    List<FixtureEvent> events;
+}
+
+@Data
+class FixtureEvent {
+    Integer id;
+    String home;
+    String away;
+    LocalDateTime starts;
+}
