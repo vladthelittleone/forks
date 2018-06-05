@@ -1,0 +1,5 @@
+scheduling:
+  enabled: false
+spring:
+    datasource:
+        url: jdbc:h2:file:./engine_test;AUTO_SERVER=TRUE;FILE_LOCK=SOCKET

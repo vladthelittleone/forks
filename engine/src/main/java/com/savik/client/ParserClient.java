@@ -15,5 +15,5 @@ import java.util.List;
 public interface ParserClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/matches")
-    List<Match> getMatches(@RequestParam MatchFilter matchFilter);
+    List<Match> getMatches(@RequestParam("matchFilter") MatchFilter matchFilter);
 }

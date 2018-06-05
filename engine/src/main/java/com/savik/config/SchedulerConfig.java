@@ -1,7 +1,9 @@
 package com.savik.config;
 
+import com.savik.scheduler.ConditionalThreadPoolTaskScheduler;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -17,8 +19,7 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = taskScheduler();
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
         threadPoolTaskScheduler.setThreadNamePrefix("engine-task-pool-");
         threadPoolTaskScheduler.setDaemon(true);
@@ -30,6 +31,11 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return new CustomAsyncExceptionHandler();
+    }
+
+    @Bean
+    public ThreadPoolTaskScheduler taskScheduler() {
+        return new ConditionalThreadPoolTaskScheduler();
     }
 
 }

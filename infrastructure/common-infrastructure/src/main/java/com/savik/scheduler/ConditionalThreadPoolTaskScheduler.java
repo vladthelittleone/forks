@@ -1,18 +1,18 @@
-package com.savik.flashscore.scheduler;
+package com.savik.scheduler;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
 
 @Component
 public class ConditionalThreadPoolTaskScheduler extends ThreadPoolTaskScheduler {
 
-    @Inject
+    @Autowired
     private Environment environment;
 
     // Override the TaskScheduler methods
