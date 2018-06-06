@@ -17,19 +17,11 @@ public class EngineService {
 
     public void handle(List<Match> matches) {
         log.info("Start handling matches, size = " + matches.size());
-
         for (Match match : matches) {
             log.debug("handling match: " + match);
             bookmakerAggregationService.handle(match);
             log.debug("match was handled: " + match);
         }
-
         log.info("Matches were handled successfully, size = " + matches.size());
-
-
-        bookmakerAggregationService.handle(null);
-
-
-
     }
 }

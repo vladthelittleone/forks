@@ -1,5 +1,6 @@
 package com.savik.service.bookmaker;
 
+import com.savik.domain.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -10,8 +11,8 @@ public class BookmakerEventPublisher {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void publishMatchResponse(final BookmakerMatchResponse bookmakerMatchResponse) {
-        BookmakerMatchResponseEvent matchResponseEvent = new BookmakerMatchResponseEvent(bookmakerMatchResponse);
+    public void publishMatchResponse(final BookmakerMatchResponse bookmakerMatchResponse, final Match match) {
+        BookmakerMatchResponseEvent matchResponseEvent = new BookmakerMatchResponseEvent(bookmakerMatchResponse, match);
         applicationEventPublisher.publishEvent(matchResponseEvent);
     }
 

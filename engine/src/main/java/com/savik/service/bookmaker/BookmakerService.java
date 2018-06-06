@@ -27,7 +27,7 @@ public abstract class BookmakerService {
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
         if (info.isPresent()) {
             log.debug("Match was parsed:" + info.get());
-            bookmakerEventPublisher.publishMatchResponse(info.get());
+            bookmakerEventPublisher.publishMatchResponse(info.get(), match);
         } else {
             log.info("Match wasn't found:" + match);
             bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
