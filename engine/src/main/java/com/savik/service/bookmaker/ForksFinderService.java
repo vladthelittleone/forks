@@ -43,8 +43,6 @@ public class ForksFinderService {
                     }
                 }
             }
-
-
         }
         return events;
     }

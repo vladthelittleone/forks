@@ -1,0 +1,7 @@
+pinnacle:
+  url: https://api.pinnacle.com/
+  apiV1Version: v1
+  apiV2Version: v2
+  fixtures: fixtures
+  sportIds:
+    football: 29

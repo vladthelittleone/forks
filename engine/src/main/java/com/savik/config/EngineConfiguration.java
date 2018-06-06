@@ -29,7 +29,8 @@ public class EngineConfiguration {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         yaml.setResources(
-                new ClassPathResource("config/bookmakers/sbobet/sbobet-config.yml")
+                new ClassPathResource("config/bookmakers/sbobet/sbobet-config.yml"),
+                new ClassPathResource("config/bookmakers/pinnacle/pinnacle-config.yml")
         );
         propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
         return propertySourcesPlaceholderConfigurer;
