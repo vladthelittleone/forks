@@ -1,6 +1,5 @@
 package com.savik.flashscore;
 
-import com.savik.flashscore.exception.ParseException;
 import lombok.experimental.UtilityClass;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

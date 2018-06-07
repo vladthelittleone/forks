@@ -26,6 +26,8 @@ public class PinnacleConfig {
 
     String fixtures;
 
+    String odds;
+
     Map<SportType, String> sportIds;
 
     @Autowired
@@ -36,6 +38,13 @@ public class PinnacleConfig {
             throw new IllegalArgumentException("Unknown sport type: " + sportType);
         }
         return url + apiV1Version + fixtures + "?sportId=" + sportIds.get(sportType);
+    }
+
+    public String getOddsUrl(SportType sportType) {
+        if (!sportIds.containsKey(sportType)) {
+            throw new IllegalArgumentException("Unknown sport type: " + sportType);
+        }
+        return url + apiV1Version + odds + "sportId=" + sportIds.get(sportType);
     }
 
     public String getBase64Authentications() {

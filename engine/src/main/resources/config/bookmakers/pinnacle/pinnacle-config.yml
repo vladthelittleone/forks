@@ -3,5 +3,6 @@ pinnacle:
   apiV1Version: v1
   apiV2Version: v2
   fixtures: fixtures
+  odds: odds?oddsFormat=DECIMAL&
   sportIds:
     football: 29
