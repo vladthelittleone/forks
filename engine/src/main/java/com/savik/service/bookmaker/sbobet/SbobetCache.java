@@ -35,7 +35,7 @@ public class SbobetCache {
         for (BookmakerMatchResponse cachedMatch : cache) {
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
-                    Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerGuestTeamName())) {
+                    Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
                 log.debug("Match info was found in cache: " + cachedMatch);
                 return Optional.of(cachedMatch);
             }

@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -41,7 +40,7 @@ public class Match {
 
     @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    Team guestTeam;
+    Team awayTeam;
 
     @NotNull
     LocalDateTime date;
@@ -63,7 +62,7 @@ public class Match {
                 "id='" + flashscoreId + '\'' +
                 ", leaguedId='" + flashscoreLeagueId + '\'' +
                 ", home=" + homeTeam +
-                ", guest=" + guestTeam +
+                ", away=" + awayTeam +
                 ", date=" + date +
                 ", sport=" + sportType +
                 ", status=" + matchStatus +

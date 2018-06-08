@@ -19,7 +19,7 @@ public class BookmakerMatchResponse {
 
     String bookmakerHomeTeamName;
 
-    String bookmakerGuestTeamName;
+    String bookmakerAwayTeamName;
 
     List<BookmakerCoeff> bookmakerCoeffs;
 
@@ -29,7 +29,7 @@ public class BookmakerMatchResponse {
                 "b matchId='" + bookmakerMatchId + '\'' +
                 ", b leagueId='" + bookmakerLeagueId + '\'' +
                 ", home='" + bookmakerHomeTeamName + '\'' +
-                ", guest='" + bookmakerGuestTeamName + '\'' +
+                ", away='" + bookmakerAwayTeamName + '\'' +
                 ", coeffs=" + bookmakerCoeffs +
                 '}';
     }

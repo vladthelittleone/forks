@@ -79,8 +79,8 @@ public class FlashscoreResponseProcessor {
         String guestTeamId = FlashscoreUtils.getGuestTeamId(html);
         match.getHomeTeam().setFlashscoreId(homeTeamId);
         match.getHomeTeam().setSportType(match.getSportType());
-        match.getGuestTeam().setFlashscoreId(guestTeamId);
-        match.getGuestTeam().setSportType(match.getSportType());
+        match.getAwayTeam().setFlashscoreId(guestTeamId);
+        match.getAwayTeam().setSportType(match.getSportType());
     }
 
 }

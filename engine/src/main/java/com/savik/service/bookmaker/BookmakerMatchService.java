@@ -22,7 +22,7 @@ public class BookmakerMatchService {
                 BookmakerMatch.builder()
                         .match(match)
                         .homeTeam(bookmakerTeamRepository.findById(new BookmakerPK(match.getHomeTeam().getFlashscoreId(), bookmakerType)).get())
-                        .guestTeam(bookmakerTeamRepository.findById(new BookmakerPK(match.getGuestTeam().getFlashscoreId(), bookmakerType)).get())
+                        .guestTeam(bookmakerTeamRepository.findById(new BookmakerPK(match.getAwayTeam().getFlashscoreId(), bookmakerType)).get())
                         .bookmakerLeague(bookmakerLeagueRepository.findById(new BookmakerPK(match.getFlashscoreLeagueId(), bookmakerType)).get())
                         .build();
     }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.savik.service.bookmaker.CoeffType.GUEST;
+import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
@@ -158,7 +158,7 @@ public class SbobetBookmakerService extends BookmakerService {
                     double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
                     double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
                     BookmakerCoeff homeCoeff = BookmakerCoeff.of(-handicapValue, homeCoeffValue, HANDICAP, HOME, MATCH);
-                    BookmakerCoeff guestCoeff = BookmakerCoeff.of(handicapValue, guestCoeffValue, HANDICAP, GUEST, MATCH);
+                    BookmakerCoeff guestCoeff = BookmakerCoeff.of(handicapValue, guestCoeffValue, HANDICAP, AWAY, MATCH);
                     bookmakerCoeffs.add(homeCoeff);
                     bookmakerCoeffs.add(guestCoeff);
                 }
@@ -167,7 +167,7 @@ public class SbobetBookmakerService extends BookmakerService {
                 BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
                         .bookmakerType(getBookmakerType())
                         .bookmakerCoeffs(bookmakerCoeffs)
-                        .bookmakerGuestTeamName(guestTeamName)
+                        .bookmakerAwayTeamName(guestTeamName)
                         .bookmakerHomeTeamName(homeTeamName)
                         .bookmakerLeagueId(String.valueOf(sbobetLeagueId))
                         .bookmakerMatchId(String.valueOf(matchId))

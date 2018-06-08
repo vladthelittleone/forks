@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static com.savik.service.bookmaker.CoeffType.GUEST;
+import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
@@ -26,7 +26,7 @@ public class BookmakerCoeffTest {
     })
     public void test1(Double coeff1, Double coeff2) {
         BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, GUEST, MATCH);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, AWAY, MATCH);
         assertTrue(target.isFork(original));
     }
 
@@ -41,7 +41,7 @@ public class BookmakerCoeffTest {
     })
     public void test2(Double coeff1, Double coeff2) {
         BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, GUEST, MATCH);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, AWAY, MATCH);
         assertFalse(target.isFork(original));
     }
 

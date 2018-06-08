@@ -8,13 +8,26 @@ import java.util.List;
 public class OddsResponse {
     Integer sportId;
     Integer last;
-    List<FixtureLeague> league;
+    List<OddsLeague> league;
+
+    public OddsEvent findEvent(FixtureEvent fixtureEvent) {
+        for (OddsLeague fixtureLeague : league) {
+            List<OddsEvent> events = fixtureLeague.getEvents();
+            for (OddsEvent event : events) {
+                if (event.getId().equals(fixtureEvent.getId())) {
+                    return event;
+                }
+            }
+
+        }
+        throw new PinnacleException("Odd event not found, fixture id: " + fixtureEvent.getId());
+    }
 }
 
 @Data
 class OddsLeague {
     Integer id;
-    List<FixtureEvent> events;
+    List<OddsEvent> events;
 }
 
 @Data

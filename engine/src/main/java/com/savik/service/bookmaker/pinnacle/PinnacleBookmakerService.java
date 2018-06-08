@@ -20,6 +20,6 @@ public class PinnacleBookmakerService extends BookmakerService {
 
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatch match) {
-        return Optional.empty();
+        return api.parseMatch(match);
     }
 }

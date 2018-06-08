@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.savik.service.bookmaker.CoeffType.GUEST;
+import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 
@@ -17,8 +17,8 @@ public class BookmakerCoeffMapper {
     private static Map<CoeffType, List<CoeffType>> acceptableTypes = new HashMap<>();
 
     static {
-        acceptableTypes.put(HOME, Arrays.asList(GUEST));
-        acceptableTypes.put(GUEST, Arrays.asList(HOME));
+        acceptableTypes.put(HOME, Arrays.asList(AWAY));
+        acceptableTypes.put(AWAY, Arrays.asList(HOME));
         acceptableTypes.put(HANDICAP, Arrays.asList(HANDICAP));
     }
 

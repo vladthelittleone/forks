@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.savik.service.bookmaker.CoeffType.GUEST;
+import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
@@ -41,7 +41,7 @@ public class ListenerIntegrationTest {
     public void test() {
         Match match = Match.builder()
                 .homeTeam(Team.builder().flashscoreId("6LHwBDGU").name("Czech Republic").build())
-                .guestTeam(Team.builder().flashscoreId("EBE2Xb3l").name("Nigeria").build())
+                .awayTeam(Team.builder().flashscoreId("EBE2Xb3l").name("Nigeria").build())
                 .flashscoreLeagueId("f1GbGBCd")
                 .sportType(SportType.FOOTBALL)
                 .date(LocalDateTime.now())
@@ -52,13 +52,13 @@ public class ListenerIntegrationTest {
         BookmakerMatchResponse sbobetResponse = BookmakerMatchResponse.builder()
                 .bookmakerType(BookmakerType.SBOBET)
                 .bookmakerHomeTeamName("Czech Republic (n)")
-                .bookmakerGuestTeamName("Nigeria")
+                .bookmakerAwayTeamName("Nigeria")
                 .bookmakerLeagueId("10")
                 .bookmakerMatchId("")
                 .bookmakerCoeffs(
                         Arrays.asList(
                                 BookmakerCoeff.of(0., 1.95, HANDICAP, HOME, MATCH),
-                                BookmakerCoeff.of(0., 1.95, HANDICAP, GUEST, MATCH)
+                                BookmakerCoeff.of(0., 1.95, HANDICAP, AWAY, MATCH)
                         )
                 )
                 .build();
@@ -67,12 +67,12 @@ public class ListenerIntegrationTest {
         BookmakerMatchResponse pinnacleResponse = BookmakerMatchResponse.builder()
                 .bookmakerType(BookmakerType.PINNACLE)
                 .bookmakerHomeTeamName("Czech Republic (n)")
-                .bookmakerGuestTeamName("Nigeria")
+                .bookmakerAwayTeamName("Nigeria")
                 .bookmakerLeagueId("2117")
                 .bookmakerMatchId("")
                 .bookmakerCoeffs(
                         Arrays.asList(
-                                BookmakerCoeff.of(0., 1.85, HANDICAP, GUEST, MATCH),
+                                BookmakerCoeff.of(0., 1.85, HANDICAP, AWAY, MATCH),
                                 BookmakerCoeff.of(0., 2.06, HANDICAP, HOME, MATCH)
                         )
                 )

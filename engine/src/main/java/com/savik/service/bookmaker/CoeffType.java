@@ -2,7 +2,12 @@ package com.savik.service.bookmaker;
 
 public enum CoeffType {
     HOME,
-    GUEST,
+    AWAY,
     MATCH,
-    HANDICAP
+    FIRST_HALF,
+    SECOND_HALF,
+    HANDICAP,
+    TOTAL,
+    OVER,
+    UNDER
 }

@@ -64,7 +64,7 @@ public class MvcApiTest {
         Assert.assertEquals(match.getSportType(), receivedMatch.getSportType());
         Assert.assertEquals(match.getDate(), receivedMatch.getDate());
         Assert.assertEquals(match.getHomeTeam(), receivedMatch.getHomeTeam());
-        Assert.assertEquals(match.getGuestTeam(), receivedMatch.getGuestTeam());
+        Assert.assertEquals(match.getAwayTeam(), receivedMatch.getAwayTeam());
 
 
     }
