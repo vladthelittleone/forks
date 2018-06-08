@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -28,8 +27,7 @@ public class Scheduler {
         log.info("start scheduling task for today matches");
         log.info("Current Thread : {}", Thread.currentThread().getName());
 
-        //List<Match> matches = parserClient.getMatches(MatchFilter.builder().matchStatus(MatchStatus.PREMATCH).build());
-        List<Match> matches = new ArrayList<>();
+        List<Match> matches = parserClient.getMatches(MatchFilter.builder().matchStatus(MatchStatus.PREMATCH).build());
         engineService.handle(matches);
 
         log.info("matches were received: " + matches.size());

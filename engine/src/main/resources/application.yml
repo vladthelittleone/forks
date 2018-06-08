@@ -22,3 +22,6 @@ spring:
             ddl-auto: validate
             use-new-id-generator-mappings: true
         show-sql: true
+feign:
+  hystrix:
+    enabled: true
