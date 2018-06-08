@@ -81,7 +81,7 @@ public class FlashscoreResponseParser {
                 Match event = Match
                         .builder()
                         .homeTeam(Team.builder().name(tmp.get(HOME_INDEX)).build())
-                        .guestTeam(Team.builder().name(tmp.get(GUEST_INDEX)).build())
+                        .awayTeam(Team.builder().name(tmp.get(GUEST_INDEX)).build())
                         .flashscoreId(tmp.get(EVENT_INDEX))
                         .flashscoreLeagueId(leagueId)
                         .matchStatus(
