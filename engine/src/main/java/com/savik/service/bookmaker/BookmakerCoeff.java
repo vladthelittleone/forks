@@ -71,7 +71,7 @@ public class BookmakerCoeff {
                 return BookmakerUtils.isFork(selfLastChild.getCoeffValue(), anotherLastChild.getCoeffValue());
             }
         }
-        return true;
+        return false;
     }
 
     private List<BookmakerCoeff> getChain() {

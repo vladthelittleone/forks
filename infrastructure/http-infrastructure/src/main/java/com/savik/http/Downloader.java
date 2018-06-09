@@ -6,23 +6,27 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
 public class Downloader {
 
     public Document download(String url) {
-        try {
-            log.debug("download url: " + url);
-            return Jsoup.connect(url).get();
-        } catch (IOException e) {
-            throw new DownloadException(e);
-        }
+        return download(url, new HashMap<>());
     }
 
     public Document download(String url, Map<String, String> headers) {
         try {
             return Jsoup.connect(url).headers(headers).get();
+        } catch (IOException e) {
+            throw new DownloadException(e);
+        }
+    }
+
+    public String downloadJson(String url, Map<String, String> headers) {
+        try {
+            return Jsoup.connect(url).headers(headers).ignoreContentType(true).execute().body();
         } catch (IOException e) {
             throw new DownloadException(e);
         }

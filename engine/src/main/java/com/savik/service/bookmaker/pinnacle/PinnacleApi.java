@@ -68,12 +68,12 @@ public class PinnacleApi {
         List<FixtureLeague> league = fixture.getLeague();
 
         FixtureLeague fixtureLeague = fixture.getLeague().stream()
-                .filter(l -> Objects.equals(l.getId(), match.getBookmakerLeague().getBookmakerId()))
+                .filter(l -> Objects.equals(l.getId(), Integer.parseInt(match.getBookmakerLeague().getBookmakerId())))
                 .findFirst().get();
 
         Optional<FixtureEvent> matchFixture = fixtureLeague.getEvents().stream()
                 .filter(event -> event.getHome().equals(match.getHomeTeam().getName()) &&
-                        event.getAway().equals(match.getGuestTeam().getName()))
+                        event.getAway().equals(match.getGuestTeam().getName()) && event.getParentId() == null)
                 .findFirst();
 
         return matchFixture;
@@ -85,7 +85,7 @@ public class PinnacleApi {
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         List<OddsPeriod> periods = odds.getPeriods();
         for (OddsPeriod period : periods) {
-            CoeffType partType = getPartByStatusCode(period.getStatus());
+            CoeffType partType = getPartByStatusCode(period.getNumber());
             List<OddsSpread> spreads = period.getSpreads();
             if (spreads != null) {
                 for (OddsSpread spread : spreads) {
@@ -127,8 +127,8 @@ public class PinnacleApi {
         return bookmakerMatchResponse;
     }
 
-    private CoeffType getPartByStatusCode(int status) {
-        switch (status) {
+    private CoeffType getPartByStatusCode(int number) {
+        switch (number) {
             case 0:
                 return MATCH;
             case 1:
@@ -136,7 +136,7 @@ public class PinnacleApi {
             case 2:
                 return SECOND_HALF;
         }
-        throw new PinnacleException("Status is invalid, should be 1,2,3. Status: " + status);
+        throw new PinnacleException("number is invalid, should be 1,2,3. number: " + number);
     }
 
     private OddsResponse getOddsResponseBySportType(SportType sportType) {

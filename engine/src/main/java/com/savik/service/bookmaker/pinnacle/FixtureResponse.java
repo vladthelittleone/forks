@@ -22,6 +22,7 @@ class FixtureLeague {
 @Data
 class FixtureEvent {
     Integer id;
+    Integer parentId;
     String home;
     String away;
     LocalDateTime starts;

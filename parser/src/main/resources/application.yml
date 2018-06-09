@@ -1,3 +1,6 @@
+scheduling:
+  enabled: true
+
 server:
     port: 8001
 spring:
@@ -16,6 +19,6 @@ spring:
               hibernate:
                     dialect: org.hibernate.dialect.H2Dialect
         hibernate:
-            ddl-auto: none
+            ddl-auto: create
             use-new-id-generator-mappings: true
         show-sql: true

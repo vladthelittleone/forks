@@ -34,7 +34,8 @@ public class Parser {
 
         Document document = downloader.downloadSportMatchesSchedule(sportConfig, day);
         List<Match> matches = flashscoreResponseParser.parse(document);
-        matches = matches.stream().filter(m -> m.getMatchStatus() == MatchStatus.PREMATCH).limit(2).collect(Collectors.toList());
+        matches = matches.stream().filter(m -> m.getFlashscoreLeagueId().equals("f1GbGBCd")&&
+                m.getMatchStatus() == MatchStatus.PREMATCH).collect(Collectors.toList());
         flashscoreResponseProcessor.process(sportConfig, matches);
         temp(matches);
 
@@ -46,8 +47,9 @@ public class Parser {
         for (Match match : matches) {
             System.out.println("matches.add(");
             System.out.println("Match.builder()");
-            System.out.println(".flashscoreLeagueId(\"" + match.getFlashscoreId() + "\")");
+            System.out.println(".flashscoreLeagueId(\"" + match.getFlashscoreLeagueId() + "\")");
             System.out.println(".sportType(" + match.getSportType() + ")");
+            System.out.println(".date(LocalDateTime.now())");
             System.out.println(".matchStatus(" + match.getMatchStatus() + ")");
             System.out.println(".homeTeam(Team.builder().name(\"" + match.getHomeTeam().getName() + "\").flashscoreId(\"" + match.getHomeTeam().getFlashscoreId() + "\").sportType(" + match.getSportType() + ").build())");
             System.out.println(".awayTeam(Team.builder().name(\"" + match.getAwayTeam().getName() + "\").flashscoreId(\"" + match.getAwayTeam().getFlashscoreId() + "\").sportType(" + match.getSportType() + ").build())");

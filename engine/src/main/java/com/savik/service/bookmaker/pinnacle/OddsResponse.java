@@ -8,10 +8,10 @@ import java.util.List;
 public class OddsResponse {
     Integer sportId;
     Integer last;
-    List<OddsLeague> league;
+    List<OddsLeague> leagues;
 
     public OddsEvent findEvent(FixtureEvent fixtureEvent) {
-        for (OddsLeague fixtureLeague : league) {
+        for (OddsLeague fixtureLeague : leagues) {
             List<OddsEvent> events = fixtureLeague.getEvents();
             for (OddsEvent event : events) {
                 if (event.getId().equals(fixtureEvent.getId())) {

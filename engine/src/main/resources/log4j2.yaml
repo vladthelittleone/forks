@@ -29,6 +29,10 @@ Configutation:
           - ref: Console_Appender
 
       Logger:
+        - name: com.netflix.discovery
+          additivity: false
+          level: 'off'
+
         - name: com.savik.http
           additivity: false
           level: debug

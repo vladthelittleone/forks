@@ -68,6 +68,7 @@ public class SbobetBookmakerService extends BookmakerService {
                 );
     }
 
+    // todo: переделать ( плохо )
     private Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
         Match match = bookmakerMatch.getMatch();
         log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());

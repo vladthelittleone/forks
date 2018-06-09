@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class ParserApplication {
 
     public static void main(String[] args) {
