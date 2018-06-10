@@ -55,8 +55,10 @@ public class PinnacleApi {
     private FixtureResponse getFixtureBySportType(SportType sportType) {
         FixtureResponse sportFixture = fixtures.get(sportType);
         if (sportFixture == null) {
+            log.debug(String.format("Fixture wasn't found. Sport:%s", sportType));
             sportFixture = downloader.downloadFixtures(sportType);
             fixtures.put(sportType, sportFixture);
+            log.debug(String.format("Fixture was downloaded. Sport:%s", sportType));
         }
         if (sportFixture == null) {
             throw new PinnacleException("fixture not found for sport type: " + sportType);
@@ -80,6 +82,7 @@ public class PinnacleApi {
     }
 
     private BookmakerMatchResponse parseMatch(FixtureEvent event, BookmakerMatch bookmakerMatch) {
+        log.debug(String.format("Start parse event. event:%s", event));
         OddsResponse oddsResponse = getOddsResponseBySportType(bookmakerMatch.getMatch().getSportType());
         OddsEvent odds = oddsResponse.findEvent(event);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
@@ -123,7 +126,7 @@ public class PinnacleApi {
                 .bookmakerType(BookmakerType.PINNACLE)
                 .build();
 
-
+        log.debug(String.format("Event was parsed. event:%s", event));
         return bookmakerMatchResponse;
     }
 

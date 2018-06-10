@@ -23,13 +23,19 @@ public abstract class BookmakerService {
     protected abstract Optional<BookmakerMatchResponse> handle(BookmakerMatch match);
 
     public void handle(Match match) {
-        BookmakerMatch bookmakerMatch = bookmakerMatchService.createFromMatch(match, getBookmakerType());
+        Optional<BookmakerMatch> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
+        if(!bookmakerMatchOptional.isPresent()) {
+            log.debug(String.format("Match wasn't parsed. id: %s, %s-%s",
+                    match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
+            return;
+        }
+        BookmakerMatch bookmakerMatch = bookmakerMatchOptional.get();
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
         if (info.isPresent()) {
             log.debug("Match was parsed:" + info.get());
             bookmakerEventPublisher.publishMatchResponse(info.get(), match);
         } else {
-            log.info("Match wasn't found:" + match);
+            log.info(String.format("Match wasn't found. Id: %s", match));
             bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
         }
     }

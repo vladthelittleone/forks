@@ -18,7 +18,6 @@ public class OddsResponse {
                     return event;
                 }
             }
-
         }
         throw new PinnacleException("Odd event not found, fixture id: " + fixtureEvent.getId());
     }

@@ -47,6 +47,7 @@ public class Parser {
         for (Match match : matches) {
             System.out.println("matches.add(");
             System.out.println("Match.builder()");
+            System.out.println(".flashscoreId(\"" + match.getFlashscoreId() + "\")");
             System.out.println(".flashscoreLeagueId(\"" + match.getFlashscoreLeagueId() + "\")");
             System.out.println(".sportType(" + match.getSportType() + ")");
             System.out.println(".date(LocalDateTime.now())");

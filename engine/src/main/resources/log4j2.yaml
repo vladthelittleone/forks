@@ -9,10 +9,21 @@ Configutation:
   Appenders:
 
     File:
-      name: Sbobet_File_Appender
-      fileName: ${log-path}/sbobet.log
-      PatternLayout:
-        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: Bookmaker_File_Appender
+        fileName: ${log-path}/common.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+
+      - name: Sbobet_File_Appender
+        fileName: ${log-path}/sbobet.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+
+      - name: Pinnacle_File_Appender
+        fileName: ${log-path}/pinnacle.log
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+
 
     Console:
       name: Console_Appender
@@ -38,11 +49,21 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Console_Appender
-              level: debug
+
+        - name: com.savik.service.bookmaker
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Bookmaker_File_Appender
 
         - name: com.savik.service.bookmaker.sbobet
           additivity: false
           level: debug
           AppenderRef:
             - ref: Sbobet_File_Appender
-              level: debug
+
+        - name: com.savik.service.bookmaker.pinnacle
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Pinnacle_File_Appender
