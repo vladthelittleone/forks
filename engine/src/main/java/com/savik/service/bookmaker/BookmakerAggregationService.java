@@ -1,11 +1,7 @@
 package com.savik.service.bookmaker;
 
 import com.savik.domain.Match;
-import com.savik.service.bookmaker.sbobet.SbobetBookmakerService;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.ThreadContext;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +26,12 @@ public class BookmakerAggregationService {
     }
 
     @Async
+    @MatchIdLogging
     public void handle(Match match) {
-        ThreadContext.put("match.id", match.getFlashscoreId());
         for (BookmakerService bookmakerService : bookmakerServices) {
             log.info(String.format("Start handling match. matchId: %s, bookmaker service: %s, ", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
             bookmakerService.handle(match);
             log.info(String.format("Match was handled. matchId: %s, bookmaker service: %s", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
         }
-        ThreadContext.clearAll();
     }
 }
