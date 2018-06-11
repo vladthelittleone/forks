@@ -1,5 +1,6 @@
 package com.savik.service.bookmaker;
 
+import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,5 +20,10 @@ public class BookmakerEventPublisher {
     public void publishMatchNotFound(final BookmakerMatch bookmakerMatch) {
         BookmakerMatchNotFoundEvent matchNotFoundEvent = new BookmakerMatchNotFoundEvent(bookmakerMatch);
         applicationEventPublisher.publishEvent(matchNotFoundEvent);
+    }
+
+    public void publishMatchInfoNotFoundForBookmaker(Match match, BookmakerType bookmakerType) {
+        BookmakerMatchInfoNotFoundEvent bookmakerMatchInfoNotFoundEvent = new BookmakerMatchInfoNotFoundEvent(match, bookmakerType);
+        applicationEventPublisher.publishEvent(bookmakerMatchInfoNotFoundEvent);
     }
 }

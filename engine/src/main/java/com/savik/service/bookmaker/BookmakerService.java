@@ -27,6 +27,7 @@ public abstract class BookmakerService {
         if(!bookmakerMatchOptional.isPresent()) {
             log.debug(String.format("Match wasn't parsed. id: %s, %s-%s",
                     match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
+            bookmakerEventPublisher.publishMatchInfoNotFoundForBookmaker(match, getBookmakerType());
             return;
         }
         BookmakerMatch bookmakerMatch = bookmakerMatchOptional.get();
