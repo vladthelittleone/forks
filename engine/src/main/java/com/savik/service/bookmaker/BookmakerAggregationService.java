@@ -1,5 +1,6 @@
 package com.savik.service.bookmaker;
 
+import com.savik.aop.MatchIdLogging;
 import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;

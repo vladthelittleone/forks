@@ -1,4 +1,4 @@
-package com.savik.service.bookmaker;
+package com.savik.aop;
 
 import com.savik.domain.Match;
 import org.apache.logging.log4j.ThreadContext;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ThreadContextAspect {
 
-    @Around("@annotation(MatchIdLogging)")
+    @Around("@annotation(com.savik.aop.MatchIdLogging)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         if (args != null && args.length == 1 && args[0] instanceof Match) {

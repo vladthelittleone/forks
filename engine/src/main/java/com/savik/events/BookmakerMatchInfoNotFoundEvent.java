@@ -1,4 +1,4 @@
-package com.savik.service.bookmaker;
+package com.savik.events;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;

@@ -1,4 +1,4 @@
-package com.savik.service.bookmaker;
+package com.savik.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
