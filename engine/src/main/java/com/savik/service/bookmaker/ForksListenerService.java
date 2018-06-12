@@ -10,6 +10,6 @@ public class ForksListenerService {
 
     @EventListener
     public void handle(final ForkFoundEvent event) {
-        System.out.println("fork was found: " + event);
+        log.info("Fork was found: " + event);
     }
 }

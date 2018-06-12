@@ -21,29 +21,42 @@ public class ForksFinderService {
 
     @EventListener
     public List<ForkFoundEvent> handleBookmakerResponse(final BookmakerMatchResponseEvent event) {
-        log.debug("BookmakerMatchResponseEvent received: " + event);
+        log.debug("Start handling new book match response: " + event);
+
         BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
         Match match = event.getMatch();
-        matches.putIfAbsent(match.getFlashscoreId(), new HashMap<>());
-        Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = matches.get(match.getFlashscoreId());
-        List<BookmakerCoeff> bookmakerCoeffs = bookmakerMatchResponse.getBookmakerCoeffs();
-        matchBookmakersCoeffs.put(bookmakerMatchResponse.getBookmakerType(), bookmakerCoeffs);
+        Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = getBookmakersCoeffs(match);
+        List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, matchBookmakersCoeffs);
+        log.debug("New received coeffs: " + eventBookmakerCoeffs);
+
         List<Entry<BookmakerType, List<BookmakerCoeff>>> otherBookmakers = matchBookmakersCoeffs.entrySet().stream()
                 .filter(eS -> eS.getKey() != bookmakerMatchResponse.getBookmakerType()).collect(Collectors.toList());
-
         List<ForkFoundEvent> events = new ArrayList<>();
         for (Entry<BookmakerType, List<BookmakerCoeff>> otherBookmaker : otherBookmakers) {
+            log.debug("Start comparing with bookmaker: " + otherBookmaker.getKey());
             List<BookmakerCoeff> otherBookCoeffs = otherBookmaker.getValue();
-
-            for (BookmakerCoeff newBookmakerCoeff : bookmakerCoeffs) {
+            for (BookmakerCoeff newBookmakerCoeff : eventBookmakerCoeffs) {
                 for (BookmakerCoeff otherBookCoeff : otherBookCoeffs) {
                     if (otherBookCoeff.isFork(newBookmakerCoeff)) {
-                        events.add(new ForkFoundEvent());
+                        log.debug("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff);
+                        events.add(new ForkFoundEvent(match, bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff, otherBookmaker.getKey(), otherBookCoeff));
                     } else {
+                        log.debug("It's not a fork: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff);
                     }
                 }
             }
         }
         return events;
+    }
+
+    private List<BookmakerCoeff> saveNewCoeffsAndGet(BookmakerMatchResponse bookmakerMatchResponse, Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs) {
+        List<BookmakerCoeff> eventBookmakerCoeffs = bookmakerMatchResponse.getBookmakerCoeffs();
+        matchBookmakersCoeffs.put(bookmakerMatchResponse.getBookmakerType(), eventBookmakerCoeffs);
+        return eventBookmakerCoeffs;
+    }
+
+    private Map<BookmakerType, List<BookmakerCoeff>> getBookmakersCoeffs(Match match) {
+        matches.putIfAbsent(match.getFlashscoreId(), new HashMap<>());
+        return matches.get(match.getFlashscoreId());
     }
 }

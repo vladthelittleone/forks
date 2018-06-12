@@ -8,26 +8,60 @@ Configutation:
 
   Appenders:
 
-    File:
+    RollingFile:
       - name: Bookmaker_File_Appender
         fileName: ${log-path}/common.log
+        filePattern: "${log-path}/archive/common.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+              size: 100 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
       - name: Sbobet_File_Appender
         fileName: ${log-path}/sbobet.log
+        filePattern: "${log-path}/archive/sbobet.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
       - name: Pinnacle_File_Appender
         fileName: ${log-path}/pinnacle.log
+        filePattern: "${log-path}/archive/pinnacle.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
       - name: Flashscore_Connection_File_Appender
         fileName: ${log-path}/flashscore_suggestions.log
+        filePattern: "${log-path}/archive/flashscore_suggestions.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+
+      - name: Forks_File_Appender
+        fileName: ${log-path}/forks.log
+        filePattern: "${log-path}/archive/forks.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
+
+      - name: Errors_File_Appender
+        fileName: ${log-path}/errors.log
+        filePattern: "${log-path}/archive/errors.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
 
 
     Console:
@@ -43,6 +77,8 @@ Configutation:
         level: info
         AppenderRef:
           - ref: Console_Appender
+          - ref: Errors_File_Appender
+            level: error
 
       Logger:
         - name: com.netflix.discovery
@@ -61,6 +97,7 @@ Configutation:
           AppenderRef:
             - ref: Bookmaker_File_Appender
 
+
         - name: com.savik.service.bookmaker.sbobet
           additivity: false
           level: debug
@@ -78,3 +115,14 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Flashscore_Connection_File_Appender
+
+        - name: com.savik.service.bookmaker.ForksListenerService
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Forks_File_Appender
+
+
+
+
+
