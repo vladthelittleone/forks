@@ -19,15 +19,15 @@ public class SbobetCache {
 
     private Set<BookmakerMatchResponse> cache = new HashSet<>();
 
-    public void addAll(Collection<BookmakerMatchResponse> matches) {
+    public synchronized void addAll(Collection<BookmakerMatchResponse> matches) {
         cache.addAll(matches);
     }
 
-    public void add(BookmakerMatchResponse match) {
+    public synchronized void add(BookmakerMatchResponse match) {
         cache.add(match);
     }
 
-    public Optional<BookmakerMatchResponse> find(BookmakerMatch bookmakerMatch) {
+    public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatch bookmakerMatch) {
         // todo concurrent
         BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
