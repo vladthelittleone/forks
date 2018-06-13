@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,11 +29,12 @@ public class BookmakerAggregationService {
 
     @Async
     @MatchIdLogging
-    public void handle(Match match) {
+    public CompletableFuture<Void> handle(Match match) {
         for (BookmakerService bookmakerService : bookmakerServices) {
             log.info(String.format("Start handling match. matchId: %s, bookmaker service: %s, ", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
             bookmakerService.handle(match);
             log.info(String.format("Match was handled. matchId: %s, bookmaker service: %s", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
         }
+        return CompletableFuture.completedFuture(null);
     }
 }
