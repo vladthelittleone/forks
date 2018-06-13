@@ -5,19 +5,19 @@ import com.savik.domain.SportType;
 import com.savik.exception.ParseException;
 import com.savik.http.Downloader;
 import lombok.extern.log4j.Log4j2;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @Log4j2
-public class PinnacleDownloader extends Downloader {
+public class PinnacleDownloader {
+
+    @Autowired
+    Downloader downloader;
 
     @Autowired
     PinnacleConfig pinnacleConfig;
@@ -28,8 +28,8 @@ public class PinnacleDownloader extends Downloader {
     public FixtureResponse downloadFixtures(SportType sportType) {
         try {
             String url = pinnacleConfig.getFixtureUrl(sportType);
-            //String json = downloadJson(url);
-            String json = new String(Files.readAllBytes(Paths.get("C:\\projects\\forks\\engine\\src\\main\\resources\\config\\bookmakers\\pinnacle\\fixtures.json")));
+            String json = downloadJson(url);
+            //String json = new String(Files.readAllBytes(Paths.get("C:\\projects\\forks\\engine\\src\\main\\resources\\config\\bookmakers\\pinnacle\\fixtures.json")));
             return objectMapper.readValue(json, FixtureResponse.class);
         } catch (IOException e) {
             throw new ParseException("Failed parse fixture", e);
@@ -39,8 +39,8 @@ public class PinnacleDownloader extends Downloader {
     public OddsResponse downloadOdds(SportType sportType) {
         try {
             String url = pinnacleConfig.getOddsUrl(sportType);
-            //String json = downloadJson(url);
-            String json = new String(Files.readAllBytes(Paths.get("C:\\projects\\forks\\engine\\src\\main\\resources\\config\\bookmakers\\pinnacle\\odds.json")));
+            String json = downloadJson(url);
+            //String json = new String(Files.readAllBytes(Paths.get("C:\\projects\\forks\\engine\\src\\main\\resources\\config\\bookmakers\\pinnacle\\odds.json")));
             return objectMapper.readValue(json, OddsResponse.class);
         } catch (IOException e) {
             throw new ParseException("Failed parse odds", e);
@@ -53,7 +53,7 @@ public class PinnacleDownloader extends Downloader {
                 put("Authorization", "Basic " + pinnacleConfig.getBase64Authentications());
             }
         };
-        return downloadJson(url, headers);
+        return downloader.downloadJson(url, headers);
     }
 
 

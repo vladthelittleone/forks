@@ -17,7 +17,7 @@ public class BookmakerMatch {
 
     BookmakerTeam homeTeam;
 
-    BookmakerTeam guestTeam;
+    BookmakerTeam awayTeam;
 
     BookmakerLeague bookmakerLeague;
 
@@ -32,7 +32,7 @@ public class BookmakerMatch {
         return "B.M.{" +
                 "m=" + match +
                 ", hT=" + homeTeam +
-                ", gT=" + guestTeam +
+                ", gT=" + awayTeam +
                 ", bL=" + bookmakerLeague +
                 '}';
     }

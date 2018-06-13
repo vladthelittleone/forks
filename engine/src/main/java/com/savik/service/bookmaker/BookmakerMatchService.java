@@ -1,6 +1,11 @@
 package com.savik.service.bookmaker;
 
-import com.savik.domain.*;
+import com.savik.domain.BookmakerLeague;
+import com.savik.domain.BookmakerPK;
+import com.savik.domain.BookmakerTeam;
+import com.savik.domain.BookmakerType;
+import com.savik.domain.Match;
+import com.savik.domain.Team;
 import com.savik.repository.BookmakerLeagueRepository;
 import com.savik.repository.BookmakerTeamRepository;
 import lombok.extern.log4j.Log4j2;
@@ -51,7 +56,7 @@ public class BookmakerMatchService {
                 BookmakerMatch.builder()
                         .match(match)
                         .homeTeam(dbHomeTeam.get())
-                        .guestTeam(dbAwayTeam.get())
+                        .awayTeam(dbAwayTeam.get())
                         .bookmakerLeague(league.get())
                         .build()
         );

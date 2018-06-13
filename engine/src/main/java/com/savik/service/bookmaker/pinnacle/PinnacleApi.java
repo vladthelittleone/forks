@@ -75,7 +75,7 @@ public class PinnacleApi {
 
         Optional<FixtureEvent> matchFixture = fixtureLeague.getEvents().stream()
                 .filter(event -> event.getHome().equals(match.getHomeTeam().getName()) &&
-                        event.getAway().equals(match.getGuestTeam().getName()) && event.getParentId() == null)
+                        event.getAway().equals(match.getAwayTeam().getName()) && event.getParentId() == null)
                 .findFirst();
 
         return matchFixture;
@@ -120,7 +120,7 @@ public class PinnacleApi {
 
         BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
                 .bookmakerHomeTeamName(bookmakerMatch.getHomeTeam().getName())
-                .bookmakerAwayTeamName(bookmakerMatch.getGuestTeam().getName())
+                .bookmakerAwayTeamName(bookmakerMatch.getAwayTeam().getName())
                 .bookmakerLeagueId(bookmakerMatch.getBookmakerLeague().getBookmakerId())
                 .bookmakerCoeffs(bookmakerCoeffs)
                 .bookmakerType(BookmakerType.PINNACLE)

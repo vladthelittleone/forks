@@ -31,7 +31,7 @@ public class SbobetCache {
         // todo concurrent
         BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
-        BookmakerTeam guestTeam = bookmakerMatch.getGuestTeam();
+        BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
         for (BookmakerMatchResponse cachedMatch : cache) {
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&

@@ -84,7 +84,7 @@ public class SbobetBookmakerService extends BookmakerService {
     }
 
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
-        Document document = downloader.download(bookmakerMatchResponse, bookmakerMatch);
+        Document document = downloader.download(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatch);
         JSONArray arrayContainer = extractArrayFromHtml(document);
         JSONArray prematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
         List<BookmakerMatchResponse> bookmakerMatchResponses = getMatchesFromArray(prematchArrays.getJSONArray(0).getJSONArray(MATCHES_IN_CONTAINER_INDEX));
