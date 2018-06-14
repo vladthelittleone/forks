@@ -22,7 +22,8 @@ public class EngineService {
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         for (Match match : matches) {
             log.debug("handling match: " + match);
-            futures.add(bookmakerAggregationService.handle(match));
+            CompletableFuture<Void> handle = bookmakerAggregationService.handle(match);
+            futures.add(handle);
             log.debug("match was handled: " + match);
         }
         log.info("Matches were handled successfully, size = " + matches.size());

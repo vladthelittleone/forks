@@ -24,6 +24,7 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = taskScheduler();
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
         threadPoolTaskScheduler.setThreadNamePrefix("engine-task-pool-");
+        threadPoolTaskScheduler.setErrorHandler(new SchedulerErrorHandler());
         threadPoolTaskScheduler.setDaemon(true);
         threadPoolTaskScheduler.initialize();
 

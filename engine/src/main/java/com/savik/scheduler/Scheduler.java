@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Log4j2
@@ -28,7 +29,8 @@ public class Scheduler {
         log.info("Current Thread : {}", Thread.currentThread().getName());
 
         List<Match> matches = parserClient.getMatches(MatchFilter.builder().matchStatus(MatchStatus.PREMATCH).build());
-        engineService.handle(matches);
+        CompletableFuture<Void> future = engineService.handle(matches);
+        future.join();
 
         log.info("matches were received: " + matches.size());
 

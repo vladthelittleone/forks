@@ -34,7 +34,7 @@ public class Parser {
 
         Document document = downloader.downloadSportMatchesSchedule(sportConfig, day);
         List<Match> matches = flashscoreResponseParser.parse(document);
-        matches = matches.stream().filter(m -> m.getFlashscoreLeagueId().equals("f1GbGBCd")&&
+        matches = matches.stream().filter(m -> m.getFlashscoreLeagueId().equals("lvUBR5F8")&&
                 m.getMatchStatus() == MatchStatus.PREMATCH).collect(Collectors.toList());
         flashscoreResponseProcessor.process(sportConfig, matches);
         temp(matches);

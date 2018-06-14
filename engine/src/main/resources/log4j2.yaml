@@ -43,7 +43,7 @@ Configutation:
            SizeBasedTriggeringPolicy:
                size: 100 KB
         PatternLayout:
-          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+          pattern: "%msg%n"
 
       - name: Forks_File_Appender
         fileName: ${log-path}/forks.log
@@ -95,6 +95,7 @@ Configutation:
           additivity: false
           level: debug
           AppenderRef:
+            - ref: Console_Appender
             - ref: Bookmaker_File_Appender
 
 

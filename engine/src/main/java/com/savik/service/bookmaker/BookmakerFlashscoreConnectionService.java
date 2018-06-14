@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class BookmakerFlashscoreConnectionService {
 
     public void printSuggestion(Match match, BookmakerType bookmakerType) {
-        log.debug(String.format("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('%s', '%s, '', '%s')",
+        log.debug(String.format("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('%s', '%s', '', '%s');",
                 bookmakerType, match.getHomeTeam().getFlashscoreId(), match.getHomeTeam().getName()));
-        log.debug(String.format("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('%s', '%s, '', '%s')",
+        log.debug(String.format("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('%s', '%s', '', '%s');",
                 bookmakerType, match.getAwayTeam().getFlashscoreId(), match.getAwayTeam().getName()));
     }
 }
