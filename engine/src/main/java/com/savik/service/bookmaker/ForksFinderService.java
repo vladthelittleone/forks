@@ -40,10 +40,10 @@ public class ForksFinderService {
             for (BookmakerCoeff newBookmakerCoeff : eventBookmakerCoeffs) {
                 for (BookmakerCoeff otherBookCoeff : otherBookCoeffs) {
                     if (otherBookCoeff.isFork(newBookmakerCoeff)) {
-                        log.debug("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff);
+                        log.debug(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(new ForkFoundEvent(match, bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff, otherBookmaker.getKey(), otherBookCoeff));
                     } else {
-                        log.debug("It's not a fork: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff);
+                        log.debug(String.format("It's not a fork: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                     }
                 }
             }

@@ -25,5 +25,6 @@ class FixtureEvent {
     Integer parentId;
     String home;
     String away;
+    String status;
     LocalDateTime starts;
 }
