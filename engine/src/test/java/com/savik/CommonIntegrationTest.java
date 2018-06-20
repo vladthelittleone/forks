@@ -75,9 +75,9 @@ public class CommonIntegrationTest {
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_odds.json").toURI()))));
 
         // sbobet football
-        when(downloader.download(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
+        when(downloader.downloadAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football.html").toURI())))));
-        when(downloader.download(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(match, BookmakerType.SBOBET).get())))
+        when(downloader.downloadAntibot(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(match, BookmakerType.SBOBET).get())))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_france_peru.html").toURI())))));
     }
 

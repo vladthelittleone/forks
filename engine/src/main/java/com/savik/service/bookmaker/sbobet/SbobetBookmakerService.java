@@ -127,7 +127,7 @@ public class SbobetBookmakerService extends BookmakerService {
     private JSONArray extractArrayFromHtml(Document download) {
         Element script = download.getElementsByTag("script").last();
         String scriptText = script.childNodes().get(0).toString();
-        String jsArray = scriptText.substring(scriptText.indexOf("onUpdate('od',") + 14, scriptText.indexOf("); }"));
+        String jsArray = scriptText.substring(scriptText.indexOf("onUpdate('od',") + 14, scriptText.indexOf("]);") + 1);
         return new JSONArray(jsArray);
     }
 

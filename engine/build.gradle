@@ -9,5 +9,4 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.0.RELEASE'
     compile group: 'org.json', name: 'json', version: '20180130'
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
-    compile 'com.github.alessiop86.anti-antibot-cloudflare:anti-antibot-cloudflare-okhttpclient:1.2'
 }
