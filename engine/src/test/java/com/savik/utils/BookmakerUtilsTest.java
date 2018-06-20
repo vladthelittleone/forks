@@ -25,7 +25,7 @@ public class BookmakerUtilsTest {
             "+0.5, -0.25",
     })
     public void test1(Double type1, Double type2) {
-        assertTrue(BookmakerUtils.isForkAcceptableTypes(type1, type2));
+        assertTrue(BookmakerUtils.isHandicapForkAcceptableTypes(type1, type2));
     }
     @DisplayName(" It's not acceptable type values for handicap, totals")
     @ParameterizedTest(name = "{index} => type1={0}, type2={1}")
@@ -37,7 +37,7 @@ public class BookmakerUtilsTest {
             "-0.75, +0.5",
     })
     public void test2(Double type1, Double type2) {
-        assertFalse(BookmakerUtils.isForkAcceptableTypes(type1, type2));
+        assertFalse(BookmakerUtils.isHandicapForkAcceptableTypes(type1, type2));
     }
 
 

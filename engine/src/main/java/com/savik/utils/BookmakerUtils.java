@@ -9,7 +9,11 @@ public class BookmakerUtils {
         return (1 / value1 + 1 / value2) < 1;
     }
 
-    public boolean isForkAcceptableTypes(Double type1, Double type2) {
+    public double getForkPercentage(Double value1, Double value2) {
+        return (1 / value1 + 1 / value2);
+    }
+
+    public boolean isHandicapForkAcceptableTypes(Double type1, Double type2) {
         if (isPositive(type1) && isPositive(type2)) {
             return true;
         }
