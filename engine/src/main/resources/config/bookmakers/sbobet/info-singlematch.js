@@ -20,6 +20,20 @@ function initiateOddsDisplay() {
                             // 14 - first half точный счет
                             // 6 - ranges на голы
                             // 15 - double chance, вроде кэфы наоборот относительно дом/гости
+                            // 555 - corners 1, x, 2
+                            // 550 - corners handicap
+                            // 551 - 1h corners handicap
+                            // 552 - total corners
+                            // 553 - 1h total corners
+                            // 218, 180 - first and last corner или наоборот, обычно кэфы одинаковы
+                            // 545 - home team total over/under
+                            // 547 - away team total over/under
+                            // 546 - 1h home team total over/under
+                            // 548 - 1h away team total over/under
+                            // 536 - bookings handicap
+                            // 537 - 1h bookings handicap
+                            // 523 - bookings total
+                            // 538 - 1h bookings total
                             [37000278, [1, 0, 1, 0, 3000, 0.75, 2922420], [1.66, 2.35]],
                             [37000279, [7, 0, 7, 0, 3000, 0.50, 2922420], [2.05, 1.83]],
                             [37000280, [3, 0, 3, 0, 5000, 2.75, 2922420], [1.95, 1.95]],

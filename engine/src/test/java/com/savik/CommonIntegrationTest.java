@@ -58,12 +58,12 @@ public class CommonIntegrationTest {
     @BeforeEach
     public void init() throws URISyntaxException, IOException {
         Match match = Match.builder()
-                .homeTeam(Team.builder().flashscoreId("6LHwBDGU").name("Czech Republic").build())
-                .awayTeam(Team.builder().flashscoreId("EBE2Xb3l").name("Nigeria").build())
-                .flashscoreLeagueId("f1GbGBCd")
+                .homeTeam(Team.builder().flashscoreId("QkGeVG1n").name("France").build())
+                .awayTeam(Team.builder().flashscoreId("Uend67D3").name("Peru").build())
+                .flashscoreLeagueId("lvUBR5F8")
                 .sportType(SportType.FOOTBALL)
                 .date(LocalDateTime.now())
-                .flashscoreId("6wouPfkp")
+                .flashscoreId("vHWXsRjb")
                 .build();
 
         matches = Arrays.asList(match);
@@ -77,8 +77,8 @@ public class CommonIntegrationTest {
         // sbobet football
         when(downloader.download(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football.html").toURI())))));
-        when(downloader.download(sbobetConfig.getMatchUrl("!!!!!!!!!!!!!!", bookmakerMatchService.createFromMatch(match, BookmakerType.SBOBET).get())))
-                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_!!!!!!!!!!!.html").toURI())))));
+        when(downloader.download(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(match, BookmakerType.SBOBET).get())))
+                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_france_peru.html").toURI())))));
     }
 
     @Test
