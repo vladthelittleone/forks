@@ -130,4 +130,26 @@ public class BookmakerCoeff {
                 ", coeff=" + temp.getCoeffValue() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BookmakerCoeff that = (BookmakerCoeff) o;
+
+        if (type != that.type) return false;
+        if (typeValue != null ? !typeValue.equals(that.typeValue) : that.typeValue != null) return false;
+        if (coeffValue != null ? !coeffValue.equals(that.coeffValue) : that.coeffValue != null) return false;
+        return child != null ? child.equals(that.child) : that.child == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (typeValue != null ? typeValue.hashCode() : 0);
+        result = 31 * result + (coeffValue != null ? coeffValue.hashCode() : 0);
+        result = 31 * result + (child != null ? child.hashCode() : 0);
+        return result;
+    }
 }
