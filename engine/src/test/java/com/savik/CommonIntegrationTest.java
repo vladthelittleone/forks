@@ -5,8 +5,9 @@ import com.savik.domain.SportType;
 import com.savik.domain.Team;
 import com.savik.events.ForkFoundEvent;
 import com.savik.http.Downloader;
+import com.savik.model.Bet;
+import com.savik.model.BookmakerCoeff;
 import com.savik.service.EngineService;
-import com.savik.service.bookmaker.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatchService;
 import com.savik.service.bookmaker.ForksListenerService;
 import com.savik.service.bookmaker.pinnacle.PinnacleConfig;
@@ -37,6 +38,9 @@ import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
+import static com.savik.service.bookmaker.CoeffType.OVER;
+import static com.savik.service.bookmaker.CoeffType.TOTAL;
+import static com.savik.service.bookmaker.CoeffType.UNDER;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -104,25 +108,27 @@ public class CommonIntegrationTest {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
         ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
-        //verify(forksListenerService, times(2)).handle(any(ForkFoundEvent.class));
-        verify(forksListenerService, times(2)).handle(argument.capture());
+        verify(forksListenerService, times(3)).handle(argument.capture());
 
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        SBOBET,
-                        BookmakerCoeff.of(-1.25, 2.51, HANDICAP, HOME, MATCH),
-                        PINNACLE,
-                        BookmakerCoeff.of(1.25, 1.69, HANDICAP, AWAY, MATCH)
+                        new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, HANDICAP, HOME, MATCH)),
+                        new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, HANDICAP, AWAY, MATCH))
                 )
         ));
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        SBOBET,
-                        BookmakerCoeff.of(-0.5, 2.19, HANDICAP, HOME, FIRST_HALF),
-                        PINNACLE,
-                        BookmakerCoeff.of(0.5, 1.88, HANDICAP, AWAY, FIRST_HALF)
+                        new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, HANDICAP, HOME, FIRST_HALF)),
+                        new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, HANDICAP, AWAY, FIRST_HALF))
+                )
+        ));
+        assertTrue(argument.getAllValues().contains(
+                new ForkFoundEvent(
+                        FRANCE_PERU,
+                        new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, OVER, TOTAL, MATCH)),
+                        new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, UNDER, TOTAL, MATCH))
                 )
         ));
     }

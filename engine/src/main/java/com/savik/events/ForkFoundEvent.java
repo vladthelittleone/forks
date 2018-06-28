@@ -1,8 +1,7 @@
 package com.savik.events;
 
-import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
-import com.savik.service.bookmaker.BookmakerCoeff;
+import com.savik.model.Bet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,13 +11,9 @@ public class ForkFoundEvent {
 
     Match match;
 
-    BookmakerType newBookmakerType;
+    Bet first;
 
-    BookmakerCoeff newBookmakerCoeff;
-
-    BookmakerType oldBookmakerType;
-
-    BookmakerCoeff oldBookmakerCoeff;
+    Bet second;
 
     @Override
     public boolean equals(Object o) {
@@ -28,19 +23,15 @@ public class ForkFoundEvent {
         ForkFoundEvent that = (ForkFoundEvent) o;
 
         if (!match.equals(that.match)) return false;
-        if (newBookmakerType != that.newBookmakerType) return false;
-        if (!newBookmakerCoeff.equals(that.newBookmakerCoeff)) return false;
-        if (oldBookmakerType != that.oldBookmakerType) return false;
-        return oldBookmakerCoeff.equals(that.oldBookmakerCoeff);
+        if (!first.equals(that.first) && !first.equals(that.second)) return false;
+        return second.equals(that.second) || second.equals(that.first);
     }
 
     @Override
     public int hashCode() {
         int result = match.hashCode();
-        result = 31 * result + newBookmakerType.hashCode();
-        result = 31 * result + newBookmakerCoeff.hashCode();
-        result = 31 * result + oldBookmakerType.hashCode();
-        result = 31 * result + oldBookmakerCoeff.hashCode();
+        result = 31 * result + first.hashCode();
+        result = 31 * result + second.hashCode();
         return result;
     }
 }

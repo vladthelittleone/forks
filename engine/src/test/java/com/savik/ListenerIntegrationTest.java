@@ -5,7 +5,7 @@ import com.savik.domain.Match;
 import com.savik.domain.SportType;
 import com.savik.domain.Team;
 import com.savik.events.ForkFoundEvent;
-import com.savik.service.bookmaker.BookmakerCoeff;
+import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerEventPublisher;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.ForksListenerService;

@@ -1,6 +1,7 @@
 package com.savik.service.bookmaker;
 
 import com.savik.domain.BookmakerType;
+import com.savik.model.BookmakerCoeff;
 import lombok.Builder;
 import lombok.Data;
 

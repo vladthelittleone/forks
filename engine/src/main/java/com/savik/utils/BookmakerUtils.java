@@ -33,6 +33,17 @@ public class BookmakerUtils {
 
     }
 
+    public boolean isTotalForkAcceptableTypes(Double totalOver, Double totalUnder) {
+        if (isNegative(totalOver) || isNegative(totalUnder)) {
+            throw new IllegalArgumentException("total should be positive. totalOver: " + totalOver + ", totalUnder:" + totalUnder);
+        }
+        if (totalOver > totalUnder) {
+            return false;
+        }
+        return true;
+
+    }
+
     private boolean isPositive(Double value) {
         return value >= 0;
     }

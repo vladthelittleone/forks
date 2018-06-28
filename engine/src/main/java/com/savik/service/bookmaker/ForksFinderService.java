@@ -4,6 +4,8 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.events.BookmakerMatchResponseEvent;
 import com.savik.events.ForkFoundEvent;
+import com.savik.model.Bet;
+import com.savik.model.BookmakerCoeff;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,15 @@ public class ForksFinderService {
                     }
                     if (otherBookCoeff.isFork(newBookmakerCoeff)) {
                         log.debug(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
-                        events.add(new ForkFoundEvent(match, bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff, otherBookmaker.getKey(), otherBookCoeff));
+                        events.add(
+                                new ForkFoundEvent(
+                                        match,
+                                        new Bet(bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff),
+                                        new Bet(otherBookmaker.getKey(), otherBookCoeff)
+                                )
+                        );
                     } else {
-                        log.debug(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s", 
+                        log.debug(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s",
                                 BookmakerCoeff.getForkPercentage(newBookmakerCoeff, otherBookCoeff), newBookmakerCoeff, otherBookCoeff));
                     }
                 }

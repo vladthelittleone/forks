@@ -7,7 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.savik.service.bookmaker.CoeffType.*;
+import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.HANDICAP;
+import static com.savik.service.bookmaker.CoeffType.HOME;
+import static com.savik.service.bookmaker.CoeffType.OVER;
+import static com.savik.service.bookmaker.CoeffType.TOTAL;
+import static com.savik.service.bookmaker.CoeffType.UNDER;
 
 public class BookmakerCoeffMapper {
 
@@ -19,6 +24,8 @@ public class BookmakerCoeffMapper {
         acceptableTypes.put(AWAY, Arrays.asList(HOME));
         acceptableTypes.put(HANDICAP, Arrays.asList(HANDICAP));
         acceptableTypes.put(TOTAL, Arrays.asList(TOTAL));
+        acceptableTypes.put(OVER, Arrays.asList(UNDER));
+        acceptableTypes.put(UNDER, Arrays.asList(OVER));
     }
 
     public static boolean isAcceptable(CoeffType origin, CoeffType target) {

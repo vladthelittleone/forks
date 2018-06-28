@@ -1,5 +1,7 @@
-package com.savik.service.bookmaker;
+package com.savik.model;
 
+import com.savik.service.bookmaker.BookmakerCoeffMapper;
+import com.savik.service.bookmaker.CoeffType;
 import com.savik.utils.BookmakerUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,6 +78,12 @@ public class BookmakerCoeff {
         if (selfLastChild.getType() == CoeffType.HANDICAP) {
             return BookmakerUtils.isHandicapForkAcceptableTypes(selfLastChild.getTypeValue(), anotherLastChild.getTypeValue());
         }
+        if (selfLastChild.getType() == CoeffType.OVER) {
+            return BookmakerUtils.isTotalForkAcceptableTypes(selfLastChild.getTypeValue(), anotherLastChild.getTypeValue());
+        }
+        if (selfLastChild.getType() == CoeffType.UNDER) {
+            return BookmakerUtils.isTotalForkAcceptableTypes(anotherLastChild.getTypeValue(), selfLastChild.getTypeValue());
+        }
         throw new IllegalArgumentException(String.format("Type handler doesn't exist: %s", selfLastChild.getType()));
     }
 
@@ -90,7 +98,13 @@ public class BookmakerCoeff {
         if (selfLastChild.getType() == CoeffType.HANDICAP) {
             return BookmakerUtils.isFork(selfLastChild.getCoeffValue(), anotherLastChild.getCoeffValue());
         }
-        return false;
+        if (selfLastChild.getType() == CoeffType.OVER) {
+            return BookmakerUtils.isFork(selfLastChild.getCoeffValue(), anotherLastChild.getCoeffValue());
+        }
+        if (selfLastChild.getType() == CoeffType.UNDER) {
+            return BookmakerUtils.isFork(selfLastChild.getCoeffValue(), anotherLastChild.getCoeffValue());
+        }
+        throw new IllegalArgumentException("Type handler doesn't exist: %s" + selfLastChild.getType());
     }
 
 

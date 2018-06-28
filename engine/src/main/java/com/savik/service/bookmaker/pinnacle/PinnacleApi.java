@@ -2,7 +2,7 @@ package com.savik.service.bookmaker.pinnacle;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.SportType;
-import com.savik.service.bookmaker.BookmakerCoeff;
+import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.savik.service.bookmaker.BookmakerCoeff.of;
+import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
