@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -58,15 +59,29 @@ public class BookmakerCoeffMapper {
 
         createMatching(
                 Arrays.asList(
-                        new CoeffTypeChain(MATCH, TOTAL, OVER),
-                        new CoeffTypeChain(MATCH, TOTAL, UNDER)
+                        new CoeffTypeChain(MATCH, COMMON, TOTAL, OVER),
+                        new CoeffTypeChain(MATCH, COMMON, TOTAL, UNDER)
                 )
         );
 
         createMatching(
                 Arrays.asList(
-                        new CoeffTypeChain(FIRST_HALF, TOTAL, OVER),
-                        new CoeffTypeChain(FIRST_HALF, TOTAL, UNDER)
+                        new CoeffTypeChain(MATCH, HOME, TOTAL, OVER),
+                        new CoeffTypeChain(MATCH, HOME, TOTAL, UNDER)
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        new CoeffTypeChain(MATCH, AWAY, TOTAL, OVER),
+                        new CoeffTypeChain(MATCH, AWAY, TOTAL, UNDER)
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        new CoeffTypeChain(FIRST_HALF, COMMON, TOTAL, OVER),
+                        new CoeffTypeChain(FIRST_HALF, COMMON, TOTAL, UNDER)
                 )
         );
         

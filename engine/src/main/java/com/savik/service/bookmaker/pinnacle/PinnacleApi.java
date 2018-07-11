@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -67,8 +68,6 @@ public class PinnacleApi {
     }
 
     private Optional<FixtureEvent> findMatch(FixtureResponse fixture, BookmakerMatch match) {
-        List<FixtureLeague> league = fixture.getLeague();
-
         FixtureLeague fixtureLeague = fixture.getLeague().stream()
                 .filter(l -> Objects.equals(l.getId(), Integer.parseInt(match.getBookmakerLeague().getBookmakerId())))
                 .findFirst().get();
@@ -99,8 +98,8 @@ public class PinnacleApi {
             List<OddsTotal> totals = period.getTotals();
             if (totals != null) {
                 for (OddsTotal total : totals) {
-                    bookmakerCoeffs.add(of(total.getPoints(), total.getOver(), partType, TOTAL, OVER));
-                    bookmakerCoeffs.add(of(total.getPoints(), total.getUnder(), partType, TOTAL, UNDER));
+                    bookmakerCoeffs.add(of(total.getPoints(), total.getOver(), partType, COMMON, TOTAL, OVER));
+                    bookmakerCoeffs.add(of(total.getPoints(), total.getUnder(), partType, COMMON, TOTAL, UNDER));
                 }
             }
             OddsTeamTotalBlock teamTotal = period.getTeamTotal();

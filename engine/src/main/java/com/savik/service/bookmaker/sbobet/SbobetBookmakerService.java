@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -29,6 +30,7 @@ import static com.savik.service.bookmaker.CoeffType.UNDER;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.FIRST_HALF_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.GUEST_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.HOME_COEFF_INDEX;
+import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.MATCH_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.MATCH_TOTAL;
 
@@ -55,6 +57,7 @@ public class SbobetBookmakerService extends BookmakerService {
             add(new MatchHandicap());
             add(new FirstHalfHandicap());
             add(new MatchTotal());
+            add(new HomeMatchTotal());
         }
     };
 
@@ -154,6 +157,7 @@ public class SbobetBookmakerService extends BookmakerService {
     public static final int MATCH_HANDICAP = 1;
     public static final int FIRST_HALF_HANDICAP = 7;
     public static final int MATCH_TOTAL = 3;
+    public static final int HOME_MATCH_TOTAL = 545;
 
 
     private List<BookmakerMatchResponse> getMatchesFromArray(JSONArray matchesArray) {
@@ -247,14 +251,14 @@ class CommonTotal implements BetParser {
         throw new UnsupportedOperationException();
     }
 
-    public List<BookmakerCoeff> apply(JSONArray betArrayContainer, CoeffType period) {
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer, CoeffType period, CoeffType type) {
         JSONArray handicapValueArray = betArrayContainer.getJSONArray(1);
         double totalValue = handicapValueArray.getDouble(5);
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
         double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
-        BookmakerCoeff overCoeff = BookmakerCoeff.of(totalValue, homeCoeffValue, period, TOTAL, OVER);
-        BookmakerCoeff underCoeff = BookmakerCoeff.of(totalValue, guestCoeffValue, period, TOTAL, UNDER);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of(totalValue, homeCoeffValue, period, type, TOTAL, OVER);
+        BookmakerCoeff underCoeff = BookmakerCoeff.of(totalValue, guestCoeffValue, period, type, TOTAL, UNDER);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
         bookmakerCoeffs.add(underCoeff);
@@ -297,6 +301,19 @@ class MatchTotal extends CommonTotal {
 
     @Override
     public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
-        return apply(betArrayContainer, MATCH);
+        return apply(betArrayContainer, MATCH, COMMON);
+    }
+}
+
+class HomeMatchTotal extends CommonTotal {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType == HOME_MATCH_TOTAL;
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, MATCH, HOME);
     }
 }

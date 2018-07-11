@@ -34,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import static com.savik.domain.BookmakerType.PINNACLE;
 import static com.savik.domain.BookmakerType.SBOBET;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -108,7 +109,7 @@ public class CommonIntegrationTest {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
         ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
-        verify(forksListenerService, times(3)).handle(argument.capture());
+        verify(forksListenerService, times(4)).handle(argument.capture());
 
 
         assertTrue(argument.getAllValues().contains(
@@ -128,8 +129,16 @@ public class CommonIntegrationTest {
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, TOTAL, OVER)),
-                        new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, MATCH, TOTAL, UNDER))
+                        new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, COMMON, TOTAL, OVER)),
+                        new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, MATCH, COMMON, TOTAL, UNDER))
+                )
+        ));
+        
+        assertTrue(argument.getAllValues().contains(
+                new ForkFoundEvent(
+                        FRANCE_PERU,
+                        new Bet(PINNACLE, BookmakerCoeff.of(1.75, 2.17, MATCH, HOME, TOTAL, OVER)),
+                        new Bet(SBOBET, BookmakerCoeff.of(1.75, 1.91, MATCH, HOME, TOTAL, UNDER))
                 )
         ));
     }
