@@ -226,8 +226,8 @@ class CommonHandicap implements BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
         double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
-        BookmakerCoeff homeCoeff = BookmakerCoeff.of(-handicapValue, homeCoeffValue, HANDICAP, HOME, period);
-        BookmakerCoeff guestCoeff = BookmakerCoeff.of(handicapValue, guestCoeffValue, HANDICAP, AWAY, period);
+        BookmakerCoeff homeCoeff = BookmakerCoeff.of(-handicapValue, homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff guestCoeff = BookmakerCoeff.of(handicapValue, guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(homeCoeff);
         bookmakerCoeffs.add(guestCoeff);
@@ -253,8 +253,8 @@ class CommonTotal implements BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
         double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
-        BookmakerCoeff overCoeff = BookmakerCoeff.of(totalValue, homeCoeffValue, OVER, TOTAL, period);
-        BookmakerCoeff underCoeff = BookmakerCoeff.of(totalValue, guestCoeffValue, UNDER, TOTAL, period);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of(totalValue, homeCoeffValue, period, TOTAL, OVER);
+        BookmakerCoeff underCoeff = BookmakerCoeff.of(totalValue, guestCoeffValue, period, TOTAL, UNDER);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
         bookmakerCoeffs.add(underCoeff);

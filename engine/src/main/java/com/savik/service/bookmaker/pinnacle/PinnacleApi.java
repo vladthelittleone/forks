@@ -92,28 +92,28 @@ public class PinnacleApi {
             List<OddsSpread> spreads = period.getSpreads();
             if (spreads != null) {
                 for (OddsSpread spread : spreads) {
-                    bookmakerCoeffs.add(of(spread.getHdp(), spread.getHome(), HANDICAP, HOME, partType));
-                    bookmakerCoeffs.add(of(-spread.getHdp(), spread.getAway(), HANDICAP, AWAY, partType));
+                    bookmakerCoeffs.add(of(spread.getHdp(), spread.getHome(), partType, HOME, HANDICAP));
+                    bookmakerCoeffs.add(of(-spread.getHdp(), spread.getAway(), partType, AWAY, HANDICAP));
                 }
             }
             List<OddsTotal> totals = period.getTotals();
             if (totals != null) {
                 for (OddsTotal total : totals) {
-                    bookmakerCoeffs.add(of(total.getPoints(), total.getOver(), OVER, TOTAL, partType));
-                    bookmakerCoeffs.add(of(total.getPoints(), total.getUnder(), UNDER, TOTAL, partType));
+                    bookmakerCoeffs.add(of(total.getPoints(), total.getOver(), partType, TOTAL, OVER));
+                    bookmakerCoeffs.add(of(total.getPoints(), total.getUnder(), partType, TOTAL, UNDER));
                 }
             }
             OddsTeamTotalBlock teamTotal = period.getTeamTotal();
             if (teamTotal != null) {
                 OddsTeamTotal home = teamTotal.getHome();
                 if (home != null) {
-                    bookmakerCoeffs.add(of(home.getPoints(), home.getOver(), OVER, TOTAL, HOME, partType));
-                    bookmakerCoeffs.add(of(home.getPoints(), home.getUnder(), UNDER, TOTAL, HOME, partType));
+                    bookmakerCoeffs.add(of(home.getPoints(), home.getOver(), partType, HOME, TOTAL, OVER));
+                    bookmakerCoeffs.add(of(home.getPoints(), home.getUnder(), partType, HOME, TOTAL, UNDER));
                 }
                 OddsTeamTotal away = teamTotal.getAway();
                 if (home != null) {
-                    bookmakerCoeffs.add(of(away.getPoints(), away.getOver(), OVER, TOTAL, AWAY, partType));
-                    bookmakerCoeffs.add(of(away.getPoints(), away.getUnder(), UNDER, TOTAL, AWAY, partType));
+                    bookmakerCoeffs.add(of(away.getPoints(), away.getOver(), partType, AWAY, TOTAL, OVER));
+                    bookmakerCoeffs.add(of(away.getPoints(), away.getUnder(), partType, AWAY, TOTAL, UNDER));
                 }
             }
         }

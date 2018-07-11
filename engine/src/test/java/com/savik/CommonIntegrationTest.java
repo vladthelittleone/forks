@@ -110,25 +110,26 @@ public class CommonIntegrationTest {
         ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
         verify(forksListenerService, times(3)).handle(argument.capture());
 
+
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, HANDICAP, HOME, MATCH)),
-                        new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, HANDICAP, AWAY, MATCH))
+                        new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, MATCH, HOME, HANDICAP)),
+                        new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, MATCH, AWAY, HANDICAP))
                 )
         ));
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, HANDICAP, HOME, FIRST_HALF)),
-                        new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, HANDICAP, AWAY, FIRST_HALF))
+                        new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, FIRST_HALF, HOME, HANDICAP)),
+                        new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, FIRST_HALF, AWAY, HANDICAP))
                 )
         ));
         assertTrue(argument.getAllValues().contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
-                        new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, OVER, TOTAL, MATCH)),
-                        new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, UNDER, TOTAL, MATCH))
+                        new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, TOTAL, OVER)),
+                        new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, MATCH, TOTAL, UNDER))
                 )
         ));
     }

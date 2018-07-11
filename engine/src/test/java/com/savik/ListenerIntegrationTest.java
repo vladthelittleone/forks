@@ -57,8 +57,8 @@ public class ListenerIntegrationTest {
                 .bookmakerMatchId("")
                 .bookmakerCoeffs(
                         Arrays.asList(
-                                BookmakerCoeff.of(0., 1.95, HANDICAP, HOME, MATCH),
-                                BookmakerCoeff.of(0., 1.95, HANDICAP, AWAY, MATCH)
+                                BookmakerCoeff.of(0., 1.95, MATCH, HOME, HANDICAP ),
+                                BookmakerCoeff.of(0., 1.95, MATCH, AWAY, HANDICAP)
                         )
                 )
                 .build();
@@ -72,8 +72,8 @@ public class ListenerIntegrationTest {
                 .bookmakerMatchId("")
                 .bookmakerCoeffs(
                         Arrays.asList(
-                                BookmakerCoeff.of(0., 1.85, HANDICAP, AWAY, MATCH),
-                                BookmakerCoeff.of(0., 2.06, HANDICAP, HOME, MATCH)
+                                BookmakerCoeff.of(0., 1.85, MATCH, AWAY, HANDICAP),
+                                BookmakerCoeff.of(0., 2.06, MATCH, HOME, HANDICAP)
                         )
                 )
                 .build();

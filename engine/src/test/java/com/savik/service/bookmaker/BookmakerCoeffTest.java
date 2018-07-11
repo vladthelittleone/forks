@@ -26,8 +26,8 @@ public class BookmakerCoeffTest {
             "1.8, 2.26"
     })
     public void test1(Double coeff1, Double coeff2) {
-        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, AWAY, MATCH);
+        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, MATCH, HOME, HANDICAP);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, MATCH, AWAY, HANDICAP);
         assertTrue(target.isForkCompatibleTypeInTypes(original));
     }
 
@@ -41,8 +41,8 @@ public class BookmakerCoeffTest {
             "1.8, 2.25"
     })
     public void test2(Double coeff1, Double coeff2) {
-        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, HANDICAP, HOME, MATCH);
-        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, HANDICAP, AWAY, MATCH);
+        BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, MATCH, HOME, HANDICAP);
+        BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, MATCH, AWAY, HANDICAP);
         assertFalse(target.isForkCompatibleTypeInTypes(original));
     }
 
