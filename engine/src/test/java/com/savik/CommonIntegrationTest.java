@@ -109,7 +109,7 @@ public class CommonIntegrationTest {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
         ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
-        verify(forksListenerService, times(4)).handle(argument.capture());
+        verify(forksListenerService, times(5)).handle(argument.capture());
 
 
         assertTrue(argument.getAllValues().contains(
@@ -139,6 +139,14 @@ public class CommonIntegrationTest {
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(1.75, 2.17, MATCH, HOME, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(1.75, 1.91, MATCH, HOME, TOTAL, UNDER))
+                )
+        ));
+        
+        assertTrue(argument.getAllValues().contains(
+                new ForkFoundEvent(
+                        FRANCE_PERU,
+                        new Bet(PINNACLE, BookmakerCoeff.of(0.5, 2.0, MATCH, AWAY, TOTAL, OVER)),
+                        new Bet(SBOBET, BookmakerCoeff.of(0.75, 2.01, MATCH, AWAY, TOTAL, UNDER))
                 )
         ));
     }
