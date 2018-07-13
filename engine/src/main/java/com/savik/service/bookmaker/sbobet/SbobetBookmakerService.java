@@ -29,6 +29,7 @@ import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.FIRST_HALF_HANDICAP;
+import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.FIRST_HALF_HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.FIRST_HALF__TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.GUEST_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.HOME_COEFF_INDEX;
@@ -61,6 +62,7 @@ public class SbobetBookmakerService extends BookmakerService {
             add(new MatchTotal());
             add(new FirstHalfTotal());
             add(new HomeMatchTotal());
+            add(new FirstHalfHomeMatchTotal());
             add(new AwayMatchTotal());
         }
     };
@@ -163,6 +165,7 @@ public class SbobetBookmakerService extends BookmakerService {
     public static final int MATCH_TOTAL = 3;
     public static final int FIRST_HALF__TOTAL = 9;
     public static final int HOME_MATCH_TOTAL = 545;
+    public static final int FIRST_HALF_HOME_MATCH_TOTAL = 546;
     public static final int AWAY_MATCH_TOTAL = 547;
 
 
@@ -334,6 +337,19 @@ class HomeMatchTotal extends CommonTotal {
     @Override
     public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
         return apply(betArrayContainer, MATCH, HOME);
+    }
+}
+
+class FirstHalfHomeMatchTotal extends CommonTotal {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType == FIRST_HALF_HOME_MATCH_TOTAL;
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, FIRST_HALF, HOME);
     }
 }
 

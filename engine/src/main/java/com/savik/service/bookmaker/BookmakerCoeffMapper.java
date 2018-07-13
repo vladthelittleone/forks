@@ -84,6 +84,20 @@ public class BookmakerCoeffMapper {
                         new CoeffTypeChain(FIRST_HALF, COMMON, TOTAL, UNDER)
                 )
         );
+
+        createMatching(
+                Arrays.asList(
+                        new CoeffTypeChain(FIRST_HALF, HOME, TOTAL, OVER),
+                        new CoeffTypeChain(FIRST_HALF, HOME, TOTAL, UNDER)
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        new CoeffTypeChain(FIRST_HALF, AWAY, TOTAL, OVER),
+                        new CoeffTypeChain(FIRST_HALF, AWAY, TOTAL, UNDER)
+                )
+        );
         
     }
     
