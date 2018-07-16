@@ -15,7 +15,10 @@ import java.util.Map;
  */
 @AllArgsConstructor
 @Service
-public class ParserDownloader extends HttpClient {
+public class ParserDownloader {
+
+    @Autowired
+    HttpClient httpClient;
 
     @Autowired
     private DownloaderConfiguration configuration;
@@ -35,6 +38,6 @@ public class ParserDownloader extends HttpClient {
                 put("X-Fsign", configuration.getFsign());
             }
         };
-        return download(url, headers);
+        return httpClient.download(url, headers);
     }
 }
