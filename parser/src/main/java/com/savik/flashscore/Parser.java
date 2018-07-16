@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Parser {
 
     @Autowired
-    ParserDownloader downloader;
+    ParserHttpClient downloader;
 
     @Autowired
     FlashscoreResponseParser flashscoreResponseParser;

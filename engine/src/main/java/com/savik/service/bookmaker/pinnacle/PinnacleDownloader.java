@@ -3,7 +3,7 @@ package com.savik.service.bookmaker.pinnacle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.savik.domain.SportType;
 import com.savik.exception.ParseException;
-import com.savik.http.Downloader;
+import com.savik.http.HttpClient;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class PinnacleDownloader {
 
     @Autowired
-    Downloader downloader;
+    HttpClient httpClient;
 
     @Autowired
     PinnacleConfig pinnacleConfig;
@@ -53,7 +53,7 @@ public class PinnacleDownloader {
                 put("Authorization", "Basic " + pinnacleConfig.getBase64Authentications());
             }
         };
-        return downloader.downloadJson(url, headers);
+        return httpClient.downloadJson(url, headers);
     }
 
 

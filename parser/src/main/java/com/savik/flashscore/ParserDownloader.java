@@ -1,6 +1,6 @@
 package com.savik.flashscore;
 
-import com.savik.http.Downloader;
+import com.savik.http.HttpClient;
 import lombok.AllArgsConstructor;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @AllArgsConstructor
 @Service
-public class ParserDownloader extends Downloader {
+public class ParserDownloader extends HttpClient {
 
     @Autowired
     private DownloaderConfiguration configuration;

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Log4j2
 @Component
-public class Downloader {
+public class HttpClient {
 
     public Document download(String url) {
         return download(url, new HashMap<>());
