@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class OddsResponse {
     Integer sportId;
-    Integer last;
+    Long last;
     List<OddsLeague> leagues;
 
     public OddsEvent findEvent(FixtureEvent fixtureEvent) {
