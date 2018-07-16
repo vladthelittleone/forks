@@ -5,6 +5,7 @@ import com.github.alessiop86.antiantibotcloudflare.OkHttpAntiAntibotCloudFlareFa
 import com.github.alessiop86.antiantibotcloudflare.exceptions.AntiAntibotException;
 import com.savik.http.exception.DownloadException;
 import lombok.extern.log4j.Log4j2;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,18 @@ public class HttpClient {
     
     public Document get(String url, Map<String, String> headers) {
         try {
-            return Jsoup.connect(url).headers(headers).get();
+            return createConnection(url, headers).get();
+        } catch (IOException e) {
+            throw new DownloadException(e);
+        }
+    }    
+    
+    public Document post(String url, Map<String, String> data) {
+        return post(url, data, null);
+    }    
+    public Document post(String url, Map<String, String> data, Map<String, String> headers) {
+        try {
+            return createConnection(url, headers).data(data).post();
         } catch (IOException e) {
             throw new DownloadException(e);
         }
@@ -36,9 +48,13 @@ public class HttpClient {
 
     public String getJson(String url, Map<String, String> headers) {
         try {
-            return Jsoup.connect(url).headers(headers).ignoreContentType(true).execute().body();
+            return createConnection(url, headers).ignoreContentType(true).execute().body();
         } catch (IOException e) {
             throw new DownloadException(e);
         }
+    }
+
+    private Connection createConnection(String url, Map<String, String> headers) {
+        return Jsoup.connect(url).headers(headers);
     }
 }
