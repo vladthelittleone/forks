@@ -10,18 +10,13 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
 @Component
 public class HttpClient {
-
-    public Document download(String url) {
-        return download(url, new HashMap<>());
-    }
-
-    public Document download(String url, Map<String, String> headers) {
+    
+    public Document get(String url, Map<String, String> headers) {
         try {
             return Jsoup.connect(url).headers(headers).get();
         } catch (IOException e) {
@@ -29,7 +24,7 @@ public class HttpClient {
         }
     }
 
-    public Document downloadAntibot(String url) {
+    public Document getAntibot(String url) {
         try {
             AntiAntiBotCloudFlare antibot = new OkHttpAntiAntibotCloudFlareFactory().createInstanceNonAndroid();
             String html = antibot.getUrl(url);
@@ -39,7 +34,7 @@ public class HttpClient {
         }
     }
 
-    public String downloadJson(String url, Map<String, String> headers) {
+    public String getJson(String url, Map<String, String> headers) {
         try {
             return Jsoup.connect(url).headers(headers).ignoreContentType(true).execute().body();
         } catch (IOException e) {

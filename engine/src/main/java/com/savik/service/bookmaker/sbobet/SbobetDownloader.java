@@ -18,12 +18,12 @@ public class SbobetDownloader {
 
     public Document download(String sbobetMatchId, BookmakerMatch bookmakerMatch) {
         String resultUrl = sbobetConfig.getMatchUrl(sbobetMatchId, bookmakerMatch);
-        return httpClient.downloadAntibot(resultUrl);
+        return httpClient.getAntibot(resultUrl);
     }
 
     public Document download(SportType sportType, int daysFromToday) {
         String resultUrl = sbobetConfig.getSportUrl(sportType, daysFromToday);
-        return httpClient.downloadAntibot(resultUrl);
+        return httpClient.getAntibot(resultUrl);
     }
 
 }

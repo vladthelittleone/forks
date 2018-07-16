@@ -38,6 +38,6 @@ public class ParserDownloader {
                 put("X-Fsign", configuration.getFsign());
             }
         };
-        return httpClient.download(url, headers);
+        return httpClient.get(url, headers);
     }
 }

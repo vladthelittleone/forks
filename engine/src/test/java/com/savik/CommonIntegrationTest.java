@@ -92,15 +92,15 @@ public class CommonIntegrationTest {
         matches = Arrays.asList(FRANCE_PERU);
 
         // pinnacle football
-        when(httpClient.downloadJson(eq(pinnacleConfig.getFixtureUrl(SportType.FOOTBALL)), any(Map.class)))
+        when(httpClient.getJson(eq(pinnacleConfig.getFixtureUrl(SportType.FOOTBALL)), any(Map.class)))
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_fixtures.json").toURI()))));
-        when(httpClient.downloadJson(eq(pinnacleConfig.getOddsUrl(SportType.FOOTBALL)), any(Map.class)))
+        when(httpClient.getJson(eq(pinnacleConfig.getOddsUrl(SportType.FOOTBALL)), any(Map.class)))
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_odds.json").toURI()))));
 
         // sbobet football
-        when(httpClient.downloadAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
+        when(httpClient.getAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football.html").toURI())))));
-        when(httpClient.downloadAntibot(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(FRANCE_PERU, SBOBET).get())))
+        when(httpClient.getAntibot(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(FRANCE_PERU, SBOBET).get())))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_france_peru.html").toURI())))));
     }
 
