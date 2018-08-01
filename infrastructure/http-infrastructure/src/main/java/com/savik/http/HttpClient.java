@@ -11,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
@@ -26,7 +27,7 @@ public class HttpClient {
     }    
     
     public Document post(String url, Map<String, String> data) {
-        return post(url, data, null);
+        return post(url, data, new HashMap<>());
     }    
     public Document post(String url, Map<String, String> data, Map<String, String> headers) {
         try {

@@ -17,7 +17,7 @@ public class MarathonDownloader {
     MarathonConfig marathonConfig;
 
     public Document download(String marathonMatchId) {
-        return httpClient.post("https://www.marathonbet.com/su/markets.htm", Collections.singletonMap("treeId", marathonMatchId));
+        return httpClient.post(marathonConfig.getUrl(), Collections.singletonMap("treeId", marathonMatchId));
     }
 
 }
