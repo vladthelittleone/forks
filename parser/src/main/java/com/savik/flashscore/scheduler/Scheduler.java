@@ -27,7 +27,9 @@ public class Scheduler {
         log.info("start scheduling task for today matches");
         log.info("Current Thread : {}", Thread.currentThread().getName());
 
-        parser.parse(sportConfigs, TODAY);
+        //parser.parse(sportConfigs, TODAY);
+        //parser.parse(sportConfigs, 1);
+        parser.parse(sportConfigs, 2);
 
         log.info("finished scheduling task for today matches");
     }

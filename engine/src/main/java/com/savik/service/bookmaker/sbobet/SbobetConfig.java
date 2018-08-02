@@ -27,13 +27,13 @@ public class SbobetConfig {
         if (daysFromToday == 0) {
             daysSbobetFormat = "";
         }
-        return url + prefixes.get(sportType) + daysSbobetFormat;
+        return url + prefixes.get(sportType) + "/" + daysSbobetFormat;
     }
 
     public String getMatchUrl(String sbobetMatchId, BookmakerMatch bookmakerMatch) {
-        String newLeagueName = bookmakerMatch.getBookmakerLeague().getName().toLowerCase().replaceAll("\\s+", "-");
-        String newHomeName = bookmakerMatch.getHomeTeam().getName().toLowerCase().replaceAll("\\s+", "-");
-        String newGuestName = bookmakerMatch.getAwayTeam().getName().toLowerCase().replaceAll("\\s+", "-");
+        String newLeagueName = bookmakerMatch.getBookmakerLeague().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
+        String newHomeName = bookmakerMatch.getHomeTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
+        String newGuestName = bookmakerMatch.getAwayTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
         return url + prefixes.get(bookmakerMatch.getMatch().getSportType()) + "/" + newLeagueName + "/" + sbobetMatchId + "/" + newHomeName + "-vs-" + newGuestName;
     }
 }

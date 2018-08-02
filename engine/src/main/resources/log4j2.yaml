@@ -35,6 +35,15 @@ Configutation:
                size: 100 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
+          
+      - name: Marathon_File_Appender
+        fileName: ${log-path}/marathon.log
+        filePattern: "${log-path}/archive/marathon.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 100 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
       - name: Flashscore_Connection_File_Appender
         fileName: ${log-path}/flashscore_suggestions.log
@@ -104,6 +113,12 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Sbobet_File_Appender
+
+        - name: com.savik.service.bookmaker.marathon
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Marathon_File_Appender
 
         - name: com.savik.service.bookmaker.pinnacle
           additivity: false

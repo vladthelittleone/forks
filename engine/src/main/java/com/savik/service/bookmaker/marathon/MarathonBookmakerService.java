@@ -6,6 +6,7 @@ import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import com.savik.service.bookmaker.CoeffType;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,15 +14,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.savik.domain.BookmakerType.MARATHON;
 
 @Component
+@Log4j2
 public class MarathonBookmakerService extends BookmakerService {
 
     final String ADDITIONAL_MARKETS = "\"ADDITIONAL_MARKETS\":\"";
@@ -37,7 +41,7 @@ public class MarathonBookmakerService extends BookmakerService {
 
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatch match) {
-        Document download = marathonDownloader.download("7083671");
+        Document download = marathonDownloader.download("7083672");
         String body = download.body().outerHtml();
         body = StringEscapeUtils.unescapeHtml(body);
         body = body.replaceAll("\\\\\"", "").replaceAll("\\\\n", "").replaceAll("\n", "");
@@ -52,6 +56,8 @@ public class MarathonBookmakerService extends BookmakerService {
         fillTotal(document, bookmakerCoeffs, match);
         fillAsianTotal(document, bookmakerCoeffs, match);
 
+        bookmakerCoeffs.removeAll(Collections.singleton(null));
+
         final BookmakerMatchResponse build = BookmakerMatchResponse.builder()
                 .bookmakerType(MARATHON)
                 .bookmakerMatchId("!!!!")
@@ -61,6 +67,7 @@ public class MarathonBookmakerService extends BookmakerService {
                 .bookmakerCoeffs(bookmakerCoeffs)
                 .build();
 
+        log.debug("Matche was parsed: " + build);
         return Optional.of(build);
     }
 
@@ -69,27 +76,32 @@ public class MarathonBookmakerService extends BookmakerService {
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
             final Element coeffsTable = marketTableName.nextElementSibling();
-            final Elements handicapBlock = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
-            final Elements prices = handicapBlock.select("td.price");
-            final Element homePrice = prices.get(0);
-            final Element awayPrice = prices.get(1);
-            if (handicap.text().equalsIgnoreCase("To Win Match With Handicap")) {
-                final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.HANDICAP);
-                final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.HANDICAP);
-                bookmakerCoeffs.add(homeCoeff);
-                bookmakerCoeffs.add(awayCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("To Win 1st Half With Handicap")) {
-                final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.HANDICAP);
-                final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.HANDICAP);
-                bookmakerCoeffs.add(homeCoeff);
-                bookmakerCoeffs.add(awayCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("To Win 2nd Half With Handicap")) {
-                final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.HANDICAP);
-                final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.HANDICAP);
-                bookmakerCoeffs.add(homeCoeff);
-                bookmakerCoeffs.add(awayCoeff);
+            final Elements handicapBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
+            for (Element handicapBlock : handicapBlocks) {
+                final Elements prices = handicapBlock.select("td.price");
+                if(prices.size() != 2) {
+                    continue;
+                }
+                final Element homePrice = prices.get(0);
+                final Element awayPrice = prices.get(1);
+                if (handicap.text().equalsIgnoreCase("To Win Match With Handicap")) {
+                    final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.HANDICAP);
+                    final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.HANDICAP);
+                    bookmakerCoeffs.add(homeCoeff);
+                    bookmakerCoeffs.add(awayCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("To Win 1st Half With Handicap")) {
+                    final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.HANDICAP);
+                    final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.HANDICAP);
+                    bookmakerCoeffs.add(homeCoeff);
+                    bookmakerCoeffs.add(awayCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("To Win 2nd Half With Handicap")) {
+                    final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.HANDICAP);
+                    final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.HANDICAP);
+                    bookmakerCoeffs.add(homeCoeff);
+                    bookmakerCoeffs.add(awayCoeff);
+                }
             }
         }
     }
@@ -99,64 +111,70 @@ public class MarathonBookmakerService extends BookmakerService {
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
             final Element coeffsTable = marketTableName.nextElementSibling();
-            final Elements handicapBlock = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
-            final Elements prices = handicapBlock.select("td.price");
-            final Element homePrice = prices.get(0);
-            final Element awayPrice = prices.get(1);
-            if (handicap.text().equalsIgnoreCase("Total Goals")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
+            final Elements totalBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
+            for (Element totalBlock : totalBlocks) {
+                final Elements prices = totalBlock.select("td.price");
+                if(prices.size() != 2) {
+                    continue;
+                }
+                final Element homePrice = prices.get(0);
+                final Element awayPrice = prices.get(1);
+                if (handicap.text().equalsIgnoreCase("Total Goals")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ")")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ")")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals - 1st Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ") - 1st Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ") - 1st Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals - 2nd Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ") - 2st Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
+                if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ") - 2st Half")) {
+                    final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
             }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ")")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ")")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals - 1st Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ") - 1st Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ") - 1st Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals - 2nd Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getHomeTeam().getName() + ") - 2st Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
-            if (handicap.text().equalsIgnoreCase("Total Goals (" + match.getAwayTeam().getName() + ") - 2st Half")) {
-                final BookmakerCoeff overCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
-            }
+
         }
     }
 
@@ -165,15 +183,20 @@ public class MarathonBookmakerService extends BookmakerService {
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
             final Element coeffsTable = marketTableName.nextElementSibling();
-            final Elements handicapBlock = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
-            final Elements prices = handicapBlock.select("td.price");
-            final Element homePrice = prices.get(0);
-            final Element awayPrice = prices.get(1);
-            if (handicap.text().equalsIgnoreCase("Asian Total Goals")) {
-                final BookmakerCoeff overCoeff = createFromAsianHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
-                final BookmakerCoeff underCoeff = createFromAsianHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
-                bookmakerCoeffs.add(overCoeff);
-                bookmakerCoeffs.add(underCoeff);
+            final Elements totalBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
+            for (Element totalBlock : totalBlocks) {
+                final Elements prices = totalBlock.select("td.price");
+                if(prices.size() != 2) {
+                    continue;
+                }
+                final Element homePrice = prices.get(0);
+                final Element awayPrice = prices.get(1);
+                if (handicap.text().equalsIgnoreCase("Asian Total Goals")) {
+                    final BookmakerCoeff overCoeff = createFromAsianHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
+                    final BookmakerCoeff underCoeff = createFromAsianHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
+                    bookmakerCoeffs.add(overCoeff);
+                    bookmakerCoeffs.add(underCoeff);
+                }
             }
         }
     }
@@ -183,21 +206,30 @@ public class MarathonBookmakerService extends BookmakerService {
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
             final Element coeffsTable = marketTableName.nextElementSibling();
-            final Elements handicapBlock = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
-            final Elements prices = handicapBlock.select("td.price");
-            final Element homePrice = prices.get(0);
-            final Element awayPrice = prices.get(1);
-            if (handicap.text().equalsIgnoreCase("To Win Match With Asian Handicap")) {
-                final BookmakerCoeff homeCoeff = createFromAsianHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.HANDICAP);
-                final BookmakerCoeff awayCoeff = createFromAsianHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.HANDICAP);
-                bookmakerCoeffs.add(homeCoeff);
-                bookmakerCoeffs.add(awayCoeff);
+            final Elements handicapBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
+            for (Element handicapBlock : handicapBlocks) {
+                final Elements prices = handicapBlock.select("td.price");
+                if(prices.size() != 2) {
+                    continue;
+                }
+                final Element homePrice = prices.get(0);
+                final Element awayPrice = prices.get(1);
+                if (handicap.text().equalsIgnoreCase("To Win Match With Asian Handicap")) {
+                    final BookmakerCoeff homeCoeff = createFromAsianHandicapBlock(homePrice, CoeffType.MATCH, CoeffType.HOME, CoeffType.HANDICAP);
+                    final BookmakerCoeff awayCoeff = createFromAsianHandicapBlock(awayPrice, CoeffType.MATCH, CoeffType.AWAY, CoeffType.HANDICAP);
+                    bookmakerCoeffs.add(homeCoeff);
+                    bookmakerCoeffs.add(awayCoeff);
+                }
             }
+            
         }
     }
 
     BookmakerCoeff createFromHandicapBlock(Element block, CoeffType... types) {
         final String handicapTypeWithBraces = block.select("div.coeff-handicap").text();
+        if(StringUtils.isEmpty(handicapTypeWithBraces)){
+            return null;
+        }
         final String handicapType = handicapTypeWithBraces.substring(1, handicapTypeWithBraces.length() - 1);
         final String handicapValue = block.select("div.coeff-price > span").text();
         return BookmakerCoeff.of(Double.valueOf(handicapType), Double.valueOf(handicapValue), types);
@@ -205,6 +237,9 @@ public class MarathonBookmakerService extends BookmakerService {
 
     BookmakerCoeff createFromAsianHandicapBlock(Element block, CoeffType... types) {
         final String handicapTypeWithBraces = block.select("div.coeff-handicap").text();
+        if(StringUtils.isEmpty(handicapTypeWithBraces)){
+            return null;
+        }
         final String handicapType = handicapTypeWithBraces.substring(1, handicapTypeWithBraces.length() - 1);
         final String[] values = handicapType.split(",");
         final double value = new BigDecimal(values[0]).add(new BigDecimal(values[1])).divide(new BigDecimal(2)).doubleValue();

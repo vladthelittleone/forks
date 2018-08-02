@@ -23,7 +23,7 @@ public class BookmakerMatch {
 
     public int getDaysFromToday() {
         LocalDateTime matchDate = match.getDate();
-        long between = ChronoUnit.DAYS.between(matchDate, LocalDateTime.now());
+        long between = ChronoUnit.DAYS.between(LocalDateTime.now() , matchDate);
         return (int) between;
     }
 
