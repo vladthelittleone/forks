@@ -1,5 +1,6 @@
 package com.savik.flashscore;
 
+import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.domain.MatchStatus;
 import lombok.extern.log4j.Log4j2;
@@ -7,7 +8,10 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +61,22 @@ public class Parser {
             System.out.println(".build()");
             System.out.println(");");
         }
+        final List<BookmakerType> types = Arrays.asList(BookmakerType.values());
+        for (BookmakerType type : types) {
+            Set<String> ids = new HashSet<>();
+            System.out.println("\n\n\n\n");
+            for (Match match : matches) {
+                if(!ids.contains(match.getHomeTeam().getFlashscoreId())) {
+                    ids.add(match.getHomeTeam().getFlashscoreId());
+                    System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getHomeTeam().getFlashscoreId() + "', '', '" + match.getHomeTeam().getName() + "');");
+                }
+                if(!ids.contains(match.getAwayTeam().getFlashscoreId())) {
+                    ids.add(match.getAwayTeam().getFlashscoreId());
+                    System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getAwayTeam().getFlashscoreId() + "', '', '" + match.getAwayTeam().getName() + "');");
+                }
+            }
+        }
+
         System.out.println("return matches;");
 
     }
