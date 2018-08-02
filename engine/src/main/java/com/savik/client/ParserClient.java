@@ -32,13 +32,13 @@ class ParserClientFallback implements ParserClient {
         List<Match> matches = new ArrayList();
         matches.add(
                 Match.builder()
-                        .flashscoreId("KEz6Yj6L")
-                        .flashscoreLeagueId("Y35Jer59")
+                        .flashscoreId("bBGdomDo")
+                        .flashscoreLeagueId("lrMHUHDc")
                         .sportType(FOOTBALL)
-                        .date(LocalDateTime.parse("2018-08-03T18:00"))
+                        .date(LocalDateTime.parse("2018-08-03T18:30"))
                         .matchStatus(PREMATCH)
-                        .homeTeam(Team.builder().name("Sochaux").flashscoreId("jPojkLXK").sportType(FOOTBALL).build())
-                        .awayTeam(Team.builder().name("Valenciennes").flashscoreId("O8dsB372").sportType(FOOTBALL).build())
+                        .homeTeam(Team.builder().name("Zaglebie Sosnowiec").flashscoreId("043sUkrq").sportType(FOOTBALL).build())
+                        .awayTeam(Team.builder().name("Pogon Szczecin").flashscoreId("Um9YwPQ0").sportType(FOOTBALL).build())
                         .build()
         );
         return matches;

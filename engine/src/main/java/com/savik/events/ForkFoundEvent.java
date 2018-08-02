@@ -4,9 +4,11 @@ import com.savik.domain.Match;
 import com.savik.model.Bet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class ForkFoundEvent {
 
     Match match;

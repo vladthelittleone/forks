@@ -3,15 +3,20 @@ package com.savik.model;
 import com.savik.domain.BookmakerType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
-@ToString
 public class Bet {
     BookmakerType bookmakerType;
 
     BookmakerCoeff bookmakerCoeff;
+
+    @Override
+    public String toString() {
+        return "B{" +
+                "bT={" + bookmakerType +
+                "}, bC={" + bookmakerCoeff + "}}";
+    }
 
     @Override
     public boolean equals(Object o) {

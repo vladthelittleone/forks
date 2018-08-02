@@ -2,15 +2,23 @@ package com.savik.utils;
 
 import lombok.experimental.UtilityClass;
 
+import java.math.BigDecimal;
+
+import static java.math.BigDecimal.ONE;
+import static java.math.MathContext.DECIMAL32;
+
 @UtilityClass
 public class BookmakerUtils {
 
     public boolean isFork(Double value1, Double value2) {
-        return (1 / value1 + 1 / value2) < 1;
+        return getForkPercentage(value1, value2) < 1;
     }
 
     public double getForkPercentage(Double value1, Double value2) {
-        return (1 / value1 + 1 / value2);
+        BigDecimal first = BigDecimal.valueOf(value1);
+        BigDecimal second = BigDecimal.valueOf(value2);
+        final BigDecimal value = (ONE.divide(first, DECIMAL32)).add((ONE.divide(second, DECIMAL32)));
+        return value.doubleValue();
     }
 
     public boolean isHandicapForkAcceptableTypes(Double type1, Double type2) {

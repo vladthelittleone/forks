@@ -6,7 +6,6 @@ import com.savik.utils.BookmakerUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -96,9 +95,9 @@ public class BookmakerCoeff {
     @Override
     public String toString() {
         return "" +
-                "typeValue=" + typeValue +
-                ", coeffValue=" + coeffValue +
-                ", typeChain=" + typeChain +
+                "tV=" + typeValue +
+                ", cV=" + coeffValue +
+                ", ch=" + typeChain +
                 '}';
     }
 
@@ -123,7 +122,6 @@ public class BookmakerCoeff {
     }
 
     @Getter
-    @ToString
     public static class CoeffTypeChain {
 
         List<CoeffType> chain;
@@ -142,6 +140,11 @@ public class BookmakerCoeff {
         
         public int size() {
             return chain.size();
+        }
+
+        @Override
+        public String toString() {
+            return chain.toString();
         }
 
         @Override
