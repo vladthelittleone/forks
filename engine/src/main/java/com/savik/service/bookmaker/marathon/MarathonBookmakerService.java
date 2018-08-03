@@ -68,6 +68,7 @@ public class MarathonBookmakerService extends BookmakerService {
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
         final List<BookmakerCoeff> bookmakerCoeffs = parser.downloadAndParseMatch(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatch);
         bookmakerMatchResponse.setBookmakerCoeffs(bookmakerCoeffs);
+        log.debug("Match was parsed: " + bookmakerMatchResponse);
         return Optional.of(bookmakerMatchResponse);
     }
 

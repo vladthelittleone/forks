@@ -53,7 +53,7 @@ public class PinnacleDownloader {
                 put("Authorization", "Basic " + pinnacleConfig.getBase64Authentications());
             }
         };
-        return httpClient.getJson(url, headers);
+        return httpClient.getPinnacleApacheJson(url, headers);
     }
 
 

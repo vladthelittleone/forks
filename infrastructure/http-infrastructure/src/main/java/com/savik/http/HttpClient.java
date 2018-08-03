@@ -5,6 +5,11 @@ import com.github.alessiop86.antiantibotcloudflare.OkHttpAntiAntibotCloudFlareFa
 import com.github.alessiop86.antiantibotcloudflare.exceptions.AntiAntibotException;
 import com.savik.http.exception.DownloadException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,6 +59,21 @@ public class HttpClient {
     public String getJson(String url, Map<String, String> headers) {
         try {
             return createConnection(url, headers).ignoreContentType(true).execute().body();
+        } catch (IOException e) {
+            throw new DownloadException(e);
+        }
+    }
+
+    public String getPinnacleApacheJson(String url, Map<String, String> headers) {
+        try {
+            final org.apache.http.client.HttpClient build = HttpClients.custom().build();
+            final HttpUriRequest uriRequest = RequestBuilder.get()
+                    .setUri(url)
+                    .setHeader("Authorization", headers.get("Authorization"))
+                    .build();
+            final HttpResponse response = build.execute(uriRequest);
+            return new BasicResponseHandler().handleResponse(response);
+
         } catch (IOException e) {
             throw new DownloadException(e);
         }

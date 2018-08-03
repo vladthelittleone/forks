@@ -33,7 +33,7 @@ public class MarathonCache {
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
         BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
         for (BookmakerMatchResponse cachedMatch : cache) {
-            if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
+            if (Objects.equals(bookmakerLeague.getName(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
                     Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
                 log.debug("Match info was found in cache: " + cachedMatch);

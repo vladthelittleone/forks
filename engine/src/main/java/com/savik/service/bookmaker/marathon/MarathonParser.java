@@ -35,7 +35,9 @@ public class MarathonParser {
         body = StringEscapeUtils.unescapeHtml(body);
         body = body.replaceAll("\\\\\"", "").replaceAll("\\\\n", "").replaceAll("\n", "");
         int i = body.indexOf(ADDITIONAL_MARKETS);
-        final String html = body.substring(i + ADDITIONAL_MARKETS.length(), body.indexOf("} </body>"));
+        final String html = body.indexOf("} </body>") != -1 ? 
+                body.substring(i + ADDITIONAL_MARKETS.length(), body.indexOf("} </body>")) :
+                body.substring(i + ADDITIONAL_MARKETS.length(), body.indexOf("</body>"));
         final Document document = Jsoup.parse(html);
 
 
@@ -81,7 +83,7 @@ public class MarathonParser {
                 responses.add(bookmakerMatchResponse);
             }
         }
-        return new ArrayList<>();
+        return responses;
     }
 
     private void fillHandicap(Document document, List<BookmakerCoeff> bookmakerCoeffs) {
