@@ -18,6 +18,10 @@ import java.util.Map;
 @Component
 public class HttpClient {
     
+    public Document get(String url) {
+        return get(url, new HashMap<>());
+    } 
+    
     public Document get(String url, Map<String, String> headers) {
         try {
             return createConnection(url, headers).get();

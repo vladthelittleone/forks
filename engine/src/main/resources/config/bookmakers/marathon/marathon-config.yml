@@ -1,2 +1,5 @@
 marathon:
-  url: https://www.marathonbet.com/en/markets.htm
+  url: https://www.marathonbet.com/en/
+  marketPrefix: markets.htm
+  prefixes:
+    football: betting/Football
