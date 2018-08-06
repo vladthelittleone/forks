@@ -6,8 +6,9 @@ import com.savik.domain.Match;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 
 @Data
 @Builder
@@ -23,8 +24,8 @@ public class BookmakerMatch {
 
     public int getDaysFromToday() {
         LocalDateTime matchDate = match.getDate();
-        long between = ChronoUnit.DAYS.between(LocalDateTime.now() , matchDate);
-        return (int) between;
+        int between = Period.between(LocalDate.now(), matchDate.toLocalDate()).getDays();
+        return between;
     }
 
     @Override

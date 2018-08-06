@@ -207,7 +207,7 @@ public class SbobetBookmakerService extends BookmakerService {
                         .bookmakerMatchId(String.valueOf(matchId))
                         .build();
 
-                log.debug("Match was parsed: " + bookmakerMatchResponse);
+                //log.debug("Match was parsed: " + bookmakerMatchResponse);
                 bookmakerMatchResponses.add(bookmakerMatchResponse);
             }
         }
