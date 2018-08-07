@@ -24,6 +24,9 @@ public class BookmakerCoeff {
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, CoeffType... types) {
         return of(typeValue, coeffValue, Arrays.asList(types));
     }
+    public static BookmakerCoeff of(Double coeffValue, CoeffType... types) {
+        return of(null, coeffValue, Arrays.asList(types));
+    }
 
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, List<CoeffType> types) {
         return new BookmakerCoeff(typeValue, coeffValue, new CoeffTypeChain(types));

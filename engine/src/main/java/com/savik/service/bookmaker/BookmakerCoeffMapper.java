@@ -21,6 +21,7 @@ import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 
 public class BookmakerCoeffMapper {
 
@@ -28,10 +29,14 @@ public class BookmakerCoeffMapper {
     private static Map<CoeffTypeChain, List<CoeffTypeChain>> acceptableTypes = new HashMap<>();
     private static Map<CoeffTypeChain, List<CoeffValueChecker>> acceptableCheckers = new HashMap<>();
 
+    final static CoeffTypeChain MATCH_HOME_WIN = new CoeffTypeChain(MATCH, HOME, WIN);
+    final static CoeffTypeChain MATCH_AWAY_WIN = new CoeffTypeChain(MATCH, AWAY, WIN);
     final static CoeffTypeChain MATCH_AWAY_HANDICAP = new CoeffTypeChain(MATCH, AWAY, HANDICAP);
     final static CoeffTypeChain MATCH_HOME_HANDICAP = new CoeffTypeChain(MATCH, HOME, HANDICAP);
     final static CoeffTypeChain FIRST_HALF_AWAY_HANDICAP = new CoeffTypeChain(FIRST_HALF, AWAY, HANDICAP);
     final static CoeffTypeChain FIRST_HALF_HOME_HANDICAP = new CoeffTypeChain(FIRST_HALF, HOME, HANDICAP);
+    final static CoeffTypeChain FIRST_HALF_AWAY_WIN = new CoeffTypeChain(FIRST_HALF, AWAY, WIN);
+    final static CoeffTypeChain FIRST_HALF_HOME_WIN = new CoeffTypeChain(FIRST_HALF, HOME, WIN);
     final static CoeffTypeChain SECOND_HALF_AWAY_HANDICAP = new CoeffTypeChain(SECOND_HALF, AWAY, HANDICAP);
     final static CoeffTypeChain SECOND_HALF_HOME_HANDICAP = new CoeffTypeChain(SECOND_HALF, HOME, HANDICAP);
     final static CoeffTypeChain MATCH_COMMON_TOTAL_OVER = new CoeffTypeChain(MATCH, COMMON, TOTAL, OVER);
@@ -51,15 +56,21 @@ public class BookmakerCoeffMapper {
     final static HandicapCoeffValueChecker HANDICAP_COEFF_VALUE_CHECKER = new HandicapCoeffValueChecker();
     final static TotalOverCoeffValueChecker TOTAL_OVER_COEFF_VALUE_CHECKER = new TotalOverCoeffValueChecker();
     final static TotalUnderCoeffValueChecker TOTAL_UNDER_COEFF_VALUE_CHECKER = new TotalUnderCoeffValueChecker();
+    final static HandicapToWinCoeffValueChecker HANDICAP_TO_WIN_COEFF_VALUE_CHECKER = new HandicapToWinCoeffValueChecker();
+    final static WinToHandicapCoeffValueChecker WIN_TO_HANDICAP_COEFF_VALUE_CHECKER = new WinToHandicapCoeffValueChecker();
 
     static {
 
-        acceptableCheckers.put(MATCH_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(SECOND_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(SECOND_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_WIN, Arrays.asList(WIN_TO_HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_AWAY_WIN, Arrays.asList(WIN_TO_HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(SECOND_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(SECOND_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, HANDICAP_TO_WIN_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_WIN, Arrays.asList(WIN_TO_HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_AWAY_WIN, Arrays.asList(WIN_TO_HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_COMMON_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_COMMON_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_HOME_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
@@ -79,11 +90,40 @@ public class BookmakerCoeffMapper {
                         MATCH_AWAY_HANDICAP,
                         MATCH_HOME_HANDICAP
                 )
+        );      
+        
+        createMatching(
+                Arrays.asList(
+                        MATCH_HOME_WIN,
+                        MATCH_AWAY_HANDICAP
+                )
+        );  
+        
+        createMatching(
+                Arrays.asList(
+                        MATCH_AWAY_WIN,
+                        MATCH_HOME_HANDICAP
+                )
         );
+        
         createMatching(
                 Arrays.asList(
                         FIRST_HALF_AWAY_HANDICAP,
                         FIRST_HALF_HOME_HANDICAP
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_AWAY_WIN,
+                        FIRST_HALF_HOME_HANDICAP
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_HOME_WIN,
+                        FIRST_HALF_AWAY_HANDICAP
                 )
         );
 
@@ -142,7 +182,9 @@ public class BookmakerCoeffMapper {
         for (CoeffTypeChain type : types) {
             ArrayList<CoeffTypeChain> copy = new ArrayList<>(types);
             copy.remove(type);
-            acceptableTypes.put(type, copy);
+            final List<CoeffTypeChain> coeffTypeChains = acceptableTypes.getOrDefault(type, new ArrayList<>());
+            coeffTypeChains.addAll(copy);
+            acceptableTypes.put(type, coeffTypeChains);
         }
     }
 
@@ -182,7 +224,7 @@ public class BookmakerCoeffMapper {
 }
 
 interface CoeffValueChecker {
-    boolean canCheck(CoeffTypeChain chain);
+    boolean canCheck(CoeffTypeChain targetChain);
 
     boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target);
 
@@ -192,8 +234,8 @@ interface CoeffValueChecker {
 class HandicapCoeffValueChecker implements CoeffValueChecker {
 
     @Override
-    public boolean canCheck(CoeffTypeChain chain) {
-        return chain.getLastChild() == HANDICAP;
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == HANDICAP;
     }
 
     @Override
@@ -210,8 +252,8 @@ class HandicapCoeffValueChecker implements CoeffValueChecker {
 class TotalOverCoeffValueChecker implements CoeffValueChecker {
 
     @Override
-    public boolean canCheck(CoeffTypeChain chain) {
-        return chain.getLastChild() == OVER;
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == OVER;
     }
 
     @Override
@@ -228,13 +270,51 @@ class TotalOverCoeffValueChecker implements CoeffValueChecker {
 class TotalUnderCoeffValueChecker implements CoeffValueChecker {
 
     @Override
-    public boolean canCheck(CoeffTypeChain chain) {
-        return chain.getLastChild() == UNDER;
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == UNDER;
     }
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
         return BookmakerUtils.isTotalForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
+    }
+
+    @Override
+    public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
+        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+    }
+}
+
+class HandicapToWinCoeffValueChecker implements CoeffValueChecker {
+
+    @Override
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == WIN;
+    }
+
+    @Override
+    public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
+        final Double typeValue = original.getTypeValue();
+        return typeValue >= 0.5;
+    }
+
+    @Override
+    public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
+        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+    }
+}
+
+class WinToHandicapCoeffValueChecker implements CoeffValueChecker {
+
+    @Override
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == HANDICAP;
+    }
+
+    @Override
+    public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
+        final Double typeValue = target.getTypeValue();
+        return typeValue >= 0.5;
     }
 
     @Override

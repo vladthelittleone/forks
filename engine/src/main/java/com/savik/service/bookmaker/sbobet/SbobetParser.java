@@ -25,15 +25,18 @@ import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HOME_MATCH_TOTAL;
+import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF__HOME_OR_AWAY;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF__TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.GUEST_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HANDICAP;
+import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HOME_OR_AWAY;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_TOTAL;
 
 @Component
@@ -54,8 +57,10 @@ public class SbobetParser {
 
 
     public static final int MATCH_HANDICAP = 1;
-    public static final int FIRST_HALF_HANDICAP = 7;
     public static final int MATCH_TOTAL = 3;
+    public static final int MATCH_HOME_OR_AWAY = 5;
+    public static final int FIRST_HALF__HOME_OR_AWAY = 8;
+    public static final int FIRST_HALF_HANDICAP = 7;
     public static final int FIRST_HALF__TOTAL = 9;
     public static final int HOME_MATCH_TOTAL = 545;
     public static final int FIRST_HALF_HOME_MATCH_TOTAL = 546;
@@ -72,6 +77,8 @@ public class SbobetParser {
             add(new FirstHalfHomeMatchTotal());
             add(new FirstHalfAwayMatchTotal());
             add(new AwayMatchTotal());
+            add(new MatchHomeOrAway());
+            add(new FirstHalfHomeOrAway());
         }
     };
 
@@ -239,11 +246,62 @@ class CommonTotal implements BetParser {
     }
 }
 
+class HomeOrAway implements BetParser {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        throw new UnsupportedOperationException();
+    }
+
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer, CoeffType period) {
+        JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
+        double homeCoeffValue = coeffValueArray.getDouble(0);
+        double guestCoeffValue = coeffValueArray.getDouble(2);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of(homeCoeffValue, period, HOME, WIN);
+        BookmakerCoeff underCoeff = BookmakerCoeff.of(guestCoeffValue, period, AWAY, WIN);
+        List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
+        bookmakerCoeffs.add(overCoeff);
+        bookmakerCoeffs.add(underCoeff);
+        return bookmakerCoeffs;
+    }
+}
+
+class MatchHomeOrAway extends HomeOrAway {
+    
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, MATCH);
+    }
+    
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType.equals(MATCH_HOME_OR_AWAY);
+    }
+}
+
+class FirstHalfHomeOrAway extends HomeOrAway {
+    
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, FIRST_HALF);
+    }
+    
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType.equals(FIRST_HALF__HOME_OR_AWAY);
+    }
+}
+
 class MatchHandicap extends CommonHandicap {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == MATCH_HANDICAP;
+        return betType.equals(MATCH_HANDICAP);
     }
 
     @Override
@@ -256,7 +314,7 @@ class FirstHalfHandicap extends CommonHandicap {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == FIRST_HALF_HANDICAP;
+        return betType.equals(FIRST_HALF_HANDICAP);
     }
 
     @Override
@@ -269,7 +327,7 @@ class MatchTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == MATCH_TOTAL;
+        return betType.equals(MATCH_TOTAL);
     }
 
     @Override
@@ -282,7 +340,7 @@ class FirstHalfTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == FIRST_HALF__TOTAL;
+        return betType.equals(FIRST_HALF__TOTAL);
     }
 
     @Override
@@ -295,7 +353,7 @@ class HomeMatchTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == HOME_MATCH_TOTAL;
+        return betType.equals(HOME_MATCH_TOTAL);
     }
 
     @Override
@@ -308,7 +366,7 @@ class FirstHalfHomeMatchTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == FIRST_HALF_HOME_MATCH_TOTAL;
+        return betType.equals(FIRST_HALF_HOME_MATCH_TOTAL);
     }
 
     @Override
@@ -321,7 +379,7 @@ class FirstHalfAwayMatchTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == FIRST_HALF_AWAY_MATCH_TOTAL;
+        return betType.equals(FIRST_HALF_AWAY_MATCH_TOTAL);
     }
 
     @Override
@@ -334,7 +392,7 @@ class AwayMatchTotal extends CommonTotal {
 
     @Override
     public boolean couldApply(Integer betType) {
-        return betType == AWAY_MATCH_TOTAL;
+        return betType.equals(AWAY_MATCH_TOTAL);
     }
 
     @Override

@@ -28,6 +28,7 @@ import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 
 @Service
 @Log4j2
@@ -88,6 +89,15 @@ public class PinnacleApi {
         List<OddsPeriod> periods = odds.getPeriods();
         for (OddsPeriod period : periods) {
             CoeffType partType = getPartByStatusCode(period.getNumber());
+            final OddsMoneyline moneyline = period.getMoneyline();
+            if(moneyline != null) {
+                if(moneyline.getHome() != null) {
+                    bookmakerCoeffs.add(of(moneyline.getHome(), partType, HOME, WIN));
+                }
+                if(moneyline.getAway() != null) {
+                    bookmakerCoeffs.add(of(moneyline.getAway(), partType, AWAY, WIN));
+                }
+            }
             List<OddsSpread> spreads = period.getSpreads();
             if (spreads != null) {
                 for (OddsSpread spread : spreads) {
