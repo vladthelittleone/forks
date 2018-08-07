@@ -111,12 +111,12 @@ public class MarathonParser {
                     bookmakerCoeffs.add(homeCoeff);
                     bookmakerCoeffs.add(awayCoeff);
                 }
-                if (handicap.text().equalsIgnoreCase("To Win 2nd Half With Handicap")) {
+                /*if (handicap.text().equalsIgnoreCase("To Win 2nd Half With Handicap")) {
                     final BookmakerCoeff homeCoeff = createFromHandicapBlock(homePrice, CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.HANDICAP);
                     final BookmakerCoeff awayCoeff = createFromHandicapBlock(awayPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.HANDICAP);
                     bookmakerCoeffs.add(homeCoeff);
                     bookmakerCoeffs.add(awayCoeff);
-                }
+                }*/
             }
         }
     }
@@ -170,7 +170,7 @@ public class MarathonParser {
                     bookmakerCoeffs.add(overCoeff);
                     bookmakerCoeffs.add(underCoeff);
                 }
-                if (handicap.text().equalsIgnoreCase("Total Goals - 2nd Half")) {
+                /*if (handicap.text().equalsIgnoreCase("Total Goals - 2nd Half")) {
                     final BookmakerCoeff overCoeff = createFromHandicapBlock(overPrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.OVER);
                     final BookmakerCoeff underCoeff = createFromHandicapBlock(underPrice, CoeffType.SECOND_HALF, CoeffType.COMMON, CoeffType.TOTAL, CoeffType.UNDER);
                     bookmakerCoeffs.add(overCoeff);
@@ -187,7 +187,7 @@ public class MarathonParser {
                     final BookmakerCoeff underCoeff = createFromHandicapBlock(underPrice, CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.TOTAL, CoeffType.UNDER);
                     bookmakerCoeffs.add(overCoeff);
                     bookmakerCoeffs.add(underCoeff);
-                }
+                }*/
             }
 
         }

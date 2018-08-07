@@ -41,10 +41,10 @@ public class ForksFinderService {
             List<BookmakerCoeff> otherBookCoeffs = otherBookmaker.getValue();
             for (BookmakerCoeff newBookmakerCoeff : eventBookmakerCoeffs) {
                 for (BookmakerCoeff otherBookCoeff : otherBookCoeffs) {
-                    if (!otherBookCoeff.isForkCompatibleTypeInGeneral(newBookmakerCoeff)) {
+                    if (!otherBookCoeff.isBetCompatibleByMeaning(newBookmakerCoeff)) {
                         continue;
                     }
-                    if (otherBookCoeff.isForkCompatibleTypeInTypes(newBookmakerCoeff)) {
+                    if (otherBookCoeff.isBetCompatibleByValue(newBookmakerCoeff)) {
                         log.debug(String.format("It's a fork compatible types: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
                     } else {
                         log.debug(String.format("It's not a fork by type: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));

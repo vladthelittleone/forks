@@ -35,61 +35,29 @@ public class BookmakerCoeff {
         this.typeChain = typeChain;
     }
 
-    public boolean isForkCompatibleTypeInGeneral(BookmakerCoeff anotherCoeff) {
+    public boolean isBetCompatibleByMeaning(BookmakerCoeff anotherCoeff) {
         CoeffTypeChain selfChain = getTypeChain();
         CoeffTypeChain anotherChain = anotherCoeff.getTypeChain();
-        if (selfChain.size() != anotherChain.size()) {
-            return false;
-        }
-        // first element is match, 1 half, 2 half, so should be equal
         return BookmakerCoeffMapper.isAcceptable(selfChain, anotherChain);
     }
 
-    public boolean isForkCompatibleTypeInTypes(BookmakerCoeff anotherCoeff) {
-        if (!isForkCompatibleTypeInGeneral(anotherCoeff)) {
-            throw new IllegalArgumentException(String.format("it's not compatible fork type: self = %s, other = %s", toString(), anotherCoeff));
+    public boolean isBetCompatibleByValue(BookmakerCoeff anotherCoeff) {
+        if (!isBetCompatibleByMeaning(anotherCoeff)) {
+            throw new IllegalArgumentException(String.format("it's not compatible bets by chains: self = %s, other = %s", toString(), anotherCoeff));
         }
-        CoeffType selfLastChild = getLastChild();
-
-        if (selfLastChild == CoeffType.HANDICAP) {
-            return BookmakerUtils.isHandicapForkAcceptableTypes(getTypeValue(), anotherCoeff.getTypeValue());
-        }
-        if (selfLastChild == CoeffType.OVER) {
-            return BookmakerUtils.isTotalForkAcceptableTypes(getTypeValue(), anotherCoeff.getTypeValue());
-        }
-        if (selfLastChild == CoeffType.UNDER) {
-            return BookmakerUtils.isTotalForkAcceptableTypes(anotherCoeff.getTypeValue(), getTypeValue());
-        }
-        throw new IllegalArgumentException(String.format("Type handler doesn't exist: %s", getTypeChain()));
+        return BookmakerCoeffMapper.isBetCompatibleByValue(this, anotherCoeff);
     }
 
-
     public boolean isFork(BookmakerCoeff anotherCoeff) {
-        if (!isForkCompatibleTypeInTypes(anotherCoeff)) {
-            throw new IllegalArgumentException(String.format("it's not compatible fork type: self = %s, other = %s", toString(), anotherCoeff));
+        if (!isBetCompatibleByValue(anotherCoeff)) {
+            throw new IllegalArgumentException(String.format("it's not compatible bets by value self = %s, other = %s", toString(), anotherCoeff));
         }
-        CoeffType selfLastChildType = getLastChild();
-
-        if (selfLastChildType == CoeffType.HANDICAP) {
-            return BookmakerUtils.isFork(getCoeffValue(), anotherCoeff.getCoeffValue());
-        }
-        if (selfLastChildType == CoeffType.OVER) {
-            return BookmakerUtils.isFork(getCoeffValue(), anotherCoeff.getCoeffValue());
-        }
-        if (selfLastChildType == CoeffType.UNDER) {
-            return BookmakerUtils.isFork(getCoeffValue(), anotherCoeff.getCoeffValue());
-        }
-        throw new IllegalArgumentException("Type handler doesn't exist: %s" + getTypeChain());
+        return BookmakerCoeffMapper.isFork(this, anotherCoeff);
     }
 
 
     public static double getForkPercentage(BookmakerCoeff first, BookmakerCoeff second) {
         return BookmakerUtils.getForkPercentage(first.getCoeffValue(), second.getCoeffValue());
-    }
-
-    private CoeffType getLastChild() {
-        CoeffTypeChain typeChain = getTypeChain();
-        return typeChain.get(typeChain.size() - 1);
     }
 
     @Override
@@ -140,6 +108,10 @@ public class BookmakerCoeff {
         
         public int size() {
             return chain.size();
+        }
+
+        public CoeffType getLastChild() {
+            return chain.get(chain.size() - 1);
         }
 
         @Override
