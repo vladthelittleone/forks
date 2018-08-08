@@ -42,7 +42,6 @@ import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
-import static com.savik.service.bookmaker.CoeffType.WIN;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -110,7 +109,7 @@ public class CommonIntegrationTest {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
         ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
-        verify(forksListenerService, times(9)).handle(argument.capture());
+        verify(forksListenerService, times(8)).handle(argument.capture());
 
 
         assertTrue(argument.getAllValues().contains(
@@ -172,14 +171,6 @@ public class CommonIntegrationTest {
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.95, FIRST_HALF, AWAY, TOTAL, UNDER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.5, 3.12, FIRST_HALF, AWAY, TOTAL, OVER))
-                )
-        ));
-        
-        assertTrue(argument.getAllValues().contains(
-                new ForkFoundEvent(
-                        FRANCE_PERU,
-                        new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, FIRST_HALF, AWAY, HANDICAP)),
-                        new Bet(SBOBET, BookmakerCoeff.of(2.19, FIRST_HALF, HOME, WIN))
                 )
         ));
     }

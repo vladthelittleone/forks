@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.savik.model.BookmakerCoeff.of;
@@ -28,7 +30,6 @@ import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
-import static com.savik.service.bookmaker.CoeffType.WIN;
 
 @Service
 @Log4j2
@@ -85,17 +86,17 @@ public class PinnacleApi {
         log.debug(String.format("Start parse event. event:%s", event));
         OddsResponse oddsResponse = getOddsResponseBySportType(bookmakerMatch.getMatch().getSportType());
         OddsEvent odds = oddsResponse.findEvent(event);
-        List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
+        Set<BookmakerCoeff> bookmakerCoeffs = new HashSet<>();
         List<OddsPeriod> periods = odds.getPeriods();
         for (OddsPeriod period : periods) {
             CoeffType partType = getPartByStatusCode(period.getNumber());
             final OddsMoneyline moneyline = period.getMoneyline();
             if(moneyline != null) {
                 if(moneyline.getHome() != null) {
-                    bookmakerCoeffs.add(of(moneyline.getHome(), partType, HOME, WIN));
+                    bookmakerCoeffs.add(of(-0.5, moneyline.getHome(), partType, HOME, HANDICAP));
                 }
                 if(moneyline.getAway() != null) {
-                    bookmakerCoeffs.add(of(moneyline.getAway(), partType, AWAY, WIN));
+                    bookmakerCoeffs.add(of(-0.5, moneyline.getAway(), partType, AWAY, HANDICAP));
                 }
             }
             List<OddsSpread> spreads = period.getSpreads();
@@ -131,7 +132,7 @@ public class PinnacleApi {
                 .bookmakerHomeTeamName(bookmakerMatch.getHomeTeam().getName())
                 .bookmakerAwayTeamName(bookmakerMatch.getAwayTeam().getName())
                 .bookmakerLeagueId(bookmakerMatch.getBookmakerLeague().getBookmakerId())
-                .bookmakerCoeffs(bookmakerCoeffs)
+                .bookmakerCoeffs(new ArrayList<>(bookmakerCoeffs))
                 .bookmakerType(BookmakerType.PINNACLE)
                 .build();
 

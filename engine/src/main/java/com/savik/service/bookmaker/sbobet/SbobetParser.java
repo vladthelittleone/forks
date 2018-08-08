@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
@@ -25,7 +27,6 @@ import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
-import static com.savik.service.bookmaker.CoeffType.WIN;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HANDICAP;
@@ -153,7 +154,7 @@ public class SbobetParser {
 
             JSONArray matchCoeffsArray = matchArray.getJSONArray(MATCH_COEFFS_INDEX);
 
-            List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
+            Set<BookmakerCoeff> bookmakerCoeffs = new HashSet<>();
             // j = 1, because, first element is info array
             for (int j = 1; j < matchCoeffsArray.length(); j++) {
                 JSONArray coeffArrayContainer = matchCoeffsArray.getJSONArray(j);
@@ -163,7 +164,7 @@ public class SbobetParser {
 
                 for (BetParser parser : PARSERS) {
                     if (parser.couldApply(betType)) {
-                        List<BookmakerCoeff> coeffs = parser.apply(coeffArrayContainer);
+                        Set<BookmakerCoeff> coeffs = new HashSet<>(parser.apply(coeffArrayContainer));
                         bookmakerCoeffs.addAll(coeffs);
                     }
                 }
@@ -171,7 +172,7 @@ public class SbobetParser {
             if (!bookmakerCoeffs.isEmpty()) {
                 BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
                         .bookmakerType(BookmakerType.SBOBET)
-                        .bookmakerCoeffs(bookmakerCoeffs)
+                        .bookmakerCoeffs(new ArrayList<>(bookmakerCoeffs))
                         .bookmakerAwayTeamName(guestTeamName)
                         .bookmakerHomeTeamName(homeTeamName)
                         .bookmakerLeagueId(String.valueOf(sbobetLeagueId))
@@ -262,8 +263,8 @@ class HomeOrAway implements BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(0);
         double guestCoeffValue = coeffValueArray.getDouble(2);
-        BookmakerCoeff overCoeff = BookmakerCoeff.of(homeCoeffValue, period, HOME, WIN);
-        BookmakerCoeff underCoeff = BookmakerCoeff.of(guestCoeffValue, period, AWAY, WIN);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of(-0.5, homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff underCoeff = BookmakerCoeff.of(-0.5, guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
         bookmakerCoeffs.add(underCoeff);
