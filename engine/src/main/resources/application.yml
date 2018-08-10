@@ -3,6 +3,14 @@ scheduling:
 server:
     port: 8002
 
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
 spring:
     datasource:
         hikari:
