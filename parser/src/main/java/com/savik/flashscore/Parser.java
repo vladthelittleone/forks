@@ -1,6 +1,7 @@
 package com.savik.flashscore;
 
 import com.savik.domain.BookmakerType;
+import com.savik.domain.FlashscoreLeagues;
 import com.savik.domain.Match;
 import com.savik.domain.MatchStatus;
 import lombok.extern.log4j.Log4j2;
@@ -66,11 +67,11 @@ public class Parser {
             Set<String> ids = new HashSet<>();
             System.out.println("\n\n\n\n");
             for (Match match : matches) {
-                if(!ids.contains(match.getHomeTeam().getFlashscoreId())) {
+                if (!ids.contains(match.getHomeTeam().getFlashscoreId())) {
                     ids.add(match.getHomeTeam().getFlashscoreId());
                     System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getHomeTeam().getFlashscoreId() + "', '', '" + match.getHomeTeam().getName() + "');");
                 }
-                if(!ids.contains(match.getAwayTeam().getFlashscoreId())) {
+                if (!ids.contains(match.getAwayTeam().getFlashscoreId())) {
                     ids.add(match.getAwayTeam().getFlashscoreId());
                     System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getAwayTeam().getFlashscoreId() + "', '', '" + match.getAwayTeam().getName() + "');");
                 }

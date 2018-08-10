@@ -79,7 +79,7 @@ public class PinnacleApi {
                         event.getAway().equals(match.getAwayTeam().getName()) && 
                         event.getParentId() == null && 
                         event.getStatus().equals("I") && 
-                        event.getStarts().toLocalDate().equals(match.getMatch().getDate())
+                        event.getStarts().toLocalDate().isEqual(match.getMatch().getDate().toLocalDate())
                 )
                 .findFirst();
 
