@@ -76,7 +76,11 @@ public class PinnacleApi {
 
         Optional<FixtureEvent> matchFixture = fixtureLeague.getEvents().stream()
                 .filter(event -> event.getHome().equals(match.getHomeTeam().getName()) &&
-                        event.getAway().equals(match.getAwayTeam().getName()) && event.getParentId() == null && event.getStatus().equals("I"))
+                        event.getAway().equals(match.getAwayTeam().getName()) && 
+                        event.getParentId() == null && 
+                        event.getStatus().equals("I") && 
+                        event.getStarts().toLocalDate().equals(match.getMatch().getDate())
+                )
                 .findFirst();
 
         return matchFixture;
