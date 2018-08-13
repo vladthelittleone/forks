@@ -1,6 +1,7 @@
 package com.savik;
 
 import com.savik.domain.Match;
+import com.savik.domain.MatchStatus;
 import com.savik.domain.SportType;
 import com.savik.domain.Team;
 import com.savik.events.ForkFoundEvent;
@@ -85,7 +86,8 @@ public class CommonIntegrationTest {
                 .awayTeam(Team.builder().flashscoreId("Uend67D3").name("Peru").build())
                 .flashscoreLeagueId("lvUBR5F8")
                 .sportType(SportType.FOOTBALL)
-                .date(LocalDateTime.now())
+                .matchStatus(MatchStatus.PREMATCH)
+                .date(LocalDateTime.of(2018,6,21,15,0))
                 .flashscoreId("vHWXsRjb")
                 .build();
 
@@ -98,7 +100,7 @@ public class CommonIntegrationTest {
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_odds.json").toURI()))));
 
         // sbobet football
-        when(httpClient.getAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, 0)))
+        when(httpClient.getAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, FRANCE_PERU.getDaysFromToday())))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football.html").toURI())))));
         when(httpClient.getAntibot(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(FRANCE_PERU, SBOBET).get())))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_france_peru.html").toURI())))));

@@ -41,7 +41,7 @@ public class SbobetCache {
         BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
         BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
-        final Set<BookmakerMatchResponse> matches = cache.get(bookmakerMatch.getDaysFromToday());
+        final Set<BookmakerMatchResponse> matches = cache.getOrDefault(bookmakerMatch.getDaysFromToday(), new HashSet<>());
         for (BookmakerMatchResponse cachedMatch : matches) {
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
@@ -50,7 +50,7 @@ public class SbobetCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.debug("Match info wasn't found in cache");
+        log.info("Match info wasn't found in cache");
         return Optional.empty();
     }
 }

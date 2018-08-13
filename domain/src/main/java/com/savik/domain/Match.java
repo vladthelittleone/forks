@@ -16,7 +16,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Entity
 @Getter
@@ -55,6 +57,11 @@ public class Match {
     @Enumerated(EnumType.STRING)
     MatchStatus matchStatus;
 
+    public int getDaysFromToday() {
+        LocalDateTime matchDate = getDate();
+        int between = Period.between(LocalDate.now(), matchDate.toLocalDate()).getDays();
+        return between;
+    }
 
     @Override
     public String toString() {
