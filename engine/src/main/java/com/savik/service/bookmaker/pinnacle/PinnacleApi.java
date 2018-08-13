@@ -1,6 +1,7 @@
 package com.savik.service.bookmaker.pinnacle;
 
 import com.savik.domain.BookmakerType;
+import com.savik.domain.MatchStatus;
 import com.savik.domain.SportType;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatch;
@@ -13,11 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
@@ -38,9 +38,8 @@ public class PinnacleApi {
     @Autowired
     PinnacleDownloader downloader;
 
-    Map<SportType, FixtureResponse> fixtures = new ConcurrentHashMap<>();
-    Map<SportType, OddsResponse> odds = new ConcurrentHashMap<>();
-
+    @Autowired
+    PinnacleCache cache;
 
     public Optional<BookmakerMatchResponse> parseMatch(BookmakerMatch match) {
         FixtureResponse fixture = getFixtureBySportType(match.getMatch().getSportType());
@@ -50,17 +49,17 @@ public class PinnacleApi {
             BookmakerMatchResponse bookmakerMatchResponse = parseMatch(event.get(), match);
             return Optional.of(bookmakerMatchResponse);
         } else {
-            log.debug(String.format("Fixture event wasn't found, match flashscore id: %s", match.getMatch().getFlashscoreId()));
+            log.info(String.format("Fixture event wasn't found, match flashscore id: %s", match.getMatch().getFlashscoreId()));
         }
         return Optional.empty();
     }
 
     private FixtureResponse getFixtureBySportType(SportType sportType) {
-        FixtureResponse sportFixture = fixtures.get(sportType);
+        FixtureResponse sportFixture = cache.getFixture(sportType);
         if (sportFixture == null) {
             log.debug(String.format("Fixture wasn't found. Sport:%s", sportType));
             sportFixture = downloader.downloadFixtures(sportType);
-            fixtures.put(sportType, sportFixture);
+            cache.putFixture(sportType, sportFixture);
             log.debug(String.format("Fixture was downloaded. Sport:%s", sportType));
         }
         if (sportFixture == null) {
@@ -74,15 +73,21 @@ public class PinnacleApi {
                 .filter(l -> Objects.equals(l.getId(), Integer.parseInt(match.getBookmakerLeague().getBookmakerId())))
                 .findFirst().get();
 
-        Optional<FixtureEvent> matchFixture = fixtureLeague.getEvents().stream()
-                .filter(event -> event.getHome().equals(match.getHomeTeam().getName()) &&
-                        event.getAway().equals(match.getAwayTeam().getName()) && 
-                        event.getParentId() == null && 
-                        event.getStatus().equals("I") && 
-                        event.getStarts().toLocalDate().isEqual(match.getMatch().getDate().toLocalDate())
-                )
-                .findFirst();
+        Predicate<FixtureEvent> predicate = event -> event.getHome().equals(match.getHomeTeam().getName()) &&
+                event.getAway().equals(match.getAwayTeam().getName()) &&
+                event.getStatus().equals("I") &&
+                event.getStarts().toLocalDate().isEqual(match.getMatch().getDate().toLocalDate());
 
+        if (match.getMatch().getMatchStatus() == MatchStatus.PREMATCH) {
+            predicate = predicate.and(event -> (event.getLiveStatus() == 2 || event.getLiveStatus() == 0) &&
+                    event.getParentId() == null);
+        } else if (match.getMatch().getMatchStatus() == MatchStatus.LIVE) {
+            predicate = predicate.and(event -> event.getLiveStatus() == 1 && event.getParentId() != null);
+        } else {
+            throw new IllegalArgumentException("Illegal match status: " + match);
+        }
+        Optional<FixtureEvent> matchFixture = fixtureLeague.getEvents().stream()
+                .filter(predicate).findFirst();
         return matchFixture;
     }
 
@@ -95,11 +100,11 @@ public class PinnacleApi {
         for (OddsPeriod period : periods) {
             CoeffType partType = getPartByStatusCode(period.getNumber());
             final OddsMoneyline moneyline = period.getMoneyline();
-            if(moneyline != null) {
-                if(moneyline.getHome() != null) {
+            if (moneyline != null) {
+                if (moneyline.getHome() != null) {
                     bookmakerCoeffs.add(of(-0.5, moneyline.getHome(), partType, HOME, HANDICAP));
                 }
-                if(moneyline.getAway() != null) {
+                if (moneyline.getAway() != null) {
                     bookmakerCoeffs.add(of(-0.5, moneyline.getAway(), partType, AWAY, HANDICAP));
                 }
             }
@@ -157,10 +162,10 @@ public class PinnacleApi {
     }
 
     private OddsResponse getOddsResponseBySportType(SportType sportType) {
-        OddsResponse oddsResponse = odds.get(sportType);
+        OddsResponse oddsResponse = cache.getOdds(sportType);
         if (oddsResponse == null) {
             oddsResponse = downloader.downloadOdds(sportType);
-            odds.put(sportType, oddsResponse);
+            cache.putOdds(sportType, oddsResponse);
         }
         if (oddsResponse == null) {
             throw new PinnacleException("odds not found for sport type: " + sportType);

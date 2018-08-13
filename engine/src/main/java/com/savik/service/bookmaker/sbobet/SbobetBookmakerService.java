@@ -34,7 +34,7 @@ public class SbobetBookmakerService extends BookmakerService {
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
         log.debug("Start handling sbobet match: " + bookmakerMatch);
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
-        if (!bookmakerMatchResponse.isPresent()) {
+        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatch.getDaysFromToday())) {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
         }
 
@@ -42,7 +42,7 @@ public class SbobetBookmakerService extends BookmakerService {
                 .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR))
                 .flatMap(
                         mR -> {
-                            cache.add(mR);
+                            cache.add(bookmakerMatch.getDaysFromToday(), mR);
                             return Optional.of(mR);
                         }
                 );
@@ -53,7 +53,7 @@ public class SbobetBookmakerService extends BookmakerService {
         log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
         List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatch.getDaysFromToday());
         log.debug("Matches were parsed, amount: " + matches.size());
-        cache.addAll(matches);
+        cache.addAll(bookmakerMatch.getDaysFromToday(), matches);
         return findMatchInCache(bookmakerMatch);
     }
 
