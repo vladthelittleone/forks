@@ -40,11 +40,12 @@ public class PinnacleConfig {
         return url + apiV1Version + fixtures + "?sportId=" + sportIds.get(sportType);
     }
 
-    public String getOddsUrl(SportType sportType) {
+    public String getOddsUrl(SportType sportType, Long since) {
         if (!sportIds.containsKey(sportType)) {
             throw new IllegalArgumentException("Unknown sport type: " + sportType);
         }
-        return url + apiV1Version + odds + "sportId=" + sportIds.get(sportType);
+        return url + apiV1Version + odds + "sportId=" + sportIds.get(sportType) +
+                (since == null ? "" : "&since=" + since);
     }
 
     public String getBase64Authentications() {

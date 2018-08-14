@@ -28,7 +28,7 @@ public class BookmakerCoeffTest {
     public void test1(Double coeff1, Double coeff2) {
         BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, MATCH, HOME, HANDICAP);
         BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, MATCH, AWAY, HANDICAP);
-        assertTrue(target.isBetCompatibleByValue(original));
+        assertTrue(target.isFork(original));
     }
 
 
@@ -43,7 +43,7 @@ public class BookmakerCoeffTest {
     public void test2(Double coeff1, Double coeff2) {
         BookmakerCoeff original = BookmakerCoeff.of(-0.25, coeff1, MATCH, HOME, HANDICAP);
         BookmakerCoeff target = BookmakerCoeff.of(0.25, coeff2, MATCH, AWAY, HANDICAP);
-        assertFalse(target.isBetCompatibleByValue(original));
+        assertFalse(target.isFork(original));
     }
 
 

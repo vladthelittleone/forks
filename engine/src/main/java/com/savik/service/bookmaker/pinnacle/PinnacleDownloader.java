@@ -36,9 +36,9 @@ public class PinnacleDownloader {
         }
     }
 
-    public OddsResponse downloadOdds(SportType sportType) {
+    public OddsResponse downloadOdds(SportType sportType, Long since) {
         try {
-            String url = pinnacleConfig.getOddsUrl(sportType);
+            String url = pinnacleConfig.getOddsUrl(sportType, since);
             String json = downloadJson(url);
             //String json = new String(Files.readAllBytes(Paths.get("C:\\projects\\forks\\engine\\src\\main\\resources\\config\\bookmakers\\pinnacle\\odds.json")));
             return objectMapper.readValue(json, OddsResponse.class);

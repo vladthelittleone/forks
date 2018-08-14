@@ -5,6 +5,7 @@ import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -23,5 +24,10 @@ public class PinnacleBookmakerService extends BookmakerService {
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatch match) {
         return api.parseMatch(match);
+    }
+
+    @Scheduled(fixedDelay = 1000 * 15, initialDelay = 60_000)
+    public void refreshCacheOdds() {
+        api.refreshCacheOdds();
     }
 }

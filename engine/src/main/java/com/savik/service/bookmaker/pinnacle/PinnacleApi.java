@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -42,8 +43,7 @@ public class PinnacleApi {
     PinnacleCache cache;
 
     public Optional<BookmakerMatchResponse> parseMatch(BookmakerMatch match) {
-        FixtureResponse fixture = getFixtureBySportType(match.getMatch().getSportType());
-        Optional<FixtureEvent> event = findMatch(fixture, match);
+        Optional<FixtureEvent> event = getEvent(match);
         if (event.isPresent()) {
             log.debug(String.format("Fixture event was found: %s", event.get()));
             BookmakerMatchResponse bookmakerMatchResponse = parseMatch(event.get(), match);
@@ -52,6 +52,19 @@ public class PinnacleApi {
             log.info(String.format("Fixture event wasn't found, match flashscore id: %s", match.getMatch().getFlashscoreId()));
         }
         return Optional.empty();
+    }
+
+    public void refreshCacheOdds() {
+        final Collection<SportType> sportTypes = cache.getSportTypes();
+        for (SportType sportType : sportTypes) {
+            final OddsResponse deltaOdds = downloader.downloadOdds(sportType, cache.getOddsLastTimestamp(sportType));
+            cache.updateOdds(sportType, deltaOdds);
+        }
+    }
+
+    private Optional<FixtureEvent> getEvent(BookmakerMatch match) {
+        FixtureResponse fixture = getFixtureBySportType(match.getMatch().getSportType());
+        return findMatch(fixture, match);
     }
 
     private FixtureResponse getFixtureBySportType(SportType sportType) {
@@ -164,7 +177,8 @@ public class PinnacleApi {
     private OddsResponse getOddsResponseBySportType(SportType sportType) {
         OddsResponse oddsResponse = cache.getOdds(sportType);
         if (oddsResponse == null) {
-            oddsResponse = downloader.downloadOdds(sportType);
+            log.debug(String.format("Odds not found. sport:%s", sportType));
+            oddsResponse = downloader.downloadOdds(sportType, null);
             cache.putOdds(sportType, oddsResponse);
         }
         if (oddsResponse == null) {

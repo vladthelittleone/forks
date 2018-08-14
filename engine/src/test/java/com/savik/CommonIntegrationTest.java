@@ -96,7 +96,7 @@ public class CommonIntegrationTest {
         // pinnacle football
         when(httpClient.getPinnacleApacheJson(eq(pinnacleConfig.getFixtureUrl(SportType.FOOTBALL)), any(Map.class)))
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_fixtures.json").toURI()))));
-        when(httpClient.getPinnacleApacheJson(eq(pinnacleConfig.getOddsUrl(SportType.FOOTBALL)), any(Map.class)))
+        when(httpClient.getPinnacleApacheJson(eq(pinnacleConfig.getOddsUrl(SportType.FOOTBALL, null)), any(Map.class)))
                 .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("pinnacle_football_odds.json").toURI()))));
 
         // sbobet football
