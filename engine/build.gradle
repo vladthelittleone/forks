@@ -1,6 +1,5 @@
 dependencies {
     compile project(':domain-jpa')
-    compile project(':infrastructure:http-infrastructure')
     compile project(':infrastructure:common-infrastructure')
     compile('org.springframework.boot:spring-boot-starter')
     compile("org.springframework.boot:spring-boot-starter-web")

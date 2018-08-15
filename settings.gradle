@@ -1,7 +1,6 @@
 rootProject.name = 'forks'
 include 'domain'
 include 'infrastructure:jpa-infrastructure'
-include 'infrastructure:http-infrastructure'
 include 'infrastructure:common-infrastructure'
 include 'parser'
 include 'domain-jpa'

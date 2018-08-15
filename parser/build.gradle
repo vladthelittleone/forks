@@ -3,6 +3,5 @@ dependencies {
     compile project(':domain-jpa')
     compile('org.springframework.boot:spring-boot-starter:2.0.1.RELEASE')
     compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
-    compile project(':infrastructure:http-infrastructure')
     compile project(':infrastructure:common-infrastructure')
 }
