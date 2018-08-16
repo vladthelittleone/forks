@@ -2,7 +2,8 @@ package com.savik.domain;
 
 public class FlashscoreLeagues {
     public static enum FOOTBALL {
-        LA("QVmLl54o"),
+        SPAIN_LA("QVmLl54o"),
+        SPAIN_SEGUNDA("vZiPmPJi"),
         SERIE_A("COuk57Ci"),
         AUSTRALIA_A("OjWW1naM"),
         AUSTRALIA_NPL("lfZXonNq"),
@@ -12,6 +13,7 @@ public class FlashscoreLeagues {
         HOLLAND_1("6Nl8nagD"),
         FRANCE_1("KIShoMk3"),
         FRANCE_2("Y35Jer59"),
+        FRANCE_NATIONAL("pv9Nf2KF"),
         HOLLAND_EREDIVISIE("Or1bBrWD"),
         ENGLAND_PREMIER("dYlOSQOD"),
         GREECE_SUPERLIGA("d2pwJFHI"),
@@ -39,8 +41,10 @@ public class FlashscoreLeagues {
         PERU_PREMIER("KrrdAMyI"),
         JAPAN_J2("vXr8fotG"),
         KOREA_K("0IDCJLlH"),
+        KOREA_NATIONAL("xfzNMq1a"),
         NORWAY_ELIT("GOvB22xg"),
         SWEDEN_ALLSVENSKAN("nXxWpLmT"),
+        TURKEY_SUPERLIGA("Opdcd08Q"),
         ENGLAND_1("rJSMG3H0"),
         ENGLAND_2("0MwU4NW6");
 
