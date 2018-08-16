@@ -9,6 +9,15 @@ Configutation:
   Appenders:
 
     RollingFile:
+      - name: HTTP_File_Appender
+        fileName: ${log-path}/http.log
+        filePattern: "${log-path}/archive/http.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+              size: 100 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
+          
       - name: Bookmaker_File_Appender
         fileName: ${log-path}/common.log
         filePattern: "${log-path}/archive/common.log.%d{yyyy-MM-dd-hh-mm}.gz"
@@ -113,6 +122,12 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Sbobet_File_Appender
+
+        - name: com.savik.http
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: HTTP_File_Appender
 
         - name: com.savik.service.bookmaker.marathon
           additivity: false
