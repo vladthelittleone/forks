@@ -9,11 +9,10 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.savik.domain.FlashscoreLeagues.FOOTBALL.*;
 
 @Service
 @Log4j2
@@ -39,8 +38,10 @@ public class Parser {
 
         Document document = downloader.downloadSportMatchesSchedule(sportConfig, day);
         List<Match> matches = flashscoreResponseParser.parse(document);
-        matches = matches.stream().filter(m -> m.getFlashscoreLeagueId().equals("jizXHcsM") &&
-                m.getMatchStatus() == MatchStatus.PREMATCH).collect(Collectors.toList());
+
+        List<String> leagues = Arrays.asList(SCOTLAND_1.getId(), RUSSIA_FNL.getId(), ENGLAND_1.getId(), ENGLAND_2.getId(), ENGLAND_CHAMPIONSHIP.getId(), ENGLAND_PREMIER.getId());
+        matches = matches.stream().filter(m -> leagues.contains(m.getFlashscoreLeagueId()) &&
+                m.getMatchStatus() == MatchStatus.LIVE).collect(Collectors.toList());
         flashscoreResponseProcessor.process(sportConfig, matches);
         temp(matches);
 
