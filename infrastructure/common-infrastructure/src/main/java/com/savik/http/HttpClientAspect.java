@@ -24,6 +24,6 @@ public class HttpClientAspect {
         if(args.length == 2 && args[1] instanceof Map) {
             dataOrHeaders = (Map) args[1];
         }
-        log.debug(jp.getSignature().getName(), url, dataOrHeaders);
+        log.debug(jp.getSignature().getName() + " " +  url + " " + dataOrHeaders);
     }
 }

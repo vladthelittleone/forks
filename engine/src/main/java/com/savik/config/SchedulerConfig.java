@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
 @Configuration
 public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
 
-    private final int POOL_SIZE = 2;
+    private final int POOL_SIZE = 10;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {

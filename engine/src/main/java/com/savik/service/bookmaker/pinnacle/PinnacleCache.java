@@ -37,7 +37,7 @@ public class PinnacleCache {
     }
 
     public synchronized Collection<SportType> getSportTypes() {
-        return fixtures.keySet();
+        return odds.keySet();
     }
 
     public synchronized void updateOdds(SportType sportType, OddsResponse deltaOdds) {

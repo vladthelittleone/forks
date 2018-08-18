@@ -4,9 +4,11 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Log4j2
@@ -22,13 +24,14 @@ public abstract class BookmakerService {
 
     protected abstract Optional<BookmakerMatchResponse> handle(BookmakerMatch match);
 
-    public void handle(Match match) {
+    //@Async
+    public CompletableFuture<Void> handle(Match match) {
         Optional<BookmakerMatch> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
         if(!bookmakerMatchOptional.isPresent()) {
             log.debug(String.format("Match wasn't parsed. id: %s, %s-%s",
                     match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
             bookmakerEventPublisher.publishMatchInfoNotFoundForBookmaker(match, getBookmakerType());
-            return;
+            return CompletableFuture.completedFuture(null);
         }
         BookmakerMatch bookmakerMatch = bookmakerMatchOptional.get();
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
@@ -39,6 +42,7 @@ public abstract class BookmakerService {
             log.info(String.format("Match wasn't found. Id: %s", match));
             bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
         }
+        return CompletableFuture.completedFuture(null);
     }
 
 }

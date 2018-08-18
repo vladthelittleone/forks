@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static com.savik.domain.BookmakerType.MARATHON;
 
-@Component
+//@Component
 @Log4j2
 public class MarathonBookmakerService extends BookmakerService {
 

@@ -78,8 +78,8 @@ public class SbobetParser {
             add(new FirstHalfHomeMatchTotal());
             add(new FirstHalfAwayMatchTotal());
             add(new AwayMatchTotal());
-            add(new MatchHomeOrAway());
-            add(new FirstHalfHomeOrAway());
+            /*add(new MatchHomeOrAway());
+            add(new FirstHalfHomeOrAway());*/
         }
     };
 

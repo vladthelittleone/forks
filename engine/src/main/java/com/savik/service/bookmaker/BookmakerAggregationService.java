@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,11 +31,13 @@ public class BookmakerAggregationService {
     @Async
     @MatchIdLogging
     public CompletableFuture<Void> handle(Match match) {
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
         for (BookmakerService bookmakerService : bookmakerServices) {
             log.info(String.format("Start handling match. matchId: %s, bookmaker service: %s, ", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
-            bookmakerService.handle(match);
+            CompletableFuture<Void> future = bookmakerService.handle(match);
+            futures.add(future);
             log.info(String.format("Match was handled. matchId: %s, bookmaker service: %s", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
         }
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
     }
 }
