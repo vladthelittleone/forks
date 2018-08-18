@@ -45,6 +45,7 @@ public class FlashscoreLeagues {
         NORWAY_ELIT("GOvB22xg"),
         SWEDEN_ALLSVENSKAN("nXxWpLmT"),
         TURKEY_SUPERLIGA("Opdcd08Q"),
+        RUSSIA_FNL("jizXHcsM"),
         ENGLAND_1("rJSMG3H0"),
         ENGLAND_2("0MwU4NW6");
 
