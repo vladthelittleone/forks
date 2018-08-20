@@ -1,5 +1,7 @@
 package com.savik.domain;
 
+import java.util.Arrays;
+
 public class FlashscoreLeagues {
     public static enum FOOTBALL {
         SPAIN_LA("QVmLl54o"),
@@ -55,6 +57,10 @@ public class FlashscoreLeagues {
         public String getId() {
             return id;
         }
+
+        public static FOOTBALL getById(String id) {
+            return Arrays.asList(values()).stream().filter(l -> id.equalsIgnoreCase(l.getId())).findFirst().get();
+        } 
 
         FOOTBALL(String id) {
             this.id = id;

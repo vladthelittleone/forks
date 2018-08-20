@@ -88,7 +88,7 @@ public class PinnacleApi {
 
         Predicate<FixtureEvent> predicate = event -> event.getHome().equals(match.getHomeTeam().getName()) &&
                 event.getAway().equals(match.getAwayTeam().getName()) &&
-                event.getStatus().equals("I") &&
+                //event.getStatus().equals("I") &&
                 event.getStarts().toLocalDate().isEqual(match.getMatch().getDate().toLocalDate());
 
         if (match.getMatch().getMatchStatus() == MatchStatus.PREMATCH) {
