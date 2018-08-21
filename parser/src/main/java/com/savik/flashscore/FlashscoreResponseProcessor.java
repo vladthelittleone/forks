@@ -44,6 +44,8 @@ public class FlashscoreResponseProcessor {
     }
 
     private void processExistentMatch(Match flashscoreMatch, Match dbMatch) {
+        dbMatch.getHomeTeam().setFlashscoreId(flashscoreMatch.getHomeTeam().getFlashscoreId());
+        dbMatch.getAwayTeam().setFlashscoreId(flashscoreMatch.getAwayTeam().getFlashscoreId());
         log.debug("Match was found in db - " + dbMatch);
         if (dbMatch.getMatchStatus() != flashscoreMatch.getMatchStatus()) {
             log.debug("Match status was changed: old: " + dbMatch.getMatchStatus() +

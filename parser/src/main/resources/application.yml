@@ -19,6 +19,6 @@ spring:
               hibernate:
                     dialect: org.hibernate.dialect.H2Dialect
         hibernate:
-            ddl-auto: create
+            ddl-auto: validate
             use-new-id-generator-mappings: true
-        show-sql: true
+        show-sql: false
