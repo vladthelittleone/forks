@@ -36,7 +36,7 @@ public class PinnacleDownloader {
         }
     }
 
-    public OddsResponse downloadOdds(SportType sportType, Long since) {
+    public synchronized OddsResponse downloadOdds(SportType sportType, Long since) {
         try {
             String url = pinnacleConfig.getOddsUrl(sportType, since);
             String json = downloadJson(url);

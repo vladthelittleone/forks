@@ -45,13 +45,13 @@ public class ForksFinderService {
                         continue;
                     }
                     if (otherBookCoeff.isBetCompatibleByValue(newBookmakerCoeff)) {
-                        log.debug(String.format("It's a fork compatible types: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
+                        //log.debug(String.format("It's a fork compatible types: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
                     } else {
-                        log.debug(String.format("It's not a fork by type: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
+                        //log.debug(String.format("It's not a fork by type: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
                         continue;
                     }
                     if (otherBookCoeff.isFork(newBookmakerCoeff)) {
-                        log.debug(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
+                        //log.debug(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(
                                 new ForkFoundEvent(
                                         match,
@@ -60,8 +60,8 @@ public class ForksFinderService {
                                 )
                         );
                     } else {
-                        log.debug(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s",
-                                BookmakerCoeff.getForkPercentage(newBookmakerCoeff, otherBookCoeff), newBookmakerCoeff, otherBookCoeff));
+                        /*log.debug(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s",
+                                BookmakerCoeff.getForkPercentage(newBookmakerCoeff, otherBookCoeff), newBookmakerCoeff, otherBookCoeff));*/
                     }
                 }
             }
