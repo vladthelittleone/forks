@@ -34,7 +34,7 @@ public class FlashscoreLeagues {
         GERMANY_BUNDESLIGA_3("fNLB0bs2"),
         CHECH_LIGA("hleea1wH"),
         POLAND_1("Qo6off6p"),
-        SWITZERLAND_1("jVMQJOHF"),
+        SWITZERLAND_CHALLENGE("jVMQJOHF"),
         CROATIA_1("nqMxclRN"),
         BULGARIA_A("r9Y9rlDt"),
         SWEDEN_SUPERETTAN("bBIP6pm3"),

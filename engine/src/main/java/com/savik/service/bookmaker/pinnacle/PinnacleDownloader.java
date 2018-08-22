@@ -25,7 +25,7 @@ public class PinnacleDownloader {
     @Autowired
     ObjectMapper objectMapper;
 
-    public FixtureResponse downloadFixtures(SportType sportType) {
+    public synchronized FixtureResponse downloadFixtures(SportType sportType) {
         try {
             String url = pinnacleConfig.getFixtureUrl(sportType);
             String json = downloadJson(url);
@@ -47,7 +47,7 @@ public class PinnacleDownloader {
         }
     }
 
-    public String downloadJson(String url) {
+    private String downloadJson(String url) {
         Map<String, String> headers = new HashMap<String, String>() {
             {
                 put("Authorization", "Basic " + pinnacleConfig.getBase64Authentications());
