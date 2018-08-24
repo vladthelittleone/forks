@@ -11,14 +11,13 @@ import static java.math.MathContext.DECIMAL32;
 public class BookmakerUtils {
 
     public boolean isFork(Double value1, Double value2) {
-        return getForkPercentage(value1, value2) < 1;
+        return getForkPercentage(value1, value2).compareTo(BigDecimal.ONE) < 0;
     }
 
-    public double getForkPercentage(Double value1, Double value2) {
+    public BigDecimal getForkPercentage(Double value1, Double value2) {
         BigDecimal first = BigDecimal.valueOf(value1);
         BigDecimal second = BigDecimal.valueOf(value2);
-        final BigDecimal value = (ONE.divide(first, DECIMAL32)).add((ONE.divide(second, DECIMAL32)));
-        return value.doubleValue();
+        return (ONE.divide(first, DECIMAL32)).add((ONE.divide(second, DECIMAL32)));
     }
 
     public boolean isHandicapForkAcceptableTypes(Double type1, Double type2) {

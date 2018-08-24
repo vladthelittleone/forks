@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class BookmakerCoeff {
     }
 
 
-    public static double getForkPercentage(BookmakerCoeff first, BookmakerCoeff second) {
+    public static BigDecimal getForkPercentage(BookmakerCoeff first, BookmakerCoeff second) {
         return BookmakerUtils.getForkPercentage(first.getCoeffValue(), second.getCoeffValue());
     }
 

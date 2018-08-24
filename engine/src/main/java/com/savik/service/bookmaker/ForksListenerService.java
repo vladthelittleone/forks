@@ -15,7 +15,7 @@ import static com.savik.model.BookmakerCoeff.getForkPercentage;
 @Log4j2
 public class ForksListenerService {
 
-    DecimalFormat f = new DecimalFormat("##.00");
+    DecimalFormat f = new DecimalFormat("##.000");
     @EventListener
     public void handle(final ForkFoundEvent event) {
         final Match match = event.getMatch();
