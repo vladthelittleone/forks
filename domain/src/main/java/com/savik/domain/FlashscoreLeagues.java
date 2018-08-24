@@ -20,7 +20,7 @@ public class FlashscoreLeagues {
         ENGLAND_PREMIER("dYlOSQOD"),
         GREECE_SUPERLIGA("d2pwJFHI"),
         //CYPRUS_1("EmZxlqvh"),
-        COSTA_RICA("tpC1pUBH"),
+        //COSTA_RICA("tpC1pUBH"),
         BELGIUM_A("dG2SqPrf"),
         BELGIUM_B("dMwNgPSC"),
         POLAND_EKSTRAKLASA("lrMHUHDc"),
