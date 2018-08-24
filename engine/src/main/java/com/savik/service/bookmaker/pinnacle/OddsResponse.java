@@ -1,7 +1,9 @@
 package com.savik.service.bookmaker.pinnacle;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.Optional;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OddsResponse {
     Integer sportId;
     Long last;
@@ -39,6 +43,8 @@ public class OddsResponse {
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class OddsLeague {
     Integer id;
     List<OddsEvent> events;
@@ -58,6 +64,8 @@ class OddsLeague {
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class OddsEvent {
     Integer id;
     List<OddsPeriod> periods;
@@ -79,6 +87,8 @@ class OddsEvent {
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class OddsPeriod {
     Integer lineId;
     Integer number;
@@ -120,6 +130,8 @@ class OddsMoneyline {
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 class OddsTotal {
     Double points;
     Double over;
