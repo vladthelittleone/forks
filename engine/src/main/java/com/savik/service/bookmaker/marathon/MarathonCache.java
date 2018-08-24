@@ -40,7 +40,7 @@ public class MarathonCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.debug("Match info wasn't found in cache");
+        log.debug("Match info wasn't found in cache: " + bookmakerMatch);
         return Optional.empty();
     }
 }

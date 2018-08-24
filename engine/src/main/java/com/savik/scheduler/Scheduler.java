@@ -23,7 +23,7 @@ public class Scheduler {
     @Autowired
     EngineService engineService;
 
-    @Scheduled(fixedDelay = 1000 * 5, initialDelay = 5_000)
+    @Scheduled(fixedDelay = 1000 * 60 * 5, initialDelay = 5_000)
     public void prematchesTask() {
         log.info("start scheduling task for today matches");
         log.info("Current Thread : {}", Thread.currentThread().getName());

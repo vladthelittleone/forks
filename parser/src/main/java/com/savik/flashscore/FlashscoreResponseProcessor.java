@@ -37,6 +37,11 @@ public class FlashscoreResponseProcessor {
             if (dbMatchOptional.isPresent()) {
                 processExistentMatch(match, dbMatchOptional.get());
             } else {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 processNonexistentMatch(sportConfig, match);
             }
             log.debug("Finished process future match - " + match.getFlashscoreId());
