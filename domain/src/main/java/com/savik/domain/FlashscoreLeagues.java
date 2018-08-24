@@ -40,7 +40,7 @@ public class FlashscoreLeagues {
         SWEDEN_SUPERETTAN("bBIP6pm3"),
         //EGYPT_PREMIER("xbpjAGxq"),
         IRAN_PRO("2HzmcynI"),
-        PERU_PREMIER("KrrdAMyI"),
+        //PERU_PREMIER("KrrdAMyI"),
         JAPAN_J2("vXr8fotG"),
         KOREA_K("0IDCJLlH"),
         //KOREA_NATIONAL("xfzNMq1a"),
