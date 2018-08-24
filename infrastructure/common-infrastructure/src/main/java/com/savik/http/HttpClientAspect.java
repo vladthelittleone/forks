@@ -18,10 +18,10 @@ public class HttpClientAspect {
         final Object[] args = jp.getArgs();
         String url = null;
         Map dataOrHeaders = null;
-        if(args.length == 1 && args[0] instanceof String) {
+        if(args.length >= 1 && args[0] instanceof String) {
             url = (String) args[0];
         }
-        if(args.length == 2 && args[1] instanceof Map) {
+        if(args.length >= 2 && args[1] instanceof Map) {
             dataOrHeaders = (Map) args[1];
         }
         log.debug(jp.getSignature().getName() + " " +  url + " " + dataOrHeaders);

@@ -67,7 +67,7 @@ public class PinnacleApi {
         return findMatch(fixture, match);
     }
 
-    private FixtureResponse getFixtureBySportType(SportType sportType) {
+    private synchronized FixtureResponse getFixtureBySportType(SportType sportType) {
         FixtureResponse sportFixture = cache.getFixture(sportType);
         if (sportFixture == null) {
             log.debug(String.format("Fixture wasn't found. Sport:%s", sportType));

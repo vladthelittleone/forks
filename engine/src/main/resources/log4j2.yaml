@@ -14,7 +14,7 @@ Configutation:
         filePattern: "${log-path}/archive/http.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-              size: 100 KB
+              size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
           
@@ -23,7 +23,7 @@ Configutation:
         filePattern: "${log-path}/archive/common.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-              size: 100 KB
+              size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
@@ -32,7 +32,7 @@ Configutation:
         filePattern: "${log-path}/archive/sbobet.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
@@ -41,7 +41,7 @@ Configutation:
         filePattern: "${log-path}/archive/pinnacle.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
           
@@ -50,7 +50,7 @@ Configutation:
         filePattern: "${log-path}/archive/marathon.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"
 
@@ -59,7 +59,7 @@ Configutation:
         filePattern: "${log-path}/archive/flashscore_suggestions.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "%msg%n"
 
@@ -68,7 +68,7 @@ Configutation:
         filePattern: "${log-path}/archive/forks.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
 
@@ -77,7 +77,7 @@ Configutation:
         filePattern: "${log-path}/archive/errors.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
-               size: 100 KB
+               size: 500 KB
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
 
