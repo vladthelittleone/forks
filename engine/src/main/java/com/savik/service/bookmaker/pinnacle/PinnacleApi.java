@@ -174,7 +174,7 @@ public class PinnacleApi {
         throw new PinnacleException("number is invalid, should be 1,2,3. number: " + number);
     }
 
-    private OddsResponse getOddsResponseBySportType(SportType sportType) {
+    private synchronized OddsResponse getOddsResponseBySportType(SportType sportType) {
         OddsResponse oddsResponse = cache.getOdds(sportType);
         if (oddsResponse == null) {
             log.debug(String.format("Odds not found. sport:%s", sportType));
