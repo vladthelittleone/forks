@@ -62,11 +62,19 @@ public class MarathonParser {
             for (Element match : matches) {
                 final String bookmakerMatchId = match.attr("data-event-treeid");
                 final Element table = match.select("table.member-area-content-table").first();
-                final Elements names = table.select("td.name");
+                Elements names = table.select("td.name");
+                boolean isToday = false;
+                if(names.isEmpty()) {
+                    names = table.select("td.today-name");
+                    isToday = true;
+                }
+                if(names.isEmpty()) {
+                    throw new IllegalArgumentException("wtf ?!");
+                }
                 String homeTeam = null, awayTeam = null;
                 for (Element name : names) {
                     final String teamNumber = name.select(".member-number").text();
-                    final String nameValue = name.select("div.member-name > span").text();
+                    final String nameValue = isToday ? name.select("div.today-member-name > span").text() : name.select("div.member-name > span").text();
                     if("1.".equalsIgnoreCase(teamNumber)) {
                         homeTeam = nameValue;
                     }if("2.".equalsIgnoreCase(teamNumber)) {

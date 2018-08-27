@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public class BookmakerFlashscoreConnectionService {
     Map<BookmakerType, Set<Team>> map = new HashMap<>();
 
     public void printSuggestion(Match match, BookmakerType bookmakerType) {
+        map.putIfAbsent(bookmakerType, new HashSet<>());
         final Set<Team> teams = map.get(bookmakerType);
         if(!teams.contains(match.getHomeTeam())) {
             log.debug(String.format("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('%s', '%s', '', '%s');",
