@@ -36,7 +36,7 @@ public class MarathonBookmakerService extends BookmakerService {
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
-        if (!bookmakerMatchResponse.isPresent()) {
+        if (!bookmakerMatchResponse.isPresent() && cache.isEmpty()) {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
         }
 

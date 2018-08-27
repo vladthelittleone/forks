@@ -26,6 +26,10 @@ public class MarathonCache {
     public synchronized void add(BookmakerMatchResponse match) {
         cache.add(match);
     }
+    
+    public synchronized boolean isEmpty() {
+        return cache.isEmpty();
+    }
 
     public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatch bookmakerMatch) {
         // todo concurrent
