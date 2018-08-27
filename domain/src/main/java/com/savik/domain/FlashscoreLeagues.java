@@ -48,6 +48,7 @@ public class FlashscoreLeagues {
         SWEDEN_ALLSVENSKAN("nXxWpLmT"),
         SWEDEN_1("UZCe41Bj"),
         SCOTLAND_1("l4P6dwRR"),
+        BELARUS_PREMIER("ObKhcPDs"),
         TURKEY_SUPERLIGA("Opdcd08Q"),
         TURKEY_1("Spw6Az1D"),
         ICELAND_PREMIER("GdxJccH5"),
