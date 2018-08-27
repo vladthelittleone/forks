@@ -139,9 +139,7 @@ public class BookmakerCoeff {
 
         @Override
         public int hashCode() {
-            // todo:
-            return  5;
-            //return chain.hashCode();
+            return  chain.stream().map(Enum::toString).mapToInt(s -> s.hashCode()).sum();
         }
     }
 }
