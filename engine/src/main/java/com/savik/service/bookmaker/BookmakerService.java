@@ -4,7 +4,6 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -24,8 +23,15 @@ public abstract class BookmakerService {
 
     protected abstract Optional<BookmakerMatchResponse> handle(BookmakerMatch match);
 
-    //@Async
-    public CompletableFuture<Void> handle(Match match) {
+    public CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match) {
+        return handle(match, true);
+    }
+    
+    public CompletableFuture<Optional<BookmakerMatchResponse>> handleWithoutPublishing(Match match) {
+        return handle(match, false);
+    }
+
+    private CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match, boolean publish) {
         Optional<BookmakerMatch> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
         if(!bookmakerMatchOptional.isPresent()) {
             log.debug(String.format("Match wasn't parsed. id: %s, %s-%s",
@@ -37,12 +43,16 @@ public abstract class BookmakerService {
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
         if (info.isPresent()) {
             log.debug("Match was parsed:" + info.get());
-            bookmakerEventPublisher.publishMatchResponse(info.get(), match);
+            if(publish) {
+                bookmakerEventPublisher.publishMatchResponse(info.get(), match);
+            }
         } else {
             log.info(String.format("Match wasn't found. Id: %s", match));
-            bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
+            if(publish) {
+                bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
+            }
         }
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture(info);
     }
 
 }

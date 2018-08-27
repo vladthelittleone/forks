@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
@@ -31,10 +32,10 @@ public class BookmakerAggregationService {
     @Async
     @MatchIdLogging
     public CompletableFuture<Void> handle(Match match) {
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        List<CompletableFuture<Optional<BookmakerMatchResponse>>> futures = new ArrayList<>();
         for (BookmakerService bookmakerService : bookmakerServices) {
             log.info(String.format("Start handling match. matchId: %s, bookmaker service: %s, ", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
-            CompletableFuture<Void> future = bookmakerService.handle(match);
+            CompletableFuture<Optional<BookmakerMatchResponse>> future = bookmakerService.handle(match);
             futures.add(future);
             log.info(String.format("Match was handled. matchId: %s, bookmaker service: %s", match.getFlashscoreId(), bookmakerService.getBookmakerType()));
         }
