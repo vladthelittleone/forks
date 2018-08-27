@@ -46,10 +46,19 @@ public class FlashscoreLeagues {
         //KOREA_NATIONAL("xfzNMq1a"),
         NORWAY_ELIT("GOvB22xg"),
         SWEDEN_ALLSVENSKAN("nXxWpLmT"),
+        SWEDEN_1("UZCe41Bj"),
         SCOTLAND_1("l4P6dwRR"),
         TURKEY_SUPERLIGA("Opdcd08Q"),
+        TURKEY_1("Spw6Az1D"),
+        ICELAND_PREMIER("GdxJccH5"),
+        FINLAND_YKKONEN("W8IYMbrj"),
+        ROMANIA_1("GILi6JC9"),
+        ISRAEL_PREMIER("rHJ2vy1B"),
         //RUSSIA_FNL("jizXHcsM"),
         ENGLAND_1("rJSMG3H0"),
+        ENGLAND_NATIONAL("4CWHXGM1"),
+        ENGLAND_NATIONAL_NORTH("rsMtLd7e"),
+        ENGLAND_NATIONAL_SOUTH("QPXiMdx8"),
         ENGLAND_2("0MwU4NW6");
 
         String id;
