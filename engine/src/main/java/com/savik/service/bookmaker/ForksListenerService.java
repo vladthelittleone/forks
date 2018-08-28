@@ -25,21 +25,22 @@ public class ForksListenerService {
     List<BookmakerService> bookmakerServices;
 
     DecimalFormat f = new DecimalFormat("##.000");
-
+    
     //@Async
     @EventListener
     public void handle(final ForkFoundEvent event) {
-        if(!forkIsStillExist(event)) {
-            log.info("Fork was exist, but there isn't right now:" + event);
-            return;
-        }
         final Match match = event.getMatch();
         final Bet first = event.getFirst();
         final Bet second = event.getSecond();
         StringBuilder builder = new StringBuilder("Fork was found: ");
-        builder.append("fork=" + formatFork(event)).append(match.getFlashscoreId()).append(" hT=").append(match.getHomeTeam().getName()).append(" aT=")
+        builder.append("fork=" + formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff())).append(match.getFlashscoreId()).append(" hT=").append(match.getHomeTeam().getName()).append(" aT=")
                 .append(match.getAwayTeam().getName()).append(" b1=").append(first).append(" b2=").append(second);
         log.info(builder.toString());
+        if(!forkIsStillExist(event)) {
+            log.info("Fork was exist, but there isn't right now:" + event);
+            return;
+        }
+        log.info("Fork still exists!");
     }
 
     private boolean forkIsStillExist(final ForkFoundEvent event) {
@@ -51,6 +52,8 @@ public class ForksListenerService {
         if(!optionalFirstUpdatedBet.isPresent() || !optionalsecondUpdatedBet.isPresent()) {
             return false;
         }
+        log.info("old fork coeff = " + formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()));
+        log.info("updated fork coeff = " + formatFork(optionalFirstUpdatedBet.get(), optionalsecondUpdatedBet.get()));
         return optionalFirstUpdatedBet.get().isFork(optionalsecondUpdatedBet.get());
     }
 
@@ -69,9 +72,7 @@ public class ForksListenerService {
                 .orElseThrow(() -> new IllegalArgumentException("invalid book type: " + bookmakerType));
     }
 
-    public String formatFork(final ForkFoundEvent event) {
-        final Bet first = event.getFirst();
-        final Bet second = event.getSecond();
-        return f.format(getForkPercentage(first.getBookmakerCoeff(), second.getBookmakerCoeff()));
+    public String formatFork(BookmakerCoeff first, BookmakerCoeff second) {
+        return f.format(getForkPercentage(first, second));
     }
 }

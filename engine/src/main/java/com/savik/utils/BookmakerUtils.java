@@ -11,7 +11,7 @@ import static java.math.MathContext.DECIMAL32;
 public class BookmakerUtils {
 
     public boolean isFork(Double value1, Double value2) {
-        return getForkPercentage(value1, value2).compareTo(BigDecimal.valueOf(1)) < 0;
+        return getForkPercentage(value1, value2).compareTo(ONE) < 0;
     }
 
     public BigDecimal getForkPercentage(Double value1, Double value2) {
