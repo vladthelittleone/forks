@@ -59,8 +59,8 @@ public class BookmakerCoeff {
         return BookmakerCoeffMapper.isFork(this, anotherCoeff);
     }
     
-    public boolean isSameChain(BookmakerCoeff coeff) {
-        return typeChain.equals(coeff.getTypeChain());
+    public boolean isSame(BookmakerCoeff coeff) {
+        return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue());
     }
 
 

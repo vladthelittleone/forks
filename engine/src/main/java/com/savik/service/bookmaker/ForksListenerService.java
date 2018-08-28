@@ -50,6 +50,7 @@ public class ForksListenerService {
         final Optional<BookmakerCoeff> optionalFirstUpdatedBet = findUpdatedBet(first, match);
         final Optional<BookmakerCoeff> optionalsecondUpdatedBet = findUpdatedBet(second, match);
         if(!optionalFirstUpdatedBet.isPresent() || !optionalsecondUpdatedBet.isPresent()) {
+            log.info("There is no updated bet");
             return false;
         }
         log.info("old fork coeff = " + formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()));
@@ -64,7 +65,7 @@ public class ForksListenerService {
         final BookmakerMatchResponse response = optional.orElseThrow(() -> new IllegalArgumentException("response should be not empty"));
         final List<BookmakerCoeff> bookmakerCoeffs = response.getBookmakerCoeffs();
         final BookmakerCoeff bookmakerCoeff = bet.getBookmakerCoeff();
-        return bookmakerCoeffs.stream().filter(b -> b.isSameChain(bookmakerCoeff)).findFirst();
+        return bookmakerCoeffs.stream().filter(b -> b.isSame(bookmakerCoeff)).findFirst();
     }
 
     private BookmakerService getByBookType(BookmakerType bookmakerType) {
