@@ -86,8 +86,8 @@ public class PinnacleApi {
                 .filter(l -> Objects.equals(l.getId(), Integer.parseInt(match.getBookmakerLeague().getBookmakerId())))
                 .findFirst().get();
 
-        Predicate<FixtureEvent> predicate = event -> event.getHome().equals(match.getHomeTeam().getName()) &&
-                event.getAway().equals(match.getAwayTeam().getName()) &&
+        Predicate<FixtureEvent> predicate = event -> event.getHome().equalsIgnoreCase(match.getHomeTeam().getName()) &&
+                event.getAway().equalsIgnoreCase(match.getAwayTeam().getName()) &&
                 //event.getStatus().equals("I") &&
                 event.getStarts().toLocalDate().isEqual(match.getMatch().getDate().toLocalDate());
 

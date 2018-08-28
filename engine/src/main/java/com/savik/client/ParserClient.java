@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.savik.domain.MatchStatus.LIVE;
 import static com.savik.domain.MatchStatus.PREMATCH;
 import static com.savik.domain.SportType.FOOTBALL;
 
@@ -382,7 +381,7 @@ class ParserClientFallback implements ParserClient {
                         .homeTeam(Team.builder().name("Stenhousemuir").flashscoreId("dWY6Y9zr").sportType(FOOTBALL).build())
                         .awayTeam(Team.builder().name("Airdrieonians").flashscoreId("KWzLBhEq").sportType(FOOTBALL).build())
                         .build()
-        );
+        );*/
         return matches;
     }
 }
