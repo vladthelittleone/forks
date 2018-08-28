@@ -51,7 +51,11 @@ public class Parser {
 
 /*        List<String> leagues = Arrays.asList(SCOTLAND_1.getId(), RUSSIA_FNL.getId(), ENGLAND_1.getId(), ENGLAND_2.getId(), ENGLAND_CHAMPIONSHIP.getId(), ENGLAND_PREMIER.getId());
         matches = matches.stream().filter(m -> leagues.contains(m.getFlashscoreLeagueId()) &&
-                m.getMatchStatus() == MatchStatus.LIVE).collect(Collectors.toList());
+                m.getMatchStatus() == MatchStatus.PREMATCH).collect(Collectors.toList());*/
+        final List<String> ids = Arrays.asList(FlashscoreLeagues.FOOTBALL.values()).stream()
+                .map(v -> v.getId()).collect(Collectors.toList());
+        matches = matches.stream().filter(m -> ids.contains(m.getFlashscoreLeagueId()) &&
+                m.getMatchStatus() == MatchStatus.PREMATCH).collect(Collectors.toList());
         flashscoreResponseProcessor.process(sportConfig, matches);
         temp(matches);
 
