@@ -3,7 +3,8 @@ package com.savik.domain;
 import java.util.Arrays;
 
 public class FlashscoreLeagues {
-    public static enum FOOTBALL {
+    public enum FOOTBALL {
+        ARGENTINA_B("GKJrZE7I"),
         SPAIN_LA("QVmLl54o"),
         SPAIN_SEGUNDA("vZiPmPJi"),
         BRASIL_A("Yq4hUnzQ"),
@@ -46,6 +47,8 @@ public class FlashscoreLeagues {
         HUNGARY_NB2("KIZK2ns8"),
         SOUTH_AFRICA_PREMIER("WYFXQ1KH"),
         POLAND_1("Qo6off6p"),
+        USA_MLS("CQv5qrFt"),
+        ECUADOR_A("WWZFEdUR"),
         SWITZERLAND_CHALLENGE("jVMQJOHF"),
         CROATIA_1("nqMxclRN"),
         //BULGARIA_A("r9Y9rlDt"),

@@ -5,4 +5,5 @@
 11, разобрать какой пул потоков за что отвечает
 12, придумать что делать с марафон в лайве
 13. разобраться что делать с 1x2
-14 marathon Hungary - NB 2
+14 marathon Hungary - NB 2, pinnacle liga GKJrZE7I Argentina Primera B
+15. сбобет разобрать с таймзоной
