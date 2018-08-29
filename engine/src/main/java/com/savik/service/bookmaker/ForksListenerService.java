@@ -33,7 +33,7 @@ public class ForksListenerService {
         final Bet first = event.getFirst();
         final Bet second = event.getSecond();
         StringBuilder builder = new StringBuilder("Fork was found: ");
-        builder.append("fork=" + formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff())).append(match.getFlashscoreId()).append(" hT=").append(match.getHomeTeam().getName()).append(" aT=")
+        builder.append("fork=" + formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff())).append(" id=").append(match.getFlashscoreId()).append(" hT=").append(match.getHomeTeam().getName()).append(" aT=")
                 .append(match.getAwayTeam().getName()).append(" b1=").append(first).append(" b2=").append(second);
         log.info(builder.toString());
         if(!forkIsStillExist(event)) {
