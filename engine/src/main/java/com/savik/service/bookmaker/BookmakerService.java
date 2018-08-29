@@ -34,7 +34,7 @@ public abstract class BookmakerService {
     private CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match, boolean publish) {
         Optional<BookmakerMatch> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
         if(!bookmakerMatchOptional.isPresent()) {
-            log.debug(String.format("Match wasn't parsed. id: %s, %s-%s",
+            log.debug(String.format("Match bookmaker matching wasn't found. %s, id: %s. %s-%s", getBookmakerType(),
                     match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
             bookmakerEventPublisher.publishMatchInfoNotFoundForBookmaker(match, getBookmakerType());
             return CompletableFuture.completedFuture(null);
@@ -47,7 +47,7 @@ public abstract class BookmakerService {
                 bookmakerEventPublisher.publishMatchResponse(info.get(), match);
             }
         } else {
-            log.info(String.format("Match wasn't found. Id: %s", match));
+            log.info(String.format("Match wasn't found in line: %s, %s", getBookmakerType(), bookmakerMatch.getDefaultLogString()));
             if(publish) {
                 bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
             }

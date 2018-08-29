@@ -50,7 +50,7 @@ public class SbobetCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.info("Match info wasn't found in cache:" + bookmakerMatch.getDefaultLogString());
+        log.info("Match info wasn't found in cache: " + bookmakerMatch.getDefaultLogString());
         return Optional.empty();
     }
 }

@@ -129,6 +129,12 @@ Configutation:
           additivity: false
           level: debug
           AppenderRef:
+            - ref: Bookmaker_Service_File_Appender  
+              
+        - name: com.savik.service.bookmaker.BookmakerMatchService
+          additivity: false
+          level: debug
+          AppenderRef:
             - ref: Bookmaker_Service_File_Appender
 
 

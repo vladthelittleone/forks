@@ -50,7 +50,8 @@ public class PinnacleApi {
             log.debug(String.format("Fixture event was parsed: %s",match.getDefaultLogString()));
             return Optional.of(bookmakerMatchResponse);
         } else {
-            log.info(String.format("Fixture event wasn't found, match flashscore id: %s", match.getDefaultLogString()));
+            log.info(String.format("Fixture event wasn't found, match flashscore id: %s, %s", 
+                    match.getDefaultLogString(), match.getBookmakerLeague()));
         }
         return Optional.empty();
     }
