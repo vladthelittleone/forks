@@ -42,7 +42,7 @@ public abstract class BookmakerService {
         BookmakerMatch bookmakerMatch = bookmakerMatchOptional.get();
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
         if (info.isPresent()) {
-            log.debug("Match was parsed:" + info.get());
+            log.trace("Match was parsed:" + info.get());
             if(publish) {
                 bookmakerEventPublisher.publishMatchResponse(info.get(), match);
             }

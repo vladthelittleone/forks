@@ -40,11 +40,11 @@ public class MarathonCache {
             if (Objects.equals(bookmakerLeague.getName(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
                     Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
-                log.debug("Match info was found in cache: " + cachedMatch);
+                log.debug(String.format("Match info was found in cache: %s", bookmakerMatch.getDefaultLogString()));
                 return Optional.of(cachedMatch);
             }
         }
-        log.debug("Match info wasn't found in cache: " + bookmakerMatch);
+        log.debug(String.format("Match info wasn't found in cache: %s", bookmakerMatch.getDefaultLogString()));
         return Optional.empty();
     }
 }

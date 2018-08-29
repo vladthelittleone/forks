@@ -46,11 +46,11 @@ public class SbobetCache {
             if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
                     Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
                     Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
-                log.debug("Match info was found in cache: " + cachedMatch);
+                log.debug("Match info was found in cache: " + bookmakerMatch.getDefaultLogString());
                 return Optional.of(cachedMatch);
             }
         }
-        log.info("Match info wasn't found in cache:" + bookmakerMatch);
+        log.info("Match info wasn't found in cache:" + bookmakerMatch.getDefaultLogString());
         return Optional.empty();
     }
 }

@@ -18,9 +18,18 @@ Configutation:
         PatternLayout:
           pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
           
-      - name: Bookmaker_File_Appender
+      - name: Common_File_Appender
         fileName: ${log-path}/common.log
         filePattern: "${log-path}/archive/common.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+              size: 500 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [matchId=%X{match.id}] [%t] %c{1} - %msg%n"   
+          
+      - name: Bookmaker_Service_File_Appender
+        fileName: ${log-path}/bookmaker-service.log
+        filePattern: "${log-path}/archive/bookmaker-service.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
               size: 500 KB
@@ -114,7 +123,13 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Console_Appender
-            - ref: Bookmaker_File_Appender
+            - ref: Common_File_Appender
+              
+        - name: com.savik.service.bookmaker.BookmakerService
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Bookmaker_Service_File_Appender
 
 
         - name: com.savik.service.bookmaker.sbobet

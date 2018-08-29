@@ -56,7 +56,7 @@ public class MarathonBookmakerService extends BookmakerService {
         return cache.find(bookmakerMatch);
     }
 
-    private Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
+    private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
         Match match = bookmakerMatch.getMatch();
         log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
         final List<BookmakerMatchResponse> matches = parser.getMatchesBySport(match.getSportType());
@@ -68,7 +68,8 @@ public class MarathonBookmakerService extends BookmakerService {
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
         final List<BookmakerCoeff> bookmakerCoeffs = parser.downloadAndParseMatch(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatch);
         bookmakerMatchResponse.setBookmakerCoeffs(bookmakerCoeffs);
-        log.debug("Match was parsed: " + bookmakerMatchResponse);
+        log.debug("Match was parsed: " + bookmakerMatch.getDefaultLogString());
+        log.trace("Match was parsed: " + bookmakerMatchResponse);
         return Optional.of(bookmakerMatchResponse);
     }
 

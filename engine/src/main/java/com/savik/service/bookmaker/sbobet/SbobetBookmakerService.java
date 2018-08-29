@@ -32,7 +32,6 @@ public class SbobetBookmakerService extends BookmakerService {
 
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
-        log.debug("Start handling sbobet match: " + bookmakerMatch);
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
         if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatch.getDaysFromToday())) {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
@@ -64,6 +63,8 @@ public class SbobetBookmakerService extends BookmakerService {
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
         final Optional<BookmakerMatchResponse> response =
                 sbobetParser.downloadAndParseSingleMatch(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatch);
+        log.debug("Match was parsed: " + bookmakerMatch.getDefaultLogString());
+        log.trace("Match was parsed: " + bookmakerMatchResponse);
         return response;
     }
 }

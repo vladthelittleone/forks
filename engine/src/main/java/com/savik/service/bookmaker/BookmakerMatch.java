@@ -21,6 +21,10 @@ public class BookmakerMatch {
     public int getDaysFromToday() {
         return match.getDaysFromToday();
     }
+    
+    public String getDefaultLogString() {
+        return String.format("%s, %s - %s", match.getFlashscoreId(), homeTeam.getName(), awayTeam.getName());
+    }
 
     @Override
     public String toString() {

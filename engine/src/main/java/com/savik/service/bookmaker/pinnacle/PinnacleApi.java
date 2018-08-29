@@ -45,11 +45,12 @@ public class PinnacleApi {
     public Optional<BookmakerMatchResponse> parseMatch(BookmakerMatch match) {
         Optional<FixtureEvent> event = getEvent(match);
         if (event.isPresent()) {
-            log.debug(String.format("Fixture event was found: %s", event.get()));
+            log.debug(String.format("Fixture event was found: %s", match.getDefaultLogString()));
             BookmakerMatchResponse bookmakerMatchResponse = parseMatch(event.get(), match);
+            log.debug(String.format("Fixture event was parsed: %s",match.getDefaultLogString()));
             return Optional.of(bookmakerMatchResponse);
         } else {
-            log.info(String.format("Fixture event wasn't found, match flashscore id: %s", match.getMatch().getFlashscoreId()));
+            log.info(String.format("Fixture event wasn't found, match flashscore id: %s", match.getDefaultLogString()));
         }
         return Optional.empty();
     }
@@ -105,7 +106,7 @@ public class PinnacleApi {
     }
 
     private BookmakerMatchResponse parseMatch(FixtureEvent event, BookmakerMatch bookmakerMatch) {
-        log.debug(String.format("Start parse event. event:%s", event));
+        log.trace(String.format("Start parse event. event:%s", event));
         OddsResponse oddsResponse = getOddsResponseBySportType(bookmakerMatch.getMatch().getSportType());
         OddsEvent odds = oddsResponse.findEvent(event);
         Set<BookmakerCoeff> bookmakerCoeffs = new HashSet<>();
@@ -158,7 +159,7 @@ public class PinnacleApi {
                 .bookmakerType(BookmakerType.PINNACLE)
                 .build();
 
-        log.debug(String.format("Event was parsed. event:%s", event));
+        log.trace(String.format("Event was parsed. event:%s", event));
         return bookmakerMatchResponse;
     }
 
