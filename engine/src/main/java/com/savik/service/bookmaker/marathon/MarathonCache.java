@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,10 +36,10 @@ public class MarathonCache {
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
         BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
         for (BookmakerMatchResponse cachedMatch : cache) {
-            if (Objects.equals(bookmakerLeague.getName(), cachedMatch.getBookmakerLeagueId()) &&
-                    Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
-                    Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
-                log.debug(String.format("Match info was found in cache: %s", bookmakerMatch.getDefaultLogString()));
+            if (bookmakerLeague.getBookmakerId().equalsIgnoreCase(cachedMatch.getBookmakerLeagueId()) &&
+                    homeTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerHomeTeamName()) &&
+                    guestTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerAwayTeamName())) {
+                log.debug("Match info was found in cache: " + bookmakerMatch.getDefaultLogString());
                 return Optional.of(cachedMatch);
             }
         }

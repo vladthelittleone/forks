@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,9 +42,9 @@ public class SbobetCache {
         BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
         final Set<BookmakerMatchResponse> matches = cache.getOrDefault(bookmakerMatch.getDaysFromToday(), new HashSet<>());
         for (BookmakerMatchResponse cachedMatch : matches) {
-            if (Objects.equals(bookmakerLeague.getBookmakerId(), cachedMatch.getBookmakerLeagueId()) &&
-                    Objects.equals(homeTeam.getName(), cachedMatch.getBookmakerHomeTeamName()) &&
-                    Objects.equals(guestTeam.getName(), cachedMatch.getBookmakerAwayTeamName())) {
+            if (bookmakerLeague.getBookmakerId().equalsIgnoreCase(cachedMatch.getBookmakerLeagueId()) &&
+                    homeTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerHomeTeamName()) &&
+                    guestTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerAwayTeamName())) {
                 log.debug("Match info was found in cache: " + bookmakerMatch.getDefaultLogString());
                 return Optional.of(cachedMatch);
             }
