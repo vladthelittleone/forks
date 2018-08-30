@@ -47,7 +47,8 @@ public abstract class BookmakerService {
                 bookmakerEventPublisher.publishMatchResponse(info.get(), match);
             }
         } else {
-            log.info(String.format("Match wasn't found in line: %s, %s", getBookmakerType(), bookmakerMatch.getDefaultLogString()));
+            log.info(String.format("Match wasn't found in line: %s, %s, %s", getBookmakerType(), 
+                    bookmakerMatch.getDefaultLogString(), bookmakerMatch.getBookmakerLeague().getName()));
             if(publish) {
                 bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
             }
