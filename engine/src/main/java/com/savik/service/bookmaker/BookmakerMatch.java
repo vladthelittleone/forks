@@ -23,7 +23,8 @@ public class BookmakerMatch {
     }
     
     public String getDefaultLogString() {
-        return String.format("%s, %s - %s", match.getFlashscoreId(), homeTeam.getName(), awayTeam.getName());
+        return String.format("%s, %s - %s, %s", match.getFlashscoreId(), homeTeam.getName(), 
+                awayTeam.getName(), bookmakerLeague.getName());
     }
 
     @Override

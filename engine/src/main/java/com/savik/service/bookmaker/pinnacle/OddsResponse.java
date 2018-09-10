@@ -25,7 +25,7 @@ public class OddsResponse {
                 return optionalEvent.get();
             }
         }
-        throw new PinnacleException("Odd event not found, fixture id: " + fixtureEvent.getId());
+        throw new PinnacleException("Odd event not found, fixture: " + fixtureEvent);
     }
 
     public void addLeague(OddsLeague newLeague) {
