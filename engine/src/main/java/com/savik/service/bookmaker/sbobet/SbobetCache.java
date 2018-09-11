@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.SBOBET_DEFAULT_OFFSET;
+
 @Component
 @Log4j2
 public class SbobetCache {
@@ -40,7 +42,8 @@ public class SbobetCache {
         BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
         BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
         BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
-        final Set<BookmakerMatchResponse> matches = cache.getOrDefault(bookmakerMatch.getDaysFromToday(), new HashSet<>());
+        final Set<BookmakerMatchResponse> matches = cache
+                .getOrDefault(bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET), new HashSet<>());
         for (BookmakerMatchResponse cachedMatch : matches) {
             if (bookmakerLeague.getBookmakerId().equalsIgnoreCase(cachedMatch.getBookmakerLeagueId()) &&
                     homeTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerHomeTeamName()) &&

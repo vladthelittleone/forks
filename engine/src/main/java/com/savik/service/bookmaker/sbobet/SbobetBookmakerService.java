@@ -9,12 +9,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Log4j2
 public class SbobetBookmakerService extends BookmakerService {
+    
+    public static final ZoneOffset SBOBET_DEFAULT_OFFSET = ZoneOffset.of("+8");
 
     @Autowired
     SbobetParser sbobetParser;
@@ -33,7 +36,7 @@ public class SbobetBookmakerService extends BookmakerService {
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
-        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatch.getDaysFromToday())) {
+        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET))) {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
         }
 
@@ -41,7 +44,7 @@ public class SbobetBookmakerService extends BookmakerService {
                 .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR))
                 .flatMap(
                         mR -> {
-                            cache.add(bookmakerMatch.getDaysFromToday(), mR);
+                            cache.add(bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET), mR);
                             return Optional.of(mR);
                         }
                 );
@@ -49,10 +52,11 @@ public class SbobetBookmakerService extends BookmakerService {
 
     private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
         Match match = bookmakerMatch.getMatch();
-        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
-        List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatch.getDaysFromToday());
+        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET));
+        List<BookmakerMatchResponse> matches = sbobetParser
+                .getMatchesBySport(match.getSportType(), bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET));
         log.debug("Matches were parsed, amount: " + matches.size());
-        cache.addAll(bookmakerMatch.getDaysFromToday(), matches);
+        cache.addAll(bookmakerMatch.getDaysFromToday(SBOBET_DEFAULT_OFFSET), matches);
         return findMatchInCache(bookmakerMatch);
     }
 

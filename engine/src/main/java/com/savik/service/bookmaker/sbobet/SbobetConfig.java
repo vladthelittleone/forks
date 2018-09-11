@@ -8,9 +8,11 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
+import static com.savik.service.bookmaker.sbobet.SbobetBookmakerService.SBOBET_DEFAULT_OFFSET;
 
 @Configuration
 @ConfigurationProperties(prefix = "sbobet")
@@ -23,7 +25,8 @@ public class SbobetConfig {
     Map<SportType, String> prefixes;
 
     public String getSportUrl(SportType sportType, int daysFromToday) {
-        String daysSbobetFormat = LocalDateTime.now().plusDays(daysFromToday).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String daysSbobetFormat = ZonedDateTime.now(SBOBET_DEFAULT_OFFSET).plusDays(daysFromToday)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         if (daysFromToday == 0) {
             daysSbobetFormat = "";
         }

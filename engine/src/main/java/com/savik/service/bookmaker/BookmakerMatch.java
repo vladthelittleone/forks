@@ -6,6 +6,8 @@ import com.savik.domain.Match;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.ZoneOffset;
+
 @Data
 @Builder
 public class BookmakerMatch {
@@ -19,7 +21,11 @@ public class BookmakerMatch {
     BookmakerLeague bookmakerLeague;
 
     public int getDaysFromToday() {
-        return match.getDaysFromToday();
+        return getDaysFromToday(ZoneOffset.UTC);
+    }
+
+    public int getDaysFromToday(ZoneOffset zoneOffset) {
+        return match.getDaysFromToday(zoneOffset);
     }
     
     public String getDefaultLogString() {

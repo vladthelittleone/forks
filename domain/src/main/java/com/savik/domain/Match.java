@@ -16,9 +16,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -57,9 +58,10 @@ public class Match {
     @Enumerated(EnumType.STRING)
     MatchStatus matchStatus;
 
-    public int getDaysFromToday() {
-        LocalDateTime matchDate = getDate();
-        int between = Period.between(LocalDate.now(), matchDate.toLocalDate()).getDays();
+    public int getDaysFromToday(ZoneOffset offset) {
+        final ZonedDateTime matchDate = ZonedDateTime.of(getDate(), offset).withZoneSameInstant(ZoneOffset.UTC);
+        final ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        int between = (Period.between(now.toLocalDate(), matchDate.toLocalDate()).getDays());
         return between;
     }
 
