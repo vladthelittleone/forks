@@ -17,13 +17,21 @@ public class MarathonDownloader {
     @Autowired
     MarathonConfig marathonConfig;
 
-    public Document download(String marathonMatchId) {
-        return httpClient.post(marathonConfig.getMarketUrl(), Collections.singletonMap("treeId", marathonMatchId));
+    public MarathonResponse downloadMatch(String marathonMatchId) {
+        final Document match = httpClient.post(marathonConfig.getMarketUrl(), Collections.singletonMap("treeId", marathonMatchId));
+        return new MarathonResponse(match);
     }
 
-    public Document download(SportType sportType) {
+    public MarathonResponse downloadPrematchMatchesBySport(SportType sportType) {
         String resultUrl = marathonConfig.getSportUrl(sportType);
-        return httpClient.getAntibot(resultUrl);
+        final Document antibot = httpClient.getAntibot(resultUrl);
+        return new MarathonResponse(antibot);
+    }
+
+    public MarathonResponse downloadLiveMatchesBySport(SportType sportType) {
+        String resultUrl = marathonConfig.getLiveSportUrl(sportType);
+        final Document antibot = httpClient.getAntibot(resultUrl);
+        return new MarathonResponse(antibot);
     }
 
 }

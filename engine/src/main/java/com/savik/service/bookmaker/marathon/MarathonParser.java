@@ -1,7 +1,6 @@
 package com.savik.service.bookmaker.marathon;
 
 import com.savik.domain.BookmakerType;
-import com.savik.domain.SportType;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
@@ -11,7 +10,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -26,16 +24,13 @@ public class MarathonParser {
 
     final String ADDITIONAL_MARKETS = "\"ADDITIONAL_MARKETS\":\"";
 
-    @Autowired
-    MarathonDownloader marathonDownloader;
-
-    public List<BookmakerCoeff> downloadAndParseMatch(String marathonMatchId, BookmakerMatch match) {
-        Document download = marathonDownloader.download(marathonMatchId);
+    public List<BookmakerCoeff> downloadAndParseMatch(MarathonResponse response, BookmakerMatch match) {
+        Document download = response.getDownload();
         String body = download.body().outerHtml();
         body = StringEscapeUtils.unescapeHtml(body);
         body = body.replaceAll("\\\\\"", "").replaceAll("\\\\n", "").replaceAll("\n", "");
         int i = body.indexOf(ADDITIONAL_MARKETS);
-        final String html = body.indexOf("} </body>") != -1 ? 
+        final String html = body.indexOf("} </body>") != -1 ?
                 body.substring(i + ADDITIONAL_MARKETS.length(), body.indexOf("} </body>")) :
                 body.substring(i + ADDITIONAL_MARKETS.length(), body.indexOf("</body>"));
         final Document document = Jsoup.parse(html);
@@ -50,9 +45,9 @@ public class MarathonParser {
         bookmakerCoeffs.removeAll(Collections.singleton(null));
         return bookmakerCoeffs;
     }
-    
-    public List<BookmakerMatchResponse> getMatchesBySport(SportType sportType) {
-        final Document download = marathonDownloader.download(sportType);
+
+    public List<BookmakerMatchResponse> parseMatches(MarathonResponse response) {
+        final Document download = response.getDownload();
 
         List<BookmakerMatchResponse> responses = new ArrayList<>();
         final Elements leagues = download.select("div.category-container");
@@ -64,20 +59,21 @@ public class MarathonParser {
                 final Element table = match.select("table.member-area-content-table").first();
                 Elements names = table.select("td.name");
                 boolean isToday = false;
-                if(names.isEmpty()) {
+                if (names.isEmpty()) {
                     names = table.select("td.today-name");
                     isToday = true;
                 }
-                if(names.isEmpty()) {
+                if (names.isEmpty()) {
                     throw new IllegalArgumentException("wtf ?!");
                 }
                 String homeTeam = null, awayTeam = null;
                 for (Element name : names) {
                     final String teamNumber = name.select(".member-number").text();
                     final String nameValue = isToday ? name.select("div.today-member-name > span").text() : name.select("div.member-name > span").text();
-                    if("1.".equalsIgnoreCase(teamNumber)) {
+                    if ("1.".equalsIgnoreCase(teamNumber)) {
                         homeTeam = nameValue;
-                    }if("2.".equalsIgnoreCase(teamNumber)) {
+                    }
+                    if ("2.".equalsIgnoreCase(teamNumber)) {
                         awayTeam = nameValue;
                     }
                 }
@@ -102,7 +98,7 @@ public class MarathonParser {
             final Elements handicapBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
             for (Element handicapBlock : handicapBlocks) {
                 final Elements prices = handicapBlock.select("td.price");
-                if(prices.size() != 2) {
+                if (prices.size() != 2) {
                     continue;
                 }
                 final Element homePrice = prices.get(0);
@@ -137,7 +133,7 @@ public class MarathonParser {
             final Elements totalBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
             for (Element totalBlock : totalBlocks) {
                 final Elements prices = totalBlock.select("td.price");
-                if(prices.size() != 2) {
+                if (prices.size() != 2) {
                     continue;
                 }
                 final Element underPrice = prices.get(0);
@@ -209,7 +205,7 @@ public class MarathonParser {
             final Elements totalBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
             for (Element totalBlock : totalBlocks) {
                 final Elements prices = totalBlock.select("td.price");
-                if(prices.size() != 2) {
+                if (prices.size() != 2) {
                     continue;
                 }
                 final Element underPrice = prices.get(0);
@@ -232,7 +228,7 @@ public class MarathonParser {
             final Elements handicapBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
             for (Element handicapBlock : handicapBlocks) {
                 final Elements prices = handicapBlock.select("td.price");
-                if(prices.size() != 2) {
+                if (prices.size() != 2) {
                     continue;
                 }
                 final Element homePrice = prices.get(0);
@@ -250,7 +246,7 @@ public class MarathonParser {
 
     BookmakerCoeff createFromHandicapBlock(Element block, CoeffType... types) {
         final String handicapTypeWithBraces = block.select("div.coeff-handicap").text();
-        if(StringUtils.isEmpty(handicapTypeWithBraces)){
+        if (StringUtils.isEmpty(handicapTypeWithBraces)) {
             return null;
         }
         final String handicapType = handicapTypeWithBraces.substring(1, handicapTypeWithBraces.length() - 1);
@@ -260,7 +256,7 @@ public class MarathonParser {
 
     BookmakerCoeff createFromAsianHandicapBlock(Element block, CoeffType... types) {
         final String handicapTypeWithBraces = block.select("div.coeff-handicap").text();
-        if(StringUtils.isEmpty(handicapTypeWithBraces)){
+        if (StringUtils.isEmpty(handicapTypeWithBraces)) {
             return null;
         }
         final String handicapType = handicapTypeWithBraces.substring(1, handicapTypeWithBraces.length() - 1);

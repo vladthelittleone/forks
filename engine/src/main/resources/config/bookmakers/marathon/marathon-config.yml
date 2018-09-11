@@ -1,5 +1,8 @@
 marathon:
   url: https://www.marathonbet.com/en/
+  liveUrl: https://www.marathonbet.com/en/live/
   marketPrefix: markets.htm
   prefixes:
     football: betting/Football
+  prefixesLive:
+    football: 26418

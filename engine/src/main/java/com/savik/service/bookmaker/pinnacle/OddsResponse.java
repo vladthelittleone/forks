@@ -68,6 +68,8 @@ class OddsLeague {
 @AllArgsConstructor
 class OddsEvent {
     Integer id;
+    Integer awayScore;
+    Integer homeScore;
     List<OddsPeriod> periods;
 
     public Optional<OddsPeriod> findPeriod(Integer number) {
