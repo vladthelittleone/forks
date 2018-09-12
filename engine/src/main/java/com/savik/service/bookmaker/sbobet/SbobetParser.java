@@ -6,6 +6,7 @@ import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
+import com.savik.service.bookmaker.SideType;
 import org.json.JSONArray;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,6 +40,7 @@ import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HOME_OR_AWAY;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_TOTAL;
+import static com.savik.utils.BookmakerUtils.convertAsianBookmakerHandicap;
 
 @Component
 public class SbobetParser {
@@ -151,6 +153,8 @@ public class SbobetParser {
             int matchId = matchInfoArray.getInt(MATCH_ID_INDEX);
             String homeTeamName = matchInfoArray.getString(HOME_NAME_INDEX);
             String guestTeamName = matchInfoArray.getString(GUEST_NAME_INDEX);
+            Integer homeScore = matchInfoArray.getInt(7);
+            Integer awayScore = matchInfoArray.getInt(8);
 
             JSONArray matchCoeffsArray = matchArray.getJSONArray(MATCH_COEFFS_INDEX);
 
@@ -164,6 +168,7 @@ public class SbobetParser {
 
                 for (BetParser parser : PARSERS) {
                     if (parser.couldApply(betType)) {
+                        parser.setScores(homeScore, awayScore);
                         Set<BookmakerCoeff> coeffs = new HashSet<>(parser.apply(coeffArrayContainer));
                         bookmakerCoeffs.addAll(coeffs);
                     }
@@ -187,13 +192,21 @@ public class SbobetParser {
     }
 }
 
-interface BetParser {
-    boolean couldApply(Integer betType);
+abstract class BetParser {
+    protected Integer homeScore;
+    protected Integer awayScore;
 
-    List<BookmakerCoeff> apply(JSONArray betArrayContainer);
+    void setScores(Integer homeScore, Integer awayScore) {
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
+    }
+
+    abstract boolean couldApply(Integer betType);
+
+    abstract List<BookmakerCoeff> apply(JSONArray betArrayContainer);
 }
 
-class CommonHandicap implements BetParser {
+class CommonHandicap extends BetParser {
 
     @Override
     public boolean couldApply(Integer betType) {
@@ -211,8 +224,8 @@ class CommonHandicap implements BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
         double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
-        BookmakerCoeff homeCoeff = BookmakerCoeff.of(-handicapValue, homeCoeffValue, period, HOME, HANDICAP);
-        BookmakerCoeff guestCoeff = BookmakerCoeff.of(handicapValue, guestCoeffValue, period, AWAY, HANDICAP);
+        BookmakerCoeff homeCoeff = BookmakerCoeff.of(convertAsianBookmakerHandicap(homeScore, awayScore, -handicapValue, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff guestCoeff = BookmakerCoeff.of(convertAsianBookmakerHandicap(homeScore, awayScore, handicapValue, SideType.AWAY), guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(homeCoeff);
         bookmakerCoeffs.add(guestCoeff);
@@ -220,7 +233,7 @@ class CommonHandicap implements BetParser {
     }
 }
 
-class CommonTotal implements BetParser {
+class CommonTotal extends BetParser {
 
     @Override
     public boolean couldApply(Integer betType) {
@@ -247,7 +260,7 @@ class CommonTotal implements BetParser {
     }
 }
 
-class HomeOrAway implements BetParser {
+class HomeOrAway extends BetParser {
 
     @Override
     public boolean couldApply(Integer betType) {
@@ -273,12 +286,12 @@ class HomeOrAway implements BetParser {
 }
 
 class MatchHomeOrAway extends HomeOrAway {
-    
+
     @Override
     public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
         return apply(betArrayContainer, MATCH);
     }
-    
+
     @Override
     public boolean couldApply(Integer betType) {
         return betType.equals(MATCH_HOME_OR_AWAY);
@@ -286,12 +299,12 @@ class MatchHomeOrAway extends HomeOrAway {
 }
 
 class FirstHalfHomeOrAway extends HomeOrAway {
-    
+
     @Override
     public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
         return apply(betArrayContainer, FIRST_HALF);
     }
-    
+
     @Override
     public boolean couldApply(Integer betType) {
         return betType.equals(FIRST_HALF__HOME_OR_AWAY);

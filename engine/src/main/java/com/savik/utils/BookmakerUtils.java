@@ -1,5 +1,6 @@
 package com.savik.utils;
 
+import com.savik.service.bookmaker.SideType;
 import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;
@@ -49,6 +50,20 @@ public class BookmakerUtils {
         }
         return true;
 
+    }
+
+    public Double convertAsianBookmakerHandicap(Integer homeScore, Integer awayScore, Double asianHandicap, SideType sideType) {
+        if (homeScore == null && awayScore == null) {
+            return asianHandicap;
+        }
+        if (homeScore.equals(awayScore)) {
+            return asianHandicap;
+        }
+        int delta = sideType == SideType.HOME ? homeScore - awayScore : awayScore - homeScore;
+        if (delta > 0) {
+            return BigDecimal.valueOf(asianHandicap).subtract(BigDecimal.valueOf(delta)).doubleValue();
+        }
+        return BigDecimal.valueOf(asianHandicap).add(BigDecimal.valueOf(-delta)).doubleValue();
     }
 
     private boolean isPositive(Double value) {
