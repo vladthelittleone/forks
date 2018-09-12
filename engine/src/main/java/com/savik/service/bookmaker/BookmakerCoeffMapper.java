@@ -104,6 +104,13 @@ public class BookmakerCoeffMapper {
 
         createMatching(
                 Arrays.asList(
+                        MATCH_COMMON_TOTAL_OVER,
+                        FIRST_HALF_COMMON_TOTAL_UNDER
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
                         MATCH_HOME_TOTAL_OVER,
                         MATCH_HOME_TOTAL_UNDER
                 )
@@ -111,8 +118,22 @@ public class BookmakerCoeffMapper {
 
         createMatching(
                 Arrays.asList(
+                        MATCH_HOME_TOTAL_OVER,
+                        FIRST_HALF_HOME_TOTAL_UNDER
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
                         MATCH_AWAY_TOTAL_OVER,
                         MATCH_AWAY_TOTAL_UNDER
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_AWAY_TOTAL_OVER,
+                        FIRST_HALF_AWAY_TOTAL_UNDER
                 )
         );
 
@@ -141,10 +162,10 @@ public class BookmakerCoeffMapper {
 
     static void createMatching(List<CoeffTypeChain> types) {
         for (CoeffTypeChain type : types) {
-            ArrayList<CoeffTypeChain> copy = new ArrayList<>(types);
-            copy.remove(type);
+            ArrayList<CoeffTypeChain> typesCopy = new ArrayList<>(types);
+            typesCopy.remove(type);
             final List<CoeffTypeChain> coeffTypeChains = acceptableTypes.getOrDefault(type, new ArrayList<>());
-            coeffTypeChains.addAll(copy);
+            coeffTypeChains.addAll(typesCopy);
             acceptableTypes.put(type, coeffTypeChains);
         }
     }
