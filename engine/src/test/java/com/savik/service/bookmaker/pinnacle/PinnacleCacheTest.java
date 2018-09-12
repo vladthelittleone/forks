@@ -24,6 +24,8 @@ public class PinnacleCacheTest {
                                 .events(Arrays.asList(
                                         OddsEvent.builder()
                                                 .id(11)
+                                                .homeScore(0)
+                                                .awayScore(0)
                                                 .periods(Arrays.asList(
                                                         OddsPeriod.builder()
                                                                 .number(0)
@@ -47,6 +49,8 @@ public class PinnacleCacheTest {
                                 .events(Arrays.asList(
                                         OddsEvent.builder()
                                                 .id(11)
+                                                .homeScore(1)
+                                                .awayScore(2)
                                                 .periods(Arrays.asList(
                                                         OddsPeriod.builder()
                                                                 .number(0)
@@ -84,5 +88,7 @@ public class PinnacleCacheTest {
 
         // у event с id=11,  period с number=0 стало 3 totals
         assertEquals(3, updatedOdds.findLeague(1).get().findEvent(11).get().findPeriod(0).get().getTotals().size());
+        assertEquals(1, (int) updatedOdds.findLeague(1).get().findEvent(11).get().getHomeScore());
+        assertEquals(2, (int) updatedOdds.findLeague(1).get().findEvent(11).get().getAwayScore());
     }
 }

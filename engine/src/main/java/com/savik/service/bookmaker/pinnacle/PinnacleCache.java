@@ -55,6 +55,8 @@ public class PinnacleCache {
                     if (optionalExpiredEvent.isPresent()) {
                         final OddsEvent expiredEvent = optionalExpiredEvent.get();
                         final List<OddsPeriod> deltaPeriods = deltaEvent.getPeriods();
+                        expiredEvent.setHomeScore(deltaEvent.getHomeScore());
+                        expiredEvent.setAwayScore(deltaEvent.getAwayScore());
                         for (OddsPeriod deltaPeriod : deltaPeriods) {
                             expiredEvent.replacePeriod(deltaPeriod);
                         }
