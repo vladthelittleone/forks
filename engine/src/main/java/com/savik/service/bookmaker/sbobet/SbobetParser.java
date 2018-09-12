@@ -7,6 +7,7 @@ import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
 import com.savik.service.bookmaker.SideType;
+import com.savik.utils.BookmakerUtils;
 import org.json.JSONArray;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,7 +41,6 @@ import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HOME_OR_AWAY;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_TOTAL;
-import static com.savik.utils.BookmakerUtils.convertAsianBookmakerHandicap;
 
 @Component
 public class SbobetParser {
@@ -224,8 +224,8 @@ class CommonHandicap extends BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(HOME_COEFF_INDEX);
         double guestCoeffValue = coeffValueArray.getDouble(GUEST_COEFF_INDEX);
-        BookmakerCoeff homeCoeff = BookmakerCoeff.of(convertAsianBookmakerHandicap(homeScore, awayScore, -handicapValue, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
-        BookmakerCoeff guestCoeff = BookmakerCoeff.of(convertAsianBookmakerHandicap(homeScore, awayScore, handicapValue, SideType.AWAY), guestCoeffValue, period, AWAY, HANDICAP);
+        BookmakerCoeff homeCoeff = BookmakerCoeff.of(BookmakerUtils.convertAsianBookmakerHandicap(homeScore, awayScore, -handicapValue, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff guestCoeff = BookmakerCoeff.of(BookmakerUtils.convertAsianBookmakerHandicap(homeScore, awayScore, handicapValue, SideType.AWAY), guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(homeCoeff);
         bookmakerCoeffs.add(guestCoeff);

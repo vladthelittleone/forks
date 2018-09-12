@@ -3,6 +3,7 @@ package com.savik.service.bookmaker.pinnacle;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.CoeffType;
 import com.savik.service.bookmaker.SideType;
+import com.savik.utils.BookmakerUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -20,7 +21,6 @@ import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
-import static com.savik.utils.BookmakerUtils.convertAsianBookmakerHandicap;
 
 @Component
 public class PinnacleParser {
@@ -42,9 +42,9 @@ public class PinnacleParser {
             List<OddsSpread> spreads = period.getSpreads();
             if (spreads != null) {
                 for (OddsSpread spread : spreads) {
-                    bookmakerCoeffs.add(of(convertAsianBookmakerHandicap(odds.getHomeScore(), odds.getAwayScore(), spread.getHdp(), SideType.HOME),
+                    bookmakerCoeffs.add(of(BookmakerUtils.convertAsianBookmakerHandicap(odds.getHomeScore(), odds.getAwayScore(), spread.getHdp(), SideType.HOME),
                             spread.getHome(), partType, HOME, HANDICAP));
-                    bookmakerCoeffs.add(of(convertAsianBookmakerHandicap(odds.getHomeScore(), odds.getAwayScore(), -spread.getHdp(), SideType.AWAY),
+                    bookmakerCoeffs.add(of(BookmakerUtils.convertAsianBookmakerHandicap(odds.getHomeScore(), odds.getAwayScore(), -spread.getHdp(), SideType.AWAY),
                             spread.getAway(), partType, AWAY, HANDICAP));
                 }
             }

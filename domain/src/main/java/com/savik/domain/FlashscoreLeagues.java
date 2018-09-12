@@ -53,7 +53,7 @@ public class FlashscoreLeagues {
         CROATIA_1("nqMxclRN"),
         //BULGARIA_A("r9Y9rlDt"),
         SWEDEN_SUPERETTAN("bBIP6pm3"),
-        //EGYPT_PREMIER("xbpjAGxq"),
+        EGYPT_PREMIER("xbpjAGxq"), // for live
         IRAN_PRO("2HzmcynI"),
         //PERU_PREMIER("KrrdAMyI"),
         JAPAN_J2("vXr8fotG"),
