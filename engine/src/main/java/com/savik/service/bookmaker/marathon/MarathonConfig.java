@@ -16,7 +16,11 @@ public class MarathonConfig {
 
     String url;
     
+    String liveUrl;
+    
     String marketPrefix;
+    
+    String liveMarketPrefix;
 
     Map<SportType, String> prefixes;
     
@@ -26,12 +30,16 @@ public class MarathonConfig {
         return url + marketPrefix;
     }
     
+    public String getLiveMarketUrl() {
+        return url + liveMarketPrefix;
+    }
+    
     public String getSportUrl(SportType sportType) {
         return url + prefixes.get(sportType);
     }
     
     public String getLiveSportUrl(SportType sportType) {
-        return url + prefixesLive.get(sportType);
+        return liveUrl + prefixesLive.get(sportType);
     }
 
 }

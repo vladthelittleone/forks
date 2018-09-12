@@ -22,6 +22,11 @@ public class MarathonDownloader {
         return new MarathonResponse(match);
     }
 
+    public MarathonResponse downloadLiveMatch(String marathonMatchId) {
+        final Document match = httpClient.post(marathonConfig.getLiveMarketUrl(), Collections.singletonMap("treeId", marathonMatchId));
+        return new MarathonResponse(match);
+    }
+
     public MarathonResponse downloadPrematchMatchesBySport(SportType sportType) {
         String resultUrl = marathonConfig.getSportUrl(sportType);
         final Document antibot = httpClient.getAntibot(resultUrl);

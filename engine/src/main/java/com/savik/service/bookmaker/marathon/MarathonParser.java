@@ -59,23 +59,40 @@ public class MarathonParser {
                 final Element table = match.select("table.member-area-content-table").first();
                 Elements names = table.select("td.name");
                 boolean isToday = false;
+                boolean isLive = false;
                 if (names.isEmpty()) {
                     names = table.select("td.today-name");
                     isToday = true;
+                }
+                if (names.isEmpty()) {
+                    names = table.select("td.live-today-name");
+                    isLive = true;
                 }
                 if (names.isEmpty()) {
                     throw new IllegalArgumentException("wtf ?!");
                 }
                 String homeTeam = null, awayTeam = null;
                 for (Element name : names) {
-                    final String teamNumber = name.select(".member-number").text();
-                    final String nameValue = isToday ? name.select("div.today-member-name > span").text() : name.select("div.member-name > span").text();
-                    if ("1.".equalsIgnoreCase(teamNumber)) {
-                        homeTeam = nameValue;
+                    if(isLive) {
+                        final String nameValue = name.select("div.live-today-member-name > span").text();
+                        if(names.indexOf(name) == 0) {
+                            homeTeam = nameValue;
+                        } else {
+                            awayTeam = nameValue;
+                        }
+                    } else {
+                        final String teamNumber = name.select(".member-number").text();
+                        final String nameValue = isToday ? name.select("div.today-member-name > span").text() : name.select("div.member-name > span").text();
+                        if ("1.".equalsIgnoreCase(teamNumber)) {
+                            homeTeam = nameValue;
+                        }
+                        if ("2.".equalsIgnoreCase(teamNumber)) {
+                            awayTeam = nameValue;
+                        }
                     }
-                    if ("2.".equalsIgnoreCase(teamNumber)) {
-                        awayTeam = nameValue;
-                    }
+                }
+                if (awayTeam == null || homeTeam == null) {
+                    throw new IllegalArgumentException("wtf ?!");
                 }
                 BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
                         .bookmakerAwayTeamName(awayTeam)

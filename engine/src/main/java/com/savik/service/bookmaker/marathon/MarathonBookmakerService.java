@@ -9,6 +9,7 @@ import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +72,15 @@ public class MarathonBookmakerService extends BookmakerService {
     }
 
     private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
-        final MarathonResponse marathonResponse = downloader.downloadMatch(bookmakerMatchResponse.getBookmakerMatchId());
+        Match match = bookmakerMatch.getMatch();
+        MarathonResponse marathonResponse;
+        if (match.getMatchStatus() == MatchStatus.PREMATCH) {
+            marathonResponse = downloader.downloadMatch(bookmakerMatchResponse.getBookmakerMatchId());
+        } else if (match.getMatchStatus() == MatchStatus.LIVE) {
+            marathonResponse = downloader.downloadLiveMatch(bookmakerMatchResponse.getBookmakerMatchId());
+        } else {
+            throw new RuntimeException("Match status is incorrect: " + match);
+        }
         final List<BookmakerCoeff> bookmakerCoeffs = parser.downloadAndParseMatch(marathonResponse, bookmakerMatch);
         bookmakerMatchResponse.setBookmakerCoeffs(bookmakerCoeffs);
         log.debug("Match was parsed: " + bookmakerMatch.getDefaultLogString());
