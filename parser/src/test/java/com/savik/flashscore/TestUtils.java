@@ -18,7 +18,7 @@ public class TestUtils {
                 .matchStatus(MatchStatus.FINISHED)
                 .sportType(SportType.FOOTBALL)
                 .homeTeam(createTeam())
-                .guestTeam(createTeam())
+                .awayTeam(createTeam())
                 .build();
     }
 

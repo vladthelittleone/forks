@@ -66,6 +66,20 @@ public class BookmakerUtils {
         return BigDecimal.valueOf(asianHandicap).add(BigDecimal.valueOf(-delta)).doubleValue();
     }
 
+    /*public Double convertAsianBookmakerWinToHandicap(Integer homeScore, Integer awayScore, SideType sideType) {
+        if (homeScore == null && awayScore == null) {
+            return -0.5;
+        }
+        if (homeScore.equals(awayScore)) {
+            return -0.5;
+        }
+        int delta = sideType == SideType.HOME ? homeScore - awayScore : awayScore - homeScore;
+        if (delta > 0) {
+            return BigDecimal.valueOf(asianHandicap).subtract(BigDecimal.valueOf(delta)).doubleValue();
+        }
+        return BigDecimal.valueOf(asianHandicap).add(BigDecimal.valueOf(-delta)).doubleValue();
+    }*/
+
     private boolean isPositive(Double value) {
         return value >= 0;
     }
