@@ -43,7 +43,7 @@ public class MarathonCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.debug(String.format("Match info wasn't found in cache: %s", bookmakerMatch.getDefaultLogString()));
+        log.info(String.format("Match info wasn't found in cache: %s", bookmakerMatch.getDefaultLogString()));
         return Optional.empty();
     }
 }
