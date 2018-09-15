@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class FlashscoreLeagues {
     public enum FOOTBALL {
-        ARGENTINA_B("GKJrZE7I"),
+        ARGENTINA_B_METROPOLITANA("GKJrZE7I"),
         SPAIN_LA("QVmLl54o"),
         SPAIN_SEGUNDA("vZiPmPJi"),
         BRASIL_A("Yq4hUnzQ"),

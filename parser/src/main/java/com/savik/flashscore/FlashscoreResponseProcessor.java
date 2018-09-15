@@ -28,29 +28,34 @@ public class FlashscoreResponseProcessor {
                 .map(Match::getFlashscoreId).collect(Collectors.toList()));
 
         for (final Match match : matches) {
-            log.debug("Start process future match - " + match.getFlashscoreId());
-            match.setSportType(sportConfig.getSportType());
+            try {
+                log.debug("Start process future match - " + match.getFlashscoreId());
+                match.setSportType(sportConfig.getSportType());
 
-            Optional<Match> dbMatchOptional = dbMatches.stream()
-                    .filter(dbM -> dbM.getFlashscoreId().equals(match.getFlashscoreId())).findFirst();
+                Optional<Match> dbMatchOptional = dbMatches.stream()
+                        .filter(dbM -> dbM.getFlashscoreId().equals(match.getFlashscoreId())).findFirst();
 
-            if (dbMatchOptional.isPresent()) {
-                processExistentMatch(match, dbMatchOptional.get());
-            } else {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (dbMatchOptional.isPresent()) {
+                    processExistentMatch(match, dbMatchOptional.get());
+                } else {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    processNonexistentMatch(sportConfig, match);
                 }
-                processNonexistentMatch(sportConfig, match);
+                log.debug("Finished process future match - " + match.getFlashscoreId());
+            } catch (Exception ex) {
+                log.error("Match: " + match.getFlashscoreId(), ex);
             }
-            log.debug("Finished process future match - " + match.getFlashscoreId());
+
         }
     }
 
     private void processExistentMatch(Match flashscoreMatch, Match dbMatch) {
-        dbMatch.getHomeTeam().setFlashscoreId(flashscoreMatch.getHomeTeam().getFlashscoreId());
-        dbMatch.getAwayTeam().setFlashscoreId(flashscoreMatch.getAwayTeam().getFlashscoreId());
+        flashscoreMatch.getHomeTeam().setFlashscoreId(dbMatch.getHomeTeam().getFlashscoreId());
+        flashscoreMatch.getAwayTeam().setFlashscoreId(dbMatch.getAwayTeam().getFlashscoreId());
         log.debug("Match was found in db - " + dbMatch);
         if (dbMatch.getMatchStatus() != flashscoreMatch.getMatchStatus()) {
             log.debug("Match status was changed: old: " + dbMatch.getMatchStatus() +
