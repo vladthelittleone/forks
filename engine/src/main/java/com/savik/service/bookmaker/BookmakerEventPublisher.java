@@ -5,6 +5,7 @@ import com.savik.domain.Match;
 import com.savik.events.BookmakerMatchInfoNotFoundEvent;
 import com.savik.events.BookmakerMatchNotFoundEvent;
 import com.savik.events.BookmakerMatchResponseEvent;
+import com.savik.events.ForkFoundEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,9 @@ public class BookmakerEventPublisher {
     public void publishMatchInfoNotFoundForBookmaker(Match match, BookmakerType bookmakerType) {
         BookmakerMatchInfoNotFoundEvent bookmakerMatchInfoNotFoundEvent = new BookmakerMatchInfoNotFoundEvent(match, bookmakerType);
         applicationEventPublisher.publishEvent(bookmakerMatchInfoNotFoundEvent);
+    }
+    
+    public void publishForkFoundEvent(ForkFoundEvent forkFoundEvent) {
+        applicationEventPublisher.publishEvent(forkFoundEvent);
     }
 }

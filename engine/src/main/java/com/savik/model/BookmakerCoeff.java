@@ -2,12 +2,10 @@ package com.savik.model;
 
 import com.savik.service.bookmaker.BookmakerCoeffMapper;
 import com.savik.service.bookmaker.CoeffType;
-import com.savik.utils.BookmakerUtils;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,17 +61,12 @@ public class BookmakerCoeff {
         return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue());
     }
 
-
-    public static BigDecimal getForkPercentage(BookmakerCoeff first, BookmakerCoeff second) {
-        return BookmakerUtils.getForkPercentage(first.getCoeffValue(), second.getCoeffValue());
-    }
-
     @Override
     public String toString() {
         return "" +
-                "tV=" + typeValue +
-                ", cV=" + coeffValue +
-                ", ch=" + typeChain +
+                "tV= " + typeValue +
+                ", cV= " + coeffValue +
+                ", ch= " + typeChain +
                 '}';
     }
 

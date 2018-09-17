@@ -63,6 +63,10 @@ public class Match {
         return between;
     }
 
+    public String getDefaultLogString() {
+        return String.format("%s, %s - %s", getFlashscoreId(), homeTeam.getName(), awayTeam.getName());
+    }
+
     @Override
     public String toString() {
         return "Match{" +

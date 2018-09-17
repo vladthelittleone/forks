@@ -10,7 +10,7 @@ import com.savik.model.Bet;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.EngineService;
 import com.savik.service.bookmaker.BookmakerMatchService;
-import com.savik.service.bookmaker.ForksListenerService;
+import com.savik.service.bookmaker.ForksService;
 import com.savik.service.bookmaker.pinnacle.PinnacleConfig;
 import com.savik.service.bookmaker.sbobet.SbobetConfig;
 import org.jsoup.Jsoup;
@@ -73,7 +73,7 @@ public class CommonIntegrationTest {
     HttpClient httpClient;
 
     @MockBean
-    ForksListenerService forksListenerService;
+    ForksService forksService;
 
     List<Match> matches;
 
@@ -87,7 +87,7 @@ public class CommonIntegrationTest {
                 .flashscoreLeagueId("lvUBR5F8")
                 .sportType(SportType.FOOTBALL)
                 .matchStatus(MatchStatus.PREMATCH)
-                .date(LocalDateTime.of(2018,6,21,15,0))
+                .date(LocalDateTime.of(2018, 6, 21, 15, 0))
                 .flashscoreId("vHWXsRjb")
                 .build();
 
@@ -110,65 +110,65 @@ public class CommonIntegrationTest {
     public void test() {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
-        ArgumentCaptor<ForkFoundEvent> argument = ArgumentCaptor.forClass(ForkFoundEvent.class);
-        verify(forksListenerService, times(8)).handle(argument.capture());
+        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
+        verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), argument.capture());
+        final List<ForkFoundEvent> forks = argument.getValue();
 
-
-        assertTrue(argument.getAllValues().contains(
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, MATCH, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, MATCH, AWAY, HANDICAP))
                 )
         ));
-        assertTrue(argument.getAllValues().contains(
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, FIRST_HALF, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, FIRST_HALF, AWAY, HANDICAP))
                 )
         ));
-        assertTrue(argument.getAllValues().contains(
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, COMMON, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, MATCH, COMMON, TOTAL, UNDER))
                 )
         ));
-        
-        assertTrue(argument.getAllValues().contains(
+
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(1.75, 2.17, MATCH, HOME, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(1.75, 1.91, MATCH, HOME, TOTAL, UNDER))
                 )
         ));
-        
-        assertTrue(argument.getAllValues().contains(
+
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 2.0, MATCH, AWAY, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.75, 2.01, MATCH, AWAY, TOTAL, UNDER))
                 )
         ));
-        
-        assertTrue(argument.getAllValues().contains(
+
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(1., 2.25, FIRST_HALF, COMMON, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(1., 1.93, FIRST_HALF, COMMON, TOTAL, UNDER))
                 )
         ));
-        
-        assertTrue(argument.getAllValues().contains(
+
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.75, 1.95, FIRST_HALF, HOME, TOTAL, UNDER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.75, 2.09, FIRST_HALF, HOME, TOTAL, OVER))
                 )
         ));
-        
-        assertTrue(argument.getAllValues().contains(
+
+        assertTrue(forks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.95, FIRST_HALF, AWAY, TOTAL, UNDER)),

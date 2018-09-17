@@ -1,15 +1,20 @@
 package com.savik.utils;
 
+import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.SideType;
 import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.MathContext.DECIMAL32;
 
 @UtilityClass
 public class BookmakerUtils {
+
+    private final DecimalFormat f = new DecimalFormat("##.000");
+
 
     public boolean isFork(Double value1, Double value2) {
         return getForkPercentage(value1, value2).compareTo(ONE) < 0;
@@ -50,6 +55,10 @@ public class BookmakerUtils {
         }
         return true;
 
+    }
+
+    public String formatFork(BookmakerCoeff first, BookmakerCoeff second) {
+        return f.format(getForkPercentage(first.getCoeffValue(), second.getCoeffValue()));
     }
 
     public Double convertAsianBookmakerHandicap(Integer homeScore, Integer awayScore, Double asianHandicap, SideType sideType) {
