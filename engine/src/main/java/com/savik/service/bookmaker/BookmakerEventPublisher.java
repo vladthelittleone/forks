@@ -6,6 +6,7 @@ import com.savik.events.BookmakerMatchInfoNotFoundEvent;
 import com.savik.events.BookmakerMatchNotFoundEvent;
 import com.savik.events.BookmakerMatchResponseEvent;
 import com.savik.events.ForkFoundEvent;
+import com.savik.model.BookmakerMatchWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

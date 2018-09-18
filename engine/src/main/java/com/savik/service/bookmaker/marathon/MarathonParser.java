@@ -3,7 +3,7 @@ package com.savik.service.bookmaker.marathon;
 import com.savik.domain.BookmakerType;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.CoeffType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;

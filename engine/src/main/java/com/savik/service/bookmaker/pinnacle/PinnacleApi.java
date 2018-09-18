@@ -4,7 +4,7 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.MatchStatus;
 import com.savik.domain.SportType;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

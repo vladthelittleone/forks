@@ -8,7 +8,7 @@ import com.savik.events.ForkFoundEvent;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerEventPublisher;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.ForksListenerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

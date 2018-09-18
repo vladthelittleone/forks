@@ -4,7 +4,7 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.SportType;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.CoeffType;
 import com.savik.service.bookmaker.SideType;
 import com.savik.utils.BookmakerUtils;

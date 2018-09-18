@@ -1,7 +1,7 @@
 package com.savik.events;
 
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -2,7 +2,7 @@ package com.savik.events;
 
 import com.savik.domain.Match;
 import com.savik.model.Bet;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

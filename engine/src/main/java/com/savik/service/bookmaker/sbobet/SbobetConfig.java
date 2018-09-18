@@ -2,7 +2,7 @@ package com.savik.service.bookmaker.sbobet;
 
 
 import com.savik.domain.SportType;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

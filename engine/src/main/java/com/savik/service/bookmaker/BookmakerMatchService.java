@@ -6,6 +6,7 @@ import com.savik.domain.BookmakerTeam;
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.domain.Team;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.repository.BookmakerLeagueRepository;
 import com.savik.repository.BookmakerTeamRepository;
 import lombok.extern.log4j.Log4j2;

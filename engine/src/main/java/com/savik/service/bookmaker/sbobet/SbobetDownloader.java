@@ -2,7 +2,7 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.SportType;
 import com.savik.http.HttpClient;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -10,7 +10,7 @@ import com.savik.model.Bet;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.EngineService;
 import com.savik.service.bookmaker.BookmakerMatchService;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.ForksService;
 import com.savik.service.bookmaker.pinnacle.PinnacleConfig;
 import com.savik.service.bookmaker.sbobet.SbobetConfig;

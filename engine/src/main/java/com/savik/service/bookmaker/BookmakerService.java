@@ -2,6 +2,7 @@ package com.savik.service.bookmaker;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

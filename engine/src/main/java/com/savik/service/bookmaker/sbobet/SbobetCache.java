@@ -3,7 +3,7 @@ package com.savik.service.bookmaker.sbobet;
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
-import com.savik.service.bookmaker.BookmakerMatchWrapper;
+import com.savik.model.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;

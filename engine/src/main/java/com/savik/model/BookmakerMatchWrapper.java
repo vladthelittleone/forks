@@ -1,4 +1,4 @@
-package com.savik.service.bookmaker;
+package com.savik.model;
 
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
