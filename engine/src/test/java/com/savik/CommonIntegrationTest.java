@@ -10,6 +10,7 @@ import com.savik.model.Bet;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.EngineService;
 import com.savik.service.bookmaker.BookmakerMatchService;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.ForksService;
 import com.savik.service.bookmaker.pinnacle.PinnacleConfig;
 import com.savik.service.bookmaker.sbobet.SbobetConfig;
@@ -78,6 +79,7 @@ public class CommonIntegrationTest {
     List<Match> matches;
 
     Match FRANCE_PERU;
+    BookmakerMatchWrapper FRANCE_PERU_WRAPPER;
 
     @BeforeEach
     public void init() throws URISyntaxException, IOException {
@@ -90,6 +92,8 @@ public class CommonIntegrationTest {
                 .date(LocalDateTime.of(2018, 6, 21, 15, 0))
                 .flashscoreId("vHWXsRjb")
                 .build();
+
+        FRANCE_PERU_WRAPPER = BookmakerMatchWrapper.builder().match(FRANCE_PERU).build();
 
         matches = Arrays.asList(FRANCE_PERU);
 
@@ -116,21 +120,21 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, MATCH, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, MATCH, AWAY, HANDICAP))
                 )
         ));
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, FIRST_HALF, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, FIRST_HALF, AWAY, HANDICAP))
                 )
         ));
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, COMMON, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(2.5, 1.93, MATCH, COMMON, TOTAL, UNDER))
                 )
@@ -138,7 +142,7 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(1.75, 2.17, MATCH, HOME, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(1.75, 1.91, MATCH, HOME, TOTAL, UNDER))
                 )
@@ -146,7 +150,7 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 2.0, MATCH, AWAY, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.75, 2.01, MATCH, AWAY, TOTAL, UNDER))
                 )
@@ -154,7 +158,7 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(1., 2.25, FIRST_HALF, COMMON, TOTAL, OVER)),
                         new Bet(SBOBET, BookmakerCoeff.of(1., 1.93, FIRST_HALF, COMMON, TOTAL, UNDER))
                 )
@@ -162,7 +166,7 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.75, 1.95, FIRST_HALF, HOME, TOTAL, UNDER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.75, 2.09, FIRST_HALF, HOME, TOTAL, OVER))
                 )
@@ -170,7 +174,7 @@ public class CommonIntegrationTest {
 
         assertTrue(forks.contains(
                 new ForkFoundEvent(
-                        FRANCE_PERU,
+                        FRANCE_PERU_WRAPPER,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.95, FIRST_HALF, AWAY, TOTAL, UNDER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.5, 3.12, FIRST_HALF, AWAY, TOTAL, OVER))
                 )

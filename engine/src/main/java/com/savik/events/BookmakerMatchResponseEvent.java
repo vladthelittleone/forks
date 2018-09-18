@@ -11,12 +11,12 @@ public class BookmakerMatchResponseEvent {
 
     BookmakerMatchResponse bookmakerMatchResponse;
 
-    BookmakerMatchWrapper match;
+    BookmakerMatchWrapper wrapper;
 
     @Override
     public String toString() {
         return "BMResEvent{" +
-                "match=" + match.getMatch().getFlashscoreId() + " (" + match.getHomeTeam().getName() + " - " + match.getAwayTeam() +
+                "wrapper=" + wrapper.getMatch().getFlashscoreId() + " (" + wrapper.getHomeTeam().getName() + " - " + wrapper.getAwayTeam() +
                 '}';
     }
 }

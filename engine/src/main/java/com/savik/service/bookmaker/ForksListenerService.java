@@ -52,7 +52,7 @@ public class ForksListenerService {
         log.trace("Start handling new book match response: " + event);
 
         BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
-        Match match = event.getMatch().getMatch();
+        Match match = event.getWrapper().getMatch();
         Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = getBookmakersCoeffs(match);
         List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, matchBookmakersCoeffs);
         log.trace("New received coeffs: " + eventBookmakerCoeffs);
@@ -78,7 +78,7 @@ public class ForksListenerService {
                         log.trace(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(
                                 new ForkFoundEvent(
-                                        match,
+                                        event.getWrapper(),
                                         new Bet(bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff),
                                         new Bet(otherBookmaker.getKey(), otherBookCoeff)
                                 )
