@@ -6,7 +6,10 @@ import com.savik.events.BookmakerMatchResponseEvent;
 import com.savik.events.ForkFoundEvent;
 import com.savik.model.Bet;
 import com.savik.model.BookmakerCoeff;
+import com.savik.model.BookmakerMatchWrapper;
 import com.savik.utils.BookmakerUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -28,8 +31,8 @@ public class ForksListenerService {
     @Autowired
     private ForksService forksService;
 
-    private Map<String, Map<BookmakerType, List<BookmakerCoeff>>> matches = new ConcurrentHashMap<>();
-    
+    private Map<String, Map<BookmakerType, BookMatchFullWrapper>> matches = new ConcurrentHashMap<>();
+
     //@Async
     @EventListener
     public void handle(final ForkFoundEvent event) {
@@ -50,16 +53,18 @@ public class ForksListenerService {
 
         BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
         Match match = event.getWrapper().getMatch();
-        Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = getBookmakersCoeffs(match);
-        List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, matchBookmakersCoeffs);
+        
+        Map<BookmakerType, BookMatchFullWrapper> matchBookmakersCoeffs = getBookmakersCoeffs(match.getFlashscoreId());
+        List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, event.getWrapper(), matchBookmakersCoeffs);
         log.trace("New received coeffs: " + eventBookmakerCoeffs);
 
-        List<Map.Entry<BookmakerType, List<BookmakerCoeff>>> otherBookmakers = matchBookmakersCoeffs.entrySet().stream()
+        List<Map.Entry<BookmakerType, BookMatchFullWrapper>> otherBookmakers = matchBookmakersCoeffs.entrySet().stream()
                 .filter(eS -> eS.getKey() != bookmakerMatchResponse.getBookmakerType()).collect(Collectors.toList());
+        
         List<ForkFoundEvent> events = new ArrayList<>();
-        for (Map.Entry<BookmakerType, List<BookmakerCoeff>> otherBookmaker : otherBookmakers) {
+        for (Map.Entry<BookmakerType, BookMatchFullWrapper> otherBookmaker : otherBookmakers) {
             log.trace("Start comparing with bookmaker: " + otherBookmaker.getKey());
-            List<BookmakerCoeff> otherBookCoeffs = otherBookmaker.getValue();
+            List<BookmakerCoeff> otherBookCoeffs = otherBookmaker.getValue().getCoeffs();
             for (BookmakerCoeff newBookmakerCoeff : eventBookmakerCoeffs) {
                 for (BookmakerCoeff otherBookCoeff : otherBookCoeffs) {
                     if (!otherBookCoeff.isBetCompatibleByMeaning(newBookmakerCoeff)) {
@@ -87,20 +92,33 @@ public class ForksListenerService {
                 }
             }
         }
-        if(!events.isEmpty()) {
+        if (!events.isEmpty()) {
             forksService.verifyExistence(match, events);
         }
     }
-    
 
-    private List<BookmakerCoeff> saveNewCoeffsAndGet(BookmakerMatchResponse bookmakerMatchResponse, Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs) {
+
+    private List<BookmakerCoeff> saveNewCoeffsAndGet(
+            BookmakerMatchResponse bookmakerMatchResponse,
+            BookmakerMatchWrapper matchWrapper,
+            Map<BookmakerType, BookMatchFullWrapper> matchBookmakersCoeffs) {
         List<BookmakerCoeff> eventBookmakerCoeffs = bookmakerMatchResponse.getBookmakerCoeffs();
-        matchBookmakersCoeffs.put(bookmakerMatchResponse.getBookmakerType(), eventBookmakerCoeffs);
+        matchBookmakersCoeffs.put(
+                bookmakerMatchResponse.getBookmakerType(),
+                new BookMatchFullWrapper(eventBookmakerCoeffs, matchWrapper)
+        );
         return eventBookmakerCoeffs;
     }
 
-    private Map<BookmakerType, List<BookmakerCoeff>> getBookmakersCoeffs(Match match) {
-        matches.putIfAbsent(match.getFlashscoreId(), new HashMap<>());
-        return matches.get(match.getFlashscoreId());
+    private Map<BookmakerType, BookMatchFullWrapper> getBookmakersCoeffs(String flashscoreId) {
+        matches.putIfAbsent(flashscoreId, new HashMap<>());
+        return matches.get(flashscoreId);
     }
+}
+
+@AllArgsConstructor
+@Getter
+class BookMatchFullWrapper {
+    List<BookmakerCoeff> coeffs;
+    BookmakerMatchWrapper matchWrapper;
 }
