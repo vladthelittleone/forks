@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.marathon;
 
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -30,20 +30,20 @@ public class MarathonCache {
         return cache.isEmpty();
     }
 
-    public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatch bookmakerMatch) {
+    public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatchWrapper bookmakerMatchWrapper) {
         // todo concurrent
-        BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
-        BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
-        BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
+        BookmakerLeague bookmakerLeague = bookmakerMatchWrapper.getBookmakerLeague();
+        BookmakerTeam homeTeam = bookmakerMatchWrapper.getHomeTeam();
+        BookmakerTeam guestTeam = bookmakerMatchWrapper.getAwayTeam();
         for (BookmakerMatchResponse cachedMatch : cache) {
             if (bookmakerLeague.getName().equalsIgnoreCase(cachedMatch.getBookmakerLeagueId()) &&
                     homeTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerHomeTeamName()) &&
                     guestTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerAwayTeamName())) {
-                log.debug("Match info was found in cache: " + bookmakerMatch.getDefaultLogString());
+                log.debug("Match info was found in cache: " + bookmakerMatchWrapper.getDefaultLogString());
                 return Optional.of(cachedMatch);
             }
         }
-        log.info(String.format("Match info wasn't found in cache: %s", bookmakerMatch.getDefaultLogString()));
+        log.info(String.format("Match info wasn't found in cache: %s", bookmakerMatchWrapper.getDefaultLogString()));
         return Optional.empty();
     }
 }

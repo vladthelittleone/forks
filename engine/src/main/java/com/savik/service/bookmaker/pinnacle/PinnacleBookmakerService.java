@@ -1,8 +1,8 @@
 package com.savik.service.bookmaker.pinnacle;
 
 import com.savik.domain.BookmakerType;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +22,7 @@ public class PinnacleBookmakerService extends BookmakerService {
     }
 
     @Override
-    protected Optional<BookmakerMatchResponse> handle(BookmakerMatch match) {
+    protected Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper match) {
         return api.parseMatch(match);
     }
 

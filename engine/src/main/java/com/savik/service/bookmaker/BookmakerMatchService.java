@@ -27,7 +27,7 @@ public class BookmakerMatchService {
     @Autowired
     BookmakerLeagueRepository bookmakerLeagueRepository;
 
-    public Optional<BookmakerMatch> createFromMatch(Match match, BookmakerType bookmakerType) {
+    public Optional<BookmakerMatchWrapper> createFromMatch(Match match, BookmakerType bookmakerType) {
         @NotNull Team homeTeam = match.getHomeTeam();
         @NotNull Team awayTeam = match.getAwayTeam();
         boolean somethingWasntFound = false;
@@ -53,7 +53,7 @@ public class BookmakerMatchService {
         }
 
         return Optional.of(
-                BookmakerMatch.builder()
+                BookmakerMatchWrapper.builder()
                         .match(match)
                         .homeTeam(dbHomeTeam.get())
                         .awayTeam(dbAwayTeam.get())

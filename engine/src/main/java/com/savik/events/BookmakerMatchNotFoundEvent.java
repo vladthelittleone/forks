@@ -1,6 +1,6 @@
 package com.savik.events;
 
-import com.savik.service.bookmaker.BookmakerMatch;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,5 +8,5 @@ import lombok.Getter;
 @Getter
 public class BookmakerMatchNotFoundEvent {
 
-    BookmakerMatch bookmakerMatch;
+    BookmakerMatchWrapper bookmakerMatchWrapper;
 }

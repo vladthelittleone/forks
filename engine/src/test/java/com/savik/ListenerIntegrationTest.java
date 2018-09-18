@@ -8,6 +8,7 @@ import com.savik.events.ForkFoundEvent;
 import com.savik.model.BookmakerCoeff;
 import com.savik.service.bookmaker.BookmakerEventPublisher;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.ForksListenerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,8 @@ public class ListenerIntegrationTest {
                 .flashscoreId("6wouPfkp")
                 .build();
 
+        BookmakerMatchWrapper bookmakerMatchWrapper = BookmakerMatchWrapper.builder().match(match).build();
+
 
         BookmakerMatchResponse sbobetResponse = BookmakerMatchResponse.builder()
                 .bookmakerType(BookmakerType.SBOBET)
@@ -78,8 +81,8 @@ public class ListenerIntegrationTest {
                 )
                 .build();
 
-        eventPublisher.publishMatchResponse(sbobetResponse, match);
-        eventPublisher.publishMatchResponse(pinnacleResponse, match);
+        eventPublisher.publishMatchResponse(sbobetResponse, bookmakerMatchWrapper);
+        eventPublisher.publishMatchResponse(pinnacleResponse, bookmakerMatchWrapper);
 
         verify(forksListenerService, times(1)).handle(Mockito.any(ForkFoundEvent.class));
     }

@@ -3,8 +3,8 @@ package com.savik.service.bookmaker.pinnacle;
 import com.savik.domain.BookmakerType;
 import com.savik.domain.MatchStatus;
 import com.savik.domain.SportType;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class PinnacleApi {
     @Autowired
     PinnacleParser parser;
 
-    public Optional<BookmakerMatchResponse> parseMatch(BookmakerMatch match) {
+    public Optional<BookmakerMatchResponse> parseMatch(BookmakerMatchWrapper match) {
         Optional<FixtureEvent> event = getEvent(match);
         if (event.isPresent()) {
             log.debug(String.format("Fixture event was found: %s, %s", match.getDefaultLogString(), event.get().getId()));
@@ -50,7 +50,7 @@ public class PinnacleApi {
         }
     }
 
-    private Optional<FixtureEvent> getEvent(BookmakerMatch match) {
+    private Optional<FixtureEvent> getEvent(BookmakerMatchWrapper match) {
         FixtureResponse fixture = getFixtureBySportType(match.getMatch().getSportType());
         return findMatch(fixture, match);
     }
@@ -69,7 +69,7 @@ public class PinnacleApi {
         return sportFixture;
     }
 
-    private Optional<FixtureEvent> findMatch(FixtureResponse fixture, BookmakerMatch match) {
+    private Optional<FixtureEvent> findMatch(FixtureResponse fixture, BookmakerMatchWrapper match) {
         FixtureLeague fixtureLeague = fixture.getLeague().stream()
                 .filter(l -> Objects.equals(l.getId(), Integer.parseInt(match.getBookmakerLeague().getBookmakerId())))
                 .findFirst().get();
@@ -92,15 +92,15 @@ public class PinnacleApi {
         return matchFixture;
     }
 
-    private BookmakerMatchResponse parseMatch(FixtureEvent event, BookmakerMatch bookmakerMatch) {
+    private BookmakerMatchResponse parseMatch(FixtureEvent event, BookmakerMatchWrapper bookmakerMatchWrapper) {
         log.trace(String.format("Start parse event. event:%s", event));
-        OddsResponse oddsResponse = getOddsResponseBySportType(bookmakerMatch.getMatch().getSportType());
+        OddsResponse oddsResponse = getOddsResponseBySportType(bookmakerMatchWrapper.getMatch().getSportType());
         OddsEvent odds = oddsResponse.findEvent(event);
 
         BookmakerMatchResponse bookmakerMatchResponse = BookmakerMatchResponse.builder()
-                .bookmakerHomeTeamName(bookmakerMatch.getHomeTeam().getName())
-                .bookmakerAwayTeamName(bookmakerMatch.getAwayTeam().getName())
-                .bookmakerLeagueId(bookmakerMatch.getBookmakerLeague().getBookmakerId())
+                .bookmakerHomeTeamName(bookmakerMatchWrapper.getHomeTeam().getName())
+                .bookmakerAwayTeamName(bookmakerMatchWrapper.getAwayTeam().getName())
+                .bookmakerLeagueId(bookmakerMatchWrapper.getBookmakerLeague().getBookmakerId())
                 .bookmakerCoeffs(new ArrayList<>(parser.parse(odds)))
                 .bookmakerType(BookmakerType.PINNACLE)
                 .build();

@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,39 +31,39 @@ public class SbobetBookmakerService extends BookmakerService {
     }
 
     @Override
-    public Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
-        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
-        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatch.getDaysFromToday())) {
-            bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
+    public Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatchWrapper);
+        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatchWrapper.getDaysFromToday())) {
+            bookmakerMatchResponse = tryToFindMatch(bookmakerMatchWrapper);
         }
 
         return bookmakerMatchResponse
-                .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR))
+                .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatchWrapper, mR))
                 .flatMap(
                         mR -> {
-                            cache.add(bookmakerMatch.getDaysFromToday(), mR);
+                            cache.add(bookmakerMatchWrapper.getDaysFromToday(), mR);
                             return Optional.of(mR);
                         }
                 );
     }
 
-    private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
-        Match match = bookmakerMatch.getMatch();
-        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
-        List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatch.getDaysFromToday());
+    private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        Match match = bookmakerMatchWrapper.getMatch();
+        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
+        List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
         log.debug("Matches were parsed, amount: " + matches.size());
-        cache.addAll(bookmakerMatch.getDaysFromToday(), matches);
-        return findMatchInCache(bookmakerMatch);
+        cache.addAll(bookmakerMatchWrapper.getDaysFromToday(), matches);
+        return findMatchInCache(bookmakerMatchWrapper);
     }
 
-    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatch bookmakerMatch) {
-        return cache.find(bookmakerMatch);
+    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        return cache.find(bookmakerMatchWrapper);
     }
 
-    private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
+    private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatchWrapper bookmakerMatchWrapper, BookmakerMatchResponse bookmakerMatchResponse) {
         final Optional<BookmakerMatchResponse> response =
-                sbobetParser.downloadAndParseSingleMatch(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatch);
-        log.debug("Match was parsed: " + bookmakerMatch.getDefaultLogString());
+                sbobetParser.downloadAndParseSingleMatch(bookmakerMatchResponse.getBookmakerMatchId(), bookmakerMatchWrapper);
+        log.debug("Match was parsed: " + bookmakerMatchWrapper.getDefaultLogString());
         log.trace("Match was parsed: " + bookmakerMatchResponse);
         return response;
     }

@@ -3,8 +3,8 @@ package com.savik.service.bookmaker.sbobet;
 import com.savik.domain.BookmakerType;
 import com.savik.domain.SportType;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.CoeffType;
 import com.savik.service.bookmaker.SideType;
 import com.savik.utils.BookmakerUtils;
@@ -125,8 +125,8 @@ public class SbobetParser {
 
     }
 
-    public Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(String bookmakerMatchId, BookmakerMatch bookmakerMatch) {
-        Document document = downloader.download(bookmakerMatchId, bookmakerMatch);
+    public Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(String bookmakerMatchId, BookmakerMatchWrapper bookmakerMatchWrapper) {
+        Document document = downloader.download(bookmakerMatchId, bookmakerMatchWrapper);
         JSONArray arrayContainer = extractArrayFromHtml(document);
         JSONArray prematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
         List<BookmakerMatchResponse> bookmakerMatchResponses = getMatchesFromArray(prematchArrays.getJSONArray(0).getJSONArray(MATCHES_IN_CONTAINER_INDEX));

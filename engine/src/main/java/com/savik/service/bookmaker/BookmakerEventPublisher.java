@@ -16,13 +16,13 @@ public class BookmakerEventPublisher {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void publishMatchResponse(final BookmakerMatchResponse bookmakerMatchResponse, final Match match) {
+    public void publishMatchResponse(final BookmakerMatchResponse bookmakerMatchResponse, final BookmakerMatchWrapper match) {
         BookmakerMatchResponseEvent matchResponseEvent = new BookmakerMatchResponseEvent(bookmakerMatchResponse, match);
         applicationEventPublisher.publishEvent(matchResponseEvent);
     }
 
-    public void publishMatchNotFound(final BookmakerMatch bookmakerMatch) {
-        BookmakerMatchNotFoundEvent matchNotFoundEvent = new BookmakerMatchNotFoundEvent(bookmakerMatch);
+    public void publishMatchNotFound(final BookmakerMatchWrapper bookmakerMatchWrapper) {
+        BookmakerMatchNotFoundEvent matchNotFoundEvent = new BookmakerMatchNotFoundEvent(bookmakerMatchWrapper);
         applicationEventPublisher.publishEvent(matchNotFoundEvent);
     }
 

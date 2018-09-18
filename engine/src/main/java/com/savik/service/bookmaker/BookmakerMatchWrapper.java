@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BookmakerMatch {
+public class BookmakerMatchWrapper {
 
     Match match;
 

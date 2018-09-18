@@ -21,7 +21,7 @@ public abstract class BookmakerService {
 
     protected abstract BookmakerType getBookmakerType();
 
-    protected abstract Optional<BookmakerMatchResponse> handle(BookmakerMatch match);
+    protected abstract Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper match);
 
     public CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match) {
         return handle(match, true);
@@ -32,25 +32,25 @@ public abstract class BookmakerService {
     }
 
     private CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match, boolean publish) {
-        Optional<BookmakerMatch> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
+        Optional<BookmakerMatchWrapper> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
         if(!bookmakerMatchOptional.isPresent()) {
             log.debug(String.format("Match bookmaker matching wasn't found. %s, id: %s. %s-%s", getBookmakerType(),
                     match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
             bookmakerEventPublisher.publishMatchInfoNotFoundForBookmaker(match, getBookmakerType());
             return CompletableFuture.completedFuture(null);
         }
-        BookmakerMatch bookmakerMatch = bookmakerMatchOptional.get();
-        Optional<BookmakerMatchResponse> info = handle(bookmakerMatch);
+        BookmakerMatchWrapper bookmakerMatchWrapper = bookmakerMatchOptional.get();
+        Optional<BookmakerMatchResponse> info = handle(bookmakerMatchWrapper);
         if (info.isPresent()) {
             log.trace("Match was parsed:" + info.get());
             if(publish) {
-                bookmakerEventPublisher.publishMatchResponse(info.get(), match);
+                bookmakerEventPublisher.publishMatchResponse(info.get(), bookmakerMatchWrapper);
             }
         } else {
             log.info(String.format("Match wasn't found in line: %s, %s, %s", getBookmakerType(), 
-                    bookmakerMatch.getDefaultLogString(), bookmakerMatch.getBookmakerLeague().getName()));
+                    bookmakerMatchWrapper.getDefaultLogString(), bookmakerMatchWrapper.getBookmakerLeague().getName()));
             if(publish) {
-                bookmakerEventPublisher.publishMatchNotFound(bookmakerMatch);
+                bookmakerEventPublisher.publishMatchNotFound(bookmakerMatchWrapper);
             }
         }
         return CompletableFuture.completedFuture(info);

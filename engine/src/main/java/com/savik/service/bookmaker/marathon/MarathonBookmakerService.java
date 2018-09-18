@@ -4,8 +4,8 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.domain.MatchStatus;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +35,13 @@ public class MarathonBookmakerService extends BookmakerService {
     }
 
     @Override
-    protected Optional<BookmakerMatchResponse> handle(BookmakerMatch bookmakerMatch) {
-        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatch);
+    protected Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatchWrapper);
         if (!bookmakerMatchResponse.isPresent() && cache.isEmpty()) {
-            bookmakerMatchResponse = tryToFindMatch(bookmakerMatch);
+            bookmakerMatchResponse = tryToFindMatch(bookmakerMatchWrapper);
         }
         return bookmakerMatchResponse
-                .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatch, mR))
+                .flatMap(mR -> downloadAndParseSingleMatch(bookmakerMatchWrapper, mR))
                 .flatMap(
                         mR -> {
                             cache.add(mR);
@@ -50,13 +50,13 @@ public class MarathonBookmakerService extends BookmakerService {
                 );
     }
 
-    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatch bookmakerMatch) {
-        return cache.find(bookmakerMatch);
+    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        return cache.find(bookmakerMatchWrapper);
     }
 
-    private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatch bookmakerMatch) {
-        Match match = bookmakerMatch.getMatch();
-        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatch.getDaysFromToday());
+    private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        Match match = bookmakerMatchWrapper.getMatch();
+        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
         MarathonResponse marathonResponse;
         if (match.getMatchStatus() == MatchStatus.PREMATCH) {
             marathonResponse = downloader.downloadPrematchMatchesBySport(match.getSportType());
@@ -68,11 +68,11 @@ public class MarathonBookmakerService extends BookmakerService {
         final List<BookmakerMatchResponse> matches = parser.parseMatches(marathonResponse);
         log.debug("Matches were parsed, amount: " + matches.size());
         cache.addAll(matches);
-        return findMatchInCache(bookmakerMatch);
+        return findMatchInCache(bookmakerMatchWrapper);
     }
 
-    private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatch bookmakerMatch, BookmakerMatchResponse bookmakerMatchResponse) {
-        Match match = bookmakerMatch.getMatch();
+    private Optional<BookmakerMatchResponse> downloadAndParseSingleMatch(BookmakerMatchWrapper bookmakerMatchWrapper, BookmakerMatchResponse bookmakerMatchResponse) {
+        Match match = bookmakerMatchWrapper.getMatch();
         MarathonResponse marathonResponse;
         if (match.getMatchStatus() == MatchStatus.PREMATCH) {
             marathonResponse = downloader.downloadMatch(bookmakerMatchResponse.getBookmakerMatchId());
@@ -81,9 +81,9 @@ public class MarathonBookmakerService extends BookmakerService {
         } else {
             throw new RuntimeException("Match status is incorrect: " + match);
         }
-        final List<BookmakerCoeff> bookmakerCoeffs = parser.downloadAndParseMatch(marathonResponse, bookmakerMatch);
+        final List<BookmakerCoeff> bookmakerCoeffs = parser.downloadAndParseMatch(marathonResponse, bookmakerMatchWrapper);
         bookmakerMatchResponse.setBookmakerCoeffs(bookmakerCoeffs);
-        log.debug("Match was parsed: " + bookmakerMatch.getDefaultLogString());
+        log.debug("Match was parsed: " + bookmakerMatchWrapper.getDefaultLogString());
         log.trace("Match was parsed: " + bookmakerMatchResponse);
         return Optional.of(bookmakerMatchResponse);
     }

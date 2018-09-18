@@ -2,7 +2,7 @@ package com.savik.service.bookmaker.sbobet;
 
 
 import com.savik.domain.SportType;
-import com.savik.service.bookmaker.BookmakerMatch;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,10 +30,10 @@ public class SbobetConfig {
         return url + prefixes.get(sportType) + "/" + daysSbobetFormat;
     }
 
-    public String getMatchUrl(String sbobetMatchId, BookmakerMatch bookmakerMatch) {
-        String newLeagueName = bookmakerMatch.getBookmakerLeague().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
-        String newHomeName = bookmakerMatch.getHomeTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
-        String newGuestName = bookmakerMatch.getAwayTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
-        return url + prefixes.get(bookmakerMatch.getMatch().getSportType()) + "/" + newLeagueName + "/" + sbobetMatchId + "/" + newHomeName + "-vs-" + newGuestName;
+    public String getMatchUrl(String sbobetMatchId, BookmakerMatchWrapper bookmakerMatchWrapper) {
+        String newLeagueName = bookmakerMatchWrapper.getBookmakerLeague().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
+        String newHomeName = bookmakerMatchWrapper.getHomeTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
+        String newGuestName = bookmakerMatchWrapper.getAwayTeam().getName().toLowerCase().replaceAll("\\s+", "-").replace("'","-");
+        return url + prefixes.get(bookmakerMatchWrapper.getMatch().getSportType()) + "/" + newLeagueName + "/" + sbobetMatchId + "/" + newHomeName + "-vs-" + newGuestName;
     }
 }

@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -35,21 +35,21 @@ public class SbobetCache {
         return !CollectionUtils.isEmpty(cache.get(day));
     }
 
-    public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatch bookmakerMatch) {
+    public synchronized Optional<BookmakerMatchResponse> find(BookmakerMatchWrapper bookmakerMatchWrapper) {
         // todo concurrent
-        BookmakerLeague bookmakerLeague = bookmakerMatch.getBookmakerLeague();
-        BookmakerTeam homeTeam = bookmakerMatch.getHomeTeam();
-        BookmakerTeam guestTeam = bookmakerMatch.getAwayTeam();
-        final Set<BookmakerMatchResponse> matches = cache.getOrDefault(bookmakerMatch.getDaysFromToday(), new HashSet<>());
+        BookmakerLeague bookmakerLeague = bookmakerMatchWrapper.getBookmakerLeague();
+        BookmakerTeam homeTeam = bookmakerMatchWrapper.getHomeTeam();
+        BookmakerTeam guestTeam = bookmakerMatchWrapper.getAwayTeam();
+        final Set<BookmakerMatchResponse> matches = cache.getOrDefault(bookmakerMatchWrapper.getDaysFromToday(), new HashSet<>());
         for (BookmakerMatchResponse cachedMatch : matches) {
             if (bookmakerLeague.getBookmakerId().equalsIgnoreCase(cachedMatch.getBookmakerLeagueId()) &&
                     homeTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerHomeTeamName()) &&
                     guestTeam.getName().equalsIgnoreCase(cachedMatch.getBookmakerAwayTeamName())) {
-                log.debug("Match info was found in cache: " + bookmakerMatch.getDefaultLogString());
+                log.debug("Match info was found in cache: " + bookmakerMatchWrapper.getDefaultLogString());
                 return Optional.of(cachedMatch);
             }
         }
-        log.info("Match info wasn't found in cache: " + bookmakerMatch.getDefaultLogString());
+        log.info("Match info wasn't found in cache: " + bookmakerMatchWrapper.getDefaultLogString());
         return Optional.empty();
     }
 }

@@ -2,7 +2,7 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.SportType;
 import com.savik.http.HttpClient;
-import com.savik.service.bookmaker.BookmakerMatch;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class SbobetDownloader {
     @Autowired
     SbobetConfig sbobetConfig;
 
-    public Document download(String sbobetMatchId, BookmakerMatch bookmakerMatch) {
-        String resultUrl = sbobetConfig.getMatchUrl(sbobetMatchId, bookmakerMatch);
+    public Document download(String sbobetMatchId, BookmakerMatchWrapper bookmakerMatchWrapper) {
+        String resultUrl = sbobetConfig.getMatchUrl(sbobetMatchId, bookmakerMatchWrapper);
         return httpClient.getAntibot(resultUrl);
     }
 

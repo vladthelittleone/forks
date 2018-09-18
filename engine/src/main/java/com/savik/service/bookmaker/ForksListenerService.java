@@ -52,7 +52,7 @@ public class ForksListenerService {
         log.trace("Start handling new book match response: " + event);
 
         BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
-        Match match = event.getMatch();
+        Match match = event.getMatch().getMatch();
         Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = getBookmakersCoeffs(match);
         List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, matchBookmakersCoeffs);
         log.trace("New received coeffs: " + eventBookmakerCoeffs);

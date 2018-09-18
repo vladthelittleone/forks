@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.marathon;
 
 import com.savik.domain.BookmakerType;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatch;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.service.bookmaker.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.CoeffType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
@@ -24,7 +24,7 @@ public class MarathonParser {
 
     final String ADDITIONAL_MARKETS = "\"ADDITIONAL_MARKETS\":\"";
 
-    public List<BookmakerCoeff> downloadAndParseMatch(MarathonResponse response, BookmakerMatch match) {
+    public List<BookmakerCoeff> downloadAndParseMatch(MarathonResponse response, BookmakerMatchWrapper match) {
         Document download = response.getDownload();
         String body = download.body().outerHtml();
         body = StringEscapeUtils.unescapeHtml(body);
@@ -142,7 +142,7 @@ public class MarathonParser {
         }
     }
 
-    private void fillTotal(Document document, List<BookmakerCoeff> bookmakerCoeffs, BookmakerMatch match) {
+    private void fillTotal(Document document, List<BookmakerCoeff> bookmakerCoeffs, BookmakerMatchWrapper match) {
         final Elements handicaps = document.select("div.name-field:containsOwn(Total Goals)");
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
@@ -214,7 +214,7 @@ public class MarathonParser {
         }
     }
 
-    private void fillAsianTotal(Document document, List<BookmakerCoeff> bookmakerCoeffs, BookmakerMatch match) {
+    private void fillAsianTotal(Document document, List<BookmakerCoeff> bookmakerCoeffs, BookmakerMatchWrapper match) {
         final Elements handicaps = document.select("div.name-field:containsOwn(Asian Total Goals)");
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
