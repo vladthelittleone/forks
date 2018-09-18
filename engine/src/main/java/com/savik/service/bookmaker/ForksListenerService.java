@@ -39,29 +39,29 @@ public class ForksListenerService {
         final Match match = event.getMatch();
         final Bet first = event.getFirst();
         final Bet second = event.getSecond();
-        StringBuilder builder = new StringBuilder("\nFork was found: ");
+        StringBuilder builder = new StringBuilder("\n\nFork was found: ");
         builder.append("percentage=").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
                 .append(" id=").append(match.getFlashscoreId())
                 .append(" hT=").append(match.getHomeTeam().getName()).append(" aT=").append(match.getAwayTeam().getName())
-                .append("\n b1=").append(first).append("\n b2=").append(second);
+                .append("\n b1=").append(first).append("\n b2=").append(second).append("\n");
         log.info(builder.toString());
     }
 
     @EventListener
     public void handleBookmakerResponse(final BookmakerMatchResponseEvent event) {
-        log.debug("Start handling new book match response: " + event);
+        log.trace("Start handling new book match response: " + event);
 
         BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
         Match match = event.getMatch();
         Map<BookmakerType, List<BookmakerCoeff>> matchBookmakersCoeffs = getBookmakersCoeffs(match);
         List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, matchBookmakersCoeffs);
-        log.debug("New received coeffs: " + eventBookmakerCoeffs);
+        log.trace("New received coeffs: " + eventBookmakerCoeffs);
 
         List<Map.Entry<BookmakerType, List<BookmakerCoeff>>> otherBookmakers = matchBookmakersCoeffs.entrySet().stream()
                 .filter(eS -> eS.getKey() != bookmakerMatchResponse.getBookmakerType()).collect(Collectors.toList());
         List<ForkFoundEvent> events = new ArrayList<>();
         for (Map.Entry<BookmakerType, List<BookmakerCoeff>> otherBookmaker : otherBookmakers) {
-            log.debug("Start comparing with bookmaker: " + otherBookmaker.getKey());
+            log.trace("Start comparing with bookmaker: " + otherBookmaker.getKey());
             List<BookmakerCoeff> otherBookCoeffs = otherBookmaker.getValue();
             for (BookmakerCoeff newBookmakerCoeff : eventBookmakerCoeffs) {
                 for (BookmakerCoeff otherBookCoeff : otherBookCoeffs) {
@@ -69,13 +69,13 @@ public class ForksListenerService {
                         continue;
                     }
                     if (otherBookCoeff.isBetCompatibleByValue(newBookmakerCoeff)) {
-                        //log.debug(String.format("It's a fork compatible types: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
+                        log.trace(String.format("It's a fork compatible types: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
                     } else {
-                        //log.debug(String.format("It's not a fork by type: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
+                        log.trace(String.format("It's not a fork by type: new=%s, old=%s", newBookmakerCoeff, otherBookCoeff));
                         continue;
                     }
                     if (otherBookCoeff.isFork(newBookmakerCoeff)) {
-                        //log.debug(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
+                        log.trace(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(
                                 new ForkFoundEvent(
                                         match,
@@ -84,8 +84,8 @@ public class ForksListenerService {
                                 )
                         );
                     } else {
-                        /*log.debug(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s",
-                                BookmakerCoeff.getForkPercentage(newBookmakerCoeff, otherBookCoeff), newBookmakerCoeff, otherBookCoeff));*/
+                        log.trace(String.format("It's not a fork by coeff: percentage=%s, new=%s, old=%s",
+                                BookmakerUtils.getForkPercentage(newBookmakerCoeff.getCoeffValue(), otherBookCoeff.getCoeffValue()), newBookmakerCoeff, otherBookCoeff));
                     }
                 }
             }

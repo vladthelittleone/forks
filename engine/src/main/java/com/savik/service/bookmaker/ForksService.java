@@ -58,10 +58,11 @@ public class ForksService {
             log.info("There is no updated bet");
             return false;
         }
-        StringBuilder builder = new StringBuilder("\n Checking fork for availability: ");
+        StringBuilder builder = new StringBuilder("\n\n Checking fork for availability: ");
         builder.append(" match ").append(event.getMatch().getDefaultLogString())
                 .append(" old fork ").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
-                .append(" updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(),  optionalSecondUpdatedBet.get()));
+                .append(" updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(), optionalSecondUpdatedBet.get()))
+                .append("\n\n");
         log.info(builder.toString());
         return optionalFirstUpdatedBet.get().isFork(optionalSecondUpdatedBet.get());
     }
