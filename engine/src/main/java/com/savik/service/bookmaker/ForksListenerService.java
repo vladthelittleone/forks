@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,6 @@ public class ForksListenerService {
 
     private Map<String, Map<BookmakerType, List<BookmakerCoeff>>> matches = new ConcurrentHashMap<>();
     
-    private final DecimalFormat f = new DecimalFormat("##.000");
-
     //@Async
     @EventListener
     public void handle(final ForkFoundEvent event) {
@@ -78,7 +75,7 @@ public class ForksListenerService {
                         log.trace(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(
                                 new ForkFoundEvent(
-                                        event.getWrapper(),
+                                        event.getWrapper().getMatch(),
                                         new Bet(bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff),
                                         new Bet(otherBookmaker.getKey(), otherBookCoeff)
                                 )
