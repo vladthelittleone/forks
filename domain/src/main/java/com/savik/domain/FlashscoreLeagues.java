@@ -59,7 +59,7 @@ public class FlashscoreLeagues {
         JAPAN_J2("vXr8fotG"),
         JAPAN_J1("pAq4eRQ9"),
         KOREA_K("0IDCJLlH"),
-        //KOREA_NATIONAL("xfzNMq1a"),
+        KOREA_NATIONAL("xfzNMq1a"),
         NORWAY_ELIT("GOvB22xg"),
         SWEDEN_ALLSVENSKAN("nXxWpLmT"),
         SWEDEN_1("UZCe41Bj"),
@@ -73,12 +73,13 @@ public class FlashscoreLeagues {
         ROMANIA_1("GILi6JC9"),
         THAI_PREMIER("hOlyBdW0"),
         ISRAEL_PREMIER("rHJ2vy1B"),
-        //RUSSIA_FNL("jizXHcsM"),
+        RUSSIA_FNL("jizXHcsM"),
         ENGLAND_1("rJSMG3H0"),
         ENGLAND_NATIONAL("4CWHXGM1"),
         ENGLAND_NATIONAL_NORTH("rsMtLd7e"),
         ENGLAND_NATIONAL_SOUTH("QPXiMdx8"),
-        ENGLAND_2("0MwU4NW6");
+        ENGLAND_2("0MwU4NW6"),
+        UEFA_CHAMPIONS_GROUP_STAGE("xGrwqq16");
 
         String id;
 
