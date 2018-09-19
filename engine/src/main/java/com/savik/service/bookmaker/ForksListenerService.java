@@ -41,8 +41,8 @@ public class ForksListenerService {
         final Bet second = event.getSecond();
         StringBuilder builder = new StringBuilder("\n\nFork was found: ");
         builder.append("percentage=").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
-                .append(" id=").append(match.getFlashscoreId())
-                .append(" hT=").append(match.getHomeTeam().getName()).append(" aT=").append(match.getAwayTeam().getName())
+                .append(" id = ").append(match.getFlashscoreId())
+                .append(" hT = ").append(match.getHomeTeam().getName()).append(" aT = ").append(match.getAwayTeam().getName())
                 .append("\n b1=").append(first).append("\n b2=").append(second).append("\n");
         log.info(builder.toString());
     }
@@ -51,11 +51,12 @@ public class ForksListenerService {
     public void handleBookmakerResponse(final BookmakerMatchResponseEvent event) {
         log.trace("Start handling new book match response: " + event);
 
-        BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
-        Match match = event.getWrapper().getMatch();
+        final BookmakerMatchResponse bookmakerMatchResponse = event.getBookmakerMatchResponse();
+        final BookmakerMatchWrapper wrapper = event.getWrapper();
+        final Match match = wrapper.getMatch();
         
         Map<BookmakerType, BookMatchFullWrapper> matchBookmakersCoeffs = getBookmakersCoeffs(match.getFlashscoreId());
-        List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, event.getWrapper(), matchBookmakersCoeffs);
+        List<BookmakerCoeff> eventBookmakerCoeffs = saveNewCoeffsAndGet(bookmakerMatchResponse, wrapper, matchBookmakersCoeffs);
         log.trace("New received coeffs: " + eventBookmakerCoeffs);
 
         List<Map.Entry<BookmakerType, BookMatchFullWrapper>> otherBookmakers = matchBookmakersCoeffs.entrySet().stream()
@@ -80,9 +81,9 @@ public class ForksListenerService {
                         log.trace(String.format("Fork is found: new=%s, old=%s: ", newBookmakerCoeff, otherBookCoeff));
                         events.add(
                                 new ForkFoundEvent(
-                                        event.getWrapper().getMatch(),
-                                        new Bet(bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff),
-                                        new Bet(otherBookmaker.getKey(), otherBookCoeff)
+                                        match,
+                                        new Bet(bookmakerMatchResponse.getBookmakerType(), newBookmakerCoeff, wrapper),
+                                        new Bet(otherBookmaker.getKey(), otherBookCoeff, otherBookmaker.getValue().getMatchWrapper())
                                 )
                         );
                     } else {

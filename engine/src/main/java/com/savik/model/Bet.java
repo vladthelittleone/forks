@@ -11,11 +11,12 @@ public class Bet {
 
     BookmakerCoeff bookmakerCoeff;
 
+    BookmakerMatchWrapper wrapper;
+
     @Override
     public String toString() {
-        return "B{" +
-                "bT={" + bookmakerType +
-                "}, bC={" + bookmakerCoeff + "}}";
+        return "{" + bookmakerType + "," +
+                wrapper.getDefaultLogString() + ", bC={" + bookmakerCoeff + "}}";
     }
 
     @Override
