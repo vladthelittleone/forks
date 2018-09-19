@@ -79,7 +79,8 @@ public class FlashscoreLeagues {
         ENGLAND_NATIONAL_NORTH("rsMtLd7e"),
         ENGLAND_NATIONAL_SOUTH("QPXiMdx8"),
         ENGLAND_2("0MwU4NW6"),
-        UEFA_CHAMPIONS_GROUP_STAGE("xGrwqq16");
+        UEFA_CHAMPIONS_GROUP_STAGE("xGrwqq16"),
+        UEFA_EUROPE_GROUP_STAGE("ClDjv3V5");
 
         String id;
 
