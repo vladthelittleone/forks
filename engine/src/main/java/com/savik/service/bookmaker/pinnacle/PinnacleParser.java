@@ -31,14 +31,20 @@ public class PinnacleParser {
         for (OddsPeriod period : periods) {
             CoeffType partType = getPartByStatusCode(period.getNumber());
             final OddsMoneyline moneyline = period.getMoneyline();
-           /* if (moneyline != null) {
+            if (moneyline != null) {
                 if (moneyline.getHome() != null) {
-                    bookmakerCoeffs.add(of(-0.5, moneyline.getHome(), partType, HOME, HANDICAP));
+                    bookmakerCoeffs.add(of(
+                            BookmakerUtils.convertAsianBookmakerWinToHandicap(odds.getHomeScore(), odds.getAwayScore(), SideType.HOME),
+                            moneyline.getHome(), partType, HOME, HANDICAP
+                    ));
                 }
                 if (moneyline.getAway() != null) {
-                    bookmakerCoeffs.add(of(-0.5, moneyline.getAway(), partType, AWAY, HANDICAP));
+                    bookmakerCoeffs.add(of(
+                            BookmakerUtils.convertAsianBookmakerWinToHandicap(odds.getHomeScore(), odds.getAwayScore(), SideType.AWAY), 
+                            moneyline.getAway(), partType, AWAY, HANDICAP
+                    ));
                 }
-            }*/
+            }
             List<OddsSpread> spreads = period.getSpreads();
             if (spreads != null) {
                 for (OddsSpread spread : spreads) {

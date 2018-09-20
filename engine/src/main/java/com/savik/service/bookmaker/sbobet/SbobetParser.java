@@ -3,8 +3,8 @@ package com.savik.service.bookmaker.sbobet;
 import com.savik.domain.BookmakerType;
 import com.savik.domain.SportType;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
 import com.savik.service.bookmaker.SideType;
 import com.savik.utils.BookmakerUtils;
@@ -80,8 +80,8 @@ public class SbobetParser {
             add(new FirstHalfHomeMatchTotal());
             add(new FirstHalfAwayMatchTotal());
             add(new AwayMatchTotal());
-            /*add(new MatchHomeOrAway());
-            add(new FirstHalfHomeOrAway());*/
+            add(new MatchHomeOrAway());
+            add(new FirstHalfHomeOrAway());
         }
     };
 
@@ -276,8 +276,8 @@ class HomeOrAway extends BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(0);
         double guestCoeffValue = coeffValueArray.getDouble(2);
-        BookmakerCoeff overCoeff = BookmakerCoeff.of(-0.5, homeCoeffValue, period, HOME, HANDICAP);
-        BookmakerCoeff underCoeff = BookmakerCoeff.of(-0.5, guestCoeffValue, period, AWAY, HANDICAP);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of( BookmakerUtils.convertAsianBookmakerWinToHandicap(homeScore, awayScore, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff underCoeff = BookmakerCoeff.of(BookmakerUtils.convertAsianBookmakerWinToHandicap(homeScore, awayScore, SideType.AWAY), guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
         bookmakerCoeffs.add(underCoeff);

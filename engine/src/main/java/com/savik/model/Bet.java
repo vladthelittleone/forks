@@ -13,6 +13,11 @@ public class Bet {
 
     BookmakerMatchWrapper wrapper;
 
+    public Bet(BookmakerType bookmakerType, BookmakerCoeff bookmakerCoeff) {
+        this.bookmakerType = bookmakerType;
+        this.bookmakerCoeff = bookmakerCoeff;
+    }
+
     @Override
     public String toString() {
         return "{" + bookmakerType + "," +
