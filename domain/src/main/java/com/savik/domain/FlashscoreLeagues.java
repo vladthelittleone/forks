@@ -74,6 +74,7 @@ public class FlashscoreLeagues {
         THAI_PREMIER("hOlyBdW0"),
         ISRAEL_PREMIER("rHJ2vy1B"),
         RUSSIA_FNL("jizXHcsM"),
+        IRELAND_PREMIER("naHiWdnt"),
         ENGLAND_1("rJSMG3H0"),
         ENGLAND_NATIONAL("4CWHXGM1"),
         ENGLAND_NATIONAL_NORTH("rsMtLd7e"),

@@ -73,8 +73,18 @@ Configutation:
           pattern: "%msg%n"
 
       - name: Forks_File_Appender
+        immediateFlush: true
         fileName: ${log-path}/forks.log
         filePattern: "${log-path}/archive/forks.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        Policies:
+           SizeBasedTriggeringPolicy:
+               size: 500 KB
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"
+          
+      - name: Coeffs
+        fileName: ${log-path}/coeffs.log
+        filePattern: "${log-path}/archive/coeffs.log.%d{yyyy-MM-dd-hh-mm}.gz"
         Policies:
            SizeBasedTriggeringPolicy:
                size: 500 KB
@@ -173,6 +183,12 @@ Configutation:
           level: debug
           AppenderRef:
             - ref: Forks_File_Appender
+              
+        - name: com.savik.service.bookmaker.CoeffListenerService
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Coeffs
 
         - name: com.savik.service.bookmaker.ForksService
           additivity: false

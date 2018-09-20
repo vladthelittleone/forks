@@ -48,6 +48,16 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
     }
 
     @Bean
+    public Executor arbPrechecker() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setThreadNamePrefix("arb-prechecker-");
+        threadPoolTaskExecutor.setCorePoolSize(20);
+        threadPoolTaskExecutor.setDaemon(true);
+        threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
+    }
+
+    @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         return new ConditionalThreadPoolTaskScheduler();
     }

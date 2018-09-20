@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.marathon;
 
 import com.savik.domain.BookmakerType;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class MarathonParser {
 
 
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
-        fillHandicap(document, bookmakerCoeffs);
+        fillHandicap(document, bookmakerCoeffs, match);
         fillAsianHandicap(document, bookmakerCoeffs);
         fillTotal(document, bookmakerCoeffs, match);
         fillAsianTotal(document, bookmakerCoeffs, match);
@@ -107,7 +108,80 @@ public class MarathonParser {
         return responses;
     }
 
-    private void fillHandicap(Document document, List<BookmakerCoeff> bookmakerCoeffs) {
+    private void fillHandicap(Document document, List<BookmakerCoeff> bookmakerCoeffs, BookmakerMatchWrapper match) {
+        final Elements results = document.select("div.name-field:containsOwn(Result)");
+        for (Element result : results) {
+            final Element marketTableName = result.parent().parent().parent().parent();
+            final Element coeffsTable = marketTableName.nextElementSibling();
+            final Elements handicapBlocks = coeffsTable.select("> tbody > tr[data-header-highlighted-bounded]");
+            if(!handicapBlocks.select("div.result-left").isEmpty()) {
+
+                final Optional<Element> homeWin = handicapBlocks.stream().filter(b -> b.select("div.result-left").first().text().equalsIgnoreCase(match.getHomeTeam().getName() + " To Win")).findFirst();
+                final Optional<Element> awayWin = handicapBlocks.stream().filter(b -> b.select("div.result-left").first().text().equalsIgnoreCase(match.getAwayTeam().getName() + " To Win")).findFirst();
+
+
+                if (result.text().equalsIgnoreCase("Result")) {
+                    if(homeWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(homeWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.MATCH, CoeffType.HOME, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                    if(awayWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(awayWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.MATCH, CoeffType.AWAY, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                }
+
+                if (result.text().equalsIgnoreCase("1st Half Result")) {
+                    if(homeWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(homeWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.FIRST_HALF, CoeffType.HOME, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                    if(awayWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(awayWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.FIRST_HALF, CoeffType.AWAY, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                }
+
+                if (result.text().equalsIgnoreCase("2st Half Result")) {
+                    if(homeWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(homeWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.SECOND_HALF, CoeffType.HOME, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                    if(awayWin.isPresent()) {
+                        final BookmakerCoeff homeCoeff = BookmakerCoeff.of(
+                                -0.5,
+                                Double.valueOf(awayWin.get().select("div.result-right > span").first().text()),
+                                Arrays.asList(CoeffType.SECOND_HALF, CoeffType.AWAY, CoeffType.HANDICAP)
+                        );
+                        bookmakerCoeffs.add(homeCoeff);
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
         final Elements handicaps = document.select("div.name-field:containsOwn(With Handicap)");
         for (Element handicap : handicaps) {
             final Element marketTableName = handicap.parent().parent().parent().parent();
