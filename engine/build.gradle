@@ -3,7 +3,7 @@ dependencies {
     compile project(':infrastructure:common-infrastructure')
     compile('org.springframework.boot:spring-boot-starter')
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+    /*compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')*/
     compile 'org.flywaydb:flyway-core:4.2.0'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.0.RELEASE'
     compile group: 'org.json', name: 'json', version: '20180130'
