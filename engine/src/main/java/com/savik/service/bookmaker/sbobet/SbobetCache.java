@@ -49,8 +49,10 @@ public class SbobetCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.info(String.format("Match info wasn't found in cache: days = %s, %s", 
-                bookmakerMatchWrapper.getDaysFromToday(), bookmakerMatchWrapper.getDefaultLogString()));
+        log.info(String.format("Match info wasn't found in cache: days = %s, %s, %s", 
+                bookmakerMatchWrapper.getDaysFromToday(), 
+                bookmakerMatchWrapper.getMatch().getDate(), 
+                bookmakerMatchWrapper.getDefaultLogString()));
         return Optional.empty();
     }
 }
