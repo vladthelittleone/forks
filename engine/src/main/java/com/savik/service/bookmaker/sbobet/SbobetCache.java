@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -49,7 +49,8 @@ public class SbobetCache {
                 return Optional.of(cachedMatch);
             }
         }
-        log.info("Match info wasn't found in cache: " + bookmakerMatchWrapper.getDefaultLogString());
+        log.info(String.format("Match info wasn't found in cache: days = %s, %s", 
+                bookmakerMatchWrapper.getDaysFromToday(), bookmakerMatchWrapper.getDefaultLogString()));
         return Optional.empty();
     }
 }

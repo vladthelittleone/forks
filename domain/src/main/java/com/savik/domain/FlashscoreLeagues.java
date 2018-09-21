@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 public class FlashscoreLeagues {
     public enum FOOTBALL {
+        ARGENTINA_SUPERLIGA("naYhNOaA"),
         ARGENTINA_B_METROPOLITANA("GKJrZE7I"),
+        ARGENTINA_B_NACIONAL("QTNHA4p4"),
         SPAIN_LA("QVmLl54o"),
         SPAIN_SEGUNDA("vZiPmPJi"),
         BRASIL_A("Yq4hUnzQ"),
@@ -24,13 +26,13 @@ public class FlashscoreLeagues {
         HOLLAND_EREDIVISIE("Or1bBrWD"),
         ENGLAND_PREMIER("dYlOSQOD"),
         GREECE_SUPERLIGA("d2pwJFHI"),
-        //CYPRUS_1("EmZxlqvh"),
-        //COSTA_RICA("tpC1pUBH"),
+        CYPRUS_1("EmZxlqvh"),
+        COSTA_RICA("tpC1pUBH"),
         BELGIUM_A("dG2SqPrf"),
         BELGIUM_B("dMwNgPSC"),
         POLAND_EKSTRAKLASA("lrMHUHDc"),
         AUSTRIA_ERSTE("EPQbW9EF"),
-        //AUSTRALIA_BRISBEN("EBPEFrRQ"),
+        AUSTRALIA_BRISBEN("EBPEFrRQ"),
         ENGLAND_CHAMPIONSHIP("2DSCa5fE"),
         RUSSIA_PREMIER("YacqHHdS"),
         RUSSIA_2("fJMY4hHj"),
@@ -51,11 +53,11 @@ public class FlashscoreLeagues {
         ECUADOR_A("WWZFEdUR"),
         SWITZERLAND_CHALLENGE("jVMQJOHF"),
         CROATIA_1("nqMxclRN"),
-        //BULGARIA_A("r9Y9rlDt"),
+        BULGARIA_A("r9Y9rlDt"),
         SWEDEN_SUPERETTAN("bBIP6pm3"),
         EGYPT_PREMIER("xbpjAGxq"), // for live
         IRAN_PRO("2HzmcynI"),
-        //PERU_PREMIER("KrrdAMyI"),
+        PERU_PREMIER("KrrdAMyI"),
         JAPAN_J2("vXr8fotG"),
         JAPAN_J1("pAq4eRQ9"),
         KOREA_K("0IDCJLlH"),
@@ -80,6 +82,11 @@ public class FlashscoreLeagues {
         ENGLAND_NATIONAL_NORTH("rsMtLd7e"),
         ENGLAND_NATIONAL_SOUTH("QPXiMdx8"),
         ENGLAND_2("0MwU4NW6"),
+        PARAGUAY_PREMIER("S66R0t75"),
+        COLOMBIA_A("t0fpnjs5"),
+        CHILE_PRIMIER("0KangpCU"),
+        MEXICO_PREMIER_A("bm2Vlsfl"),
+        SAUDI_PRO("tUxUbLR2"),
         UEFA_CHAMPIONS_GROUP_STAGE("xGrwqq16"),
         UEFA_EUROPE_GROUP_STAGE("ClDjv3V5");
 
