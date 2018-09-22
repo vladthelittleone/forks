@@ -27,7 +27,7 @@ public class FlashscoreLeagues {
         ENGLAND_PREMIER("dYlOSQOD"),
         GREECE_SUPERLIGA("d2pwJFHI"),
         CYPRUS_1("EmZxlqvh"),
-        COSTA_RICA("tpC1pUBH"),
+        //COSTA_RICA("tpC1pUBH"), live ?
         BELGIUM_A("dG2SqPrf"),
         BELGIUM_B("dMwNgPSC"),
         POLAND_EKSTRAKLASA("lrMHUHDc"),
@@ -55,7 +55,7 @@ public class FlashscoreLeagues {
         CROATIA_1("nqMxclRN"),
         BULGARIA_A("r9Y9rlDt"),
         SWEDEN_SUPERETTAN("bBIP6pm3"),
-        EGYPT_PREMIER("xbpjAGxq"), // for live
+        //EGYPT_PREMIER("xbpjAGxq"), // for live
         IRAN_PRO("2HzmcynI"),
         PERU_PREMIER("KrrdAMyI"),
         JAPAN_J2("vXr8fotG"),
@@ -73,7 +73,7 @@ public class FlashscoreLeagues {
         ICELAND_PREMIER("GdxJccH5"),
         FINLAND_YKKONEN("W8IYMbrj"),
         ROMANIA_1("GILi6JC9"),
-        THAI_PREMIER("hOlyBdW0"),
+        //THAI_PREMIER("hOlyBdW0"),  live ?
         ISRAEL_PREMIER("rHJ2vy1B"),
         RUSSIA_FNL("jizXHcsM"),
         IRELAND_PREMIER("naHiWdnt"),
@@ -82,8 +82,8 @@ public class FlashscoreLeagues {
         ENGLAND_NATIONAL_NORTH("rsMtLd7e"),
         ENGLAND_NATIONAL_SOUTH("QPXiMdx8"),
         ENGLAND_2("0MwU4NW6"),
-        PARAGUAY_PREMIER("S66R0t75"),
-        COLOMBIA_A("t0fpnjs5"),
+        //PARAGUAY_PREMIER("S66R0t75"),
+        //COLOMBIA_A("t0fpnjs5"),
         CHILE_PRIMIER("0KangpCU"),
         MEXICO_PREMIER_A("bm2Vlsfl"),
         SAUDI_PRO("tUxUbLR2"),
