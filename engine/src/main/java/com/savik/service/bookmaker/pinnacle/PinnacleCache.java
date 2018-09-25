@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
-public class PinnacleCache {
+class PinnacleCache {
 
     Map<SportType, FixtureResponse> fixtures = new ConcurrentHashMap<>();
     Map<SportType, OddsResponse> odds = new ConcurrentHashMap<>();

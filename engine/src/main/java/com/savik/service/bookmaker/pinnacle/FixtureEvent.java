@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class FixtureEvent {
+class FixtureEvent {
     Integer id;
     Integer parentId;
     String home;

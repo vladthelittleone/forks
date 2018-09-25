@@ -25,7 +25,7 @@ public class PinnacleDownloader {
     @Autowired
     ObjectMapper objectMapper;
 
-    public synchronized FixtureResponse downloadFixtures(SportType sportType) {
+    public FixtureResponse downloadFixtures(SportType sportType) {
         try {
             String url = pinnacleConfig.getFixtureUrl(sportType);
             String json = downloadJson(url);
@@ -36,7 +36,7 @@ public class PinnacleDownloader {
         }
     }
 
-    public synchronized OddsResponse downloadOdds(SportType sportType, Long since) {
+    public OddsResponse downloadOdds(SportType sportType, Long since) {
         try {
             String url = pinnacleConfig.getOddsUrl(sportType, since);
             String json = downloadJson(url);

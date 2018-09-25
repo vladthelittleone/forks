@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class FixtureResponse {
+class FixtureResponse {
     Integer sportId;
     Integer last;
     List<FixtureLeague> league;

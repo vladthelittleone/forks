@@ -23,7 +23,7 @@ import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
 
 @Component
-public class PinnacleParser {
+class PinnacleParser {
 
     public Set<BookmakerCoeff> parse(OddsEvent odds) {
         Set<BookmakerCoeff> bookmakerCoeffs = new HashSet<>();

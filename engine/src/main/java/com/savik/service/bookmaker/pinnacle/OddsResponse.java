@@ -13,7 +13,7 @@ import java.util.Optional;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OddsResponse {
+class OddsResponse {
     Integer sportId;
     Long last;
     List<OddsLeague> leagues;

@@ -16,7 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "pinnacle")
 @Getter
 @Setter
-public class PinnacleConfig {
+class PinnacleConfig {
 
     String url;
 
