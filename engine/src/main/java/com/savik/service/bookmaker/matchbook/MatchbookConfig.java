@@ -22,5 +22,8 @@ public class MatchbookConfig {
     String eventsPrefix;
 
     Map<SportType, String> sportIds;
-    
+
+    public String getNavigationUrl() {
+        return url + navigationPrefix;
+    }
 }

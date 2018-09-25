@@ -56,6 +56,10 @@ public class HttpClient {
         }
     }
 
+    public String getJson(String url) {
+        return getJson(url, new HashMap<>());
+    }
+
     public String getJson(String url, Map<String, String> headers) {
         try {
             return createConnection(url, headers).ignoreContentType(true).execute().body();
