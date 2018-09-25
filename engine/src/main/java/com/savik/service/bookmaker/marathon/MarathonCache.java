@@ -2,8 +2,8 @@ package com.savik.service.bookmaker.marathon;
 
 import com.savik.domain.BookmakerLeague;
 import com.savik.domain.BookmakerTeam;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Component
 @Log4j2
-public class MarathonCache {
+class MarathonCache {
 
     private Set<BookmakerMatchResponse> cache = new HashSet<>();
 

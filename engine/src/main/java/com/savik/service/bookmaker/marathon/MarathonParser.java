@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class MarathonParser {
+class MarathonParser {
 
     final String ADDITIONAL_MARKETS = "\"ADDITIONAL_MARKETS\":\"";
 

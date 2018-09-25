@@ -6,6 +6,6 @@ import org.jsoup.nodes.Document;
 
 @AllArgsConstructor
 @Getter
-public class MarathonResponse {
+class MarathonResponse {
     final Document download;
 }

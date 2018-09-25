@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class MarathonDownloader {
+class MarathonDownloader {
 
     @Autowired
     HttpClient httpClient;

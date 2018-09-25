@@ -12,7 +12,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "marathon")
 @Getter
 @Setter
-public class MarathonConfig {
+class MarathonConfig {
 
     String url;
     
