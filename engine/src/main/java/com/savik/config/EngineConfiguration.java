@@ -31,7 +31,8 @@ public class EngineConfiguration {
         yaml.setResources(
                 new ClassPathResource("config/bookmakers/sbobet/sbobet-config.yml"),
                 new ClassPathResource("config/bookmakers/pinnacle/pinnacle-config.yml"),
-                new ClassPathResource("config/bookmakers/marathon/marathon-config.yml")
+                new ClassPathResource("config/bookmakers/marathon/marathon-config.yml"),
+                new ClassPathResource("config/bookmakers/matchbook/matchbook-config.yml")
         );
         propertySourcesPlaceholderConfigurer.setProperties(yaml.getObject());
         return propertySourcesPlaceholderConfigurer;

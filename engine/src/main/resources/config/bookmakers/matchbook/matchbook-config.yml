@@ -1,0 +1,6 @@
+matchbook:
+  url: https://api.matchbook.com/edge/rest/
+  navigationPrefix: navigation
+  eventsPrefix: events?currency=USD&odds-type=DECIMAL
+  sportIds:
+    football: 15
