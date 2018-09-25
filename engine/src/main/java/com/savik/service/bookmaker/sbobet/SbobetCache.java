@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Component
 @Log4j2
-public class SbobetCache {
+class SbobetCache {
 
     private Map<Integer, Set<BookmakerMatchResponse>> cache = new HashMap<>();
 

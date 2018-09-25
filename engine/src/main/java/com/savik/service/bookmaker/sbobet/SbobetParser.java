@@ -43,7 +43,7 @@ import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HOME_OR_AWAY
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_TOTAL;
 
 @Component
-public class SbobetParser {
+class SbobetParser {
     public static final int MATCHES_ARRAYS_INDEX = 2;
     public static final int LEAGUE_ID_INDEX = 1;
     public static final int MATCH_INFO_INDEX = 2;

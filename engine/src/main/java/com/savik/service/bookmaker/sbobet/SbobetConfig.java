@@ -16,7 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "sbobet")
 @Getter
 @Setter
-public class SbobetConfig {
+class SbobetConfig {
 
     String url;
 
