@@ -3,14 +3,13 @@ package com.savik.model;
 import com.savik.service.bookmaker.BookmakerCoeffMapper;
 import com.savik.service.bookmaker.CoeffType;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Data
 @Builder
+@Getter
 public class BookmakerCoeff {
 
     Double typeValue;
@@ -18,7 +17,8 @@ public class BookmakerCoeff {
     Double coeffValue;
 
     CoeffTypeChain typeChain;
-
+    
+    boolean lay = false;
 
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, CoeffType... types) {
         return of(typeValue, coeffValue, Arrays.asList(types));
@@ -30,11 +30,23 @@ public class BookmakerCoeff {
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, List<CoeffType> types) {
         return new BookmakerCoeff(typeValue, coeffValue, new CoeffTypeChain(types));
     }
+    
+    public BookmakerCoeff lay() {
+        this.lay = true;
+        return this;
+    }
 
     public BookmakerCoeff(Double typeValue, Double coeffValue, CoeffTypeChain typeChain) {
         this.typeValue = typeValue;
         this.coeffValue = coeffValue;
         this.typeChain = typeChain;
+    }
+
+    public BookmakerCoeff(Double typeValue, Double coeffValue, CoeffTypeChain typeChain, boolean lay) {
+        this.typeValue = typeValue;
+        this.coeffValue = coeffValue;
+        this.typeChain = typeChain;
+        this.lay = lay;
     }
 
     public boolean isBetCompatibleByMeaning(BookmakerCoeff anotherCoeff) {

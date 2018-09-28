@@ -3,6 +3,7 @@ package com.savik.service.bookmaker;
 import com.savik.model.BookmakerCoeff;
 import com.savik.model.BookmakerCoeff.CoeffTypeChain;
 import com.savik.utils.BookmakerUtils;
+import lombok.Setter;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -51,36 +52,49 @@ public class BookmakerCoeffMapper {
     final static HandicapCoeffValueChecker HANDICAP_COEFF_VALUE_CHECKER = new HandicapCoeffValueChecker();
     final static TotalOverCoeffValueChecker TOTAL_OVER_COEFF_VALUE_CHECKER = new TotalOverCoeffValueChecker();
     final static TotalUnderCoeffValueChecker TOTAL_UNDER_COEFF_VALUE_CHECKER = new TotalUnderCoeffValueChecker();
+    final static LayCoeffValueChecker LAY_COEFF_VALUE_CHECKER = createLayChecker();
+    
+    static LayCoeffValueChecker createLayChecker() {
+        final LayCoeffValueChecker checker = new LayCoeffValueChecker();
+        checker.setCheckers(
+                Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, TOTAL_OVER_COEFF_VALUE_CHECKER, TOTAL_UNDER_COEFF_VALUE_CHECKER)
+        );
+        return checker;
+    }
+    
+    static List<CoeffValueChecker> wrapCommonCheckers(CoeffValueChecker checker) {
+        return Arrays.asList(LAY_COEFF_VALUE_CHECKER, checker);
+    }
 
     static {
 
-        acceptableCheckers.put(MATCH_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(SECOND_HALF_AWAY_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(SECOND_HALF_HOME_HANDICAP, Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_COMMON_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_COMMON_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_HOME_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_HOME_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_AWAY_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(MATCH_AWAY_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_COMMON_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_COMMON_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_HOME_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_HOME_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_OVER, Arrays.asList(TOTAL_UNDER_COEFF_VALUE_CHECKER));
-        acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_UNDER, Arrays.asList(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(SECOND_HALF_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(SECOND_HALF_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_COMMON_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_COMMON_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_AWAY_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_AWAY_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_COMMON_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_COMMON_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
 
-        
+
         createMatching(
                 Arrays.asList(
                         MATCH_AWAY_HANDICAP,
                         MATCH_HOME_HANDICAP
                 )
         );
-        
+
         createMatching(
                 Arrays.asList(
                         FIRST_HALF_AWAY_HANDICAP,
@@ -180,23 +194,24 @@ public class BookmakerCoeffMapper {
 
     public static boolean isBetCompatibleByValue(BookmakerCoeff origin, BookmakerCoeff target) {
         final List<CoeffValueChecker> coeffValueCheckers = acceptableCheckers.get(origin.getTypeChain());
-        if(CollectionUtils.isEmpty(coeffValueCheckers)) {
+        if (CollectionUtils.isEmpty(coeffValueCheckers)) {
             throw new IllegalArgumentException("Checkers for chain not found: " + origin.getTypeChain());
         }
         for (CoeffValueChecker coeffValueChecker : coeffValueCheckers) {
-            if(coeffValueChecker.canCheck(target.getTypeChain()) && coeffValueChecker.isCompatible(origin, target)) {
+            if (coeffValueChecker.canCheck(target.getTypeChain()) && coeffValueChecker.isCompatible(origin, target)) {
                 return true;
             }
         }
         return false;
     }
+
     public static boolean isFork(BookmakerCoeff origin, BookmakerCoeff target) {
         final List<CoeffValueChecker> coeffValueCheckers = acceptableCheckers.get(origin.getTypeChain());
-        if(CollectionUtils.isEmpty(coeffValueCheckers)) {
+        if (CollectionUtils.isEmpty(coeffValueCheckers)) {
             throw new IllegalArgumentException("Checkers for chain not found: " + origin.getTypeChain());
         }
         for (CoeffValueChecker coeffValueChecker : coeffValueCheckers) {
-            if(coeffValueChecker.canCheck(target.getTypeChain()) && coeffValueChecker.isFork(origin, target)) {
+            if (coeffValueChecker.canCheck(target.getTypeChain()) && coeffValueChecker.isFork(origin, target)) {
                 return true;
             }
         }
@@ -211,6 +226,45 @@ interface CoeffValueChecker {
     boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target);
 
     boolean isFork(BookmakerCoeff original, BookmakerCoeff target);
+}
+
+class LayCoeffValueChecker implements CoeffValueChecker {
+
+    @Setter
+    List<CoeffValueChecker> checkers;
+
+    @Override
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return true;
+    }
+
+    @Override
+    public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
+        if (original.isSame(target) && isBackLay(original, target)) {
+            for (CoeffValueChecker checker : checkers) {
+                if (checker.isCompatible(original, target)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
+        if (original.isSame(target) && isBackLay(original, target)) {
+            for (CoeffValueChecker checker : checkers) {
+                if (checker.isFork(original, target)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isBackLay(BookmakerCoeff original, BookmakerCoeff target) {
+        return (original.isLay() && !target.isLay()) || (!original.isLay() && target.isLay());
+    }
 }
 
 class HandicapCoeffValueChecker implements CoeffValueChecker {
