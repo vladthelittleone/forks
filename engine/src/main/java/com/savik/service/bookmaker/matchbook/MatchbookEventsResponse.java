@@ -24,8 +24,14 @@ public class MatchbookEventsResponse {
 @AllArgsConstructor
 class Event {
     Long id;
+    
+    Long bookmakerLeagueId;
 
     String name;
+    
+    String bookmakerHomeTeamName;
+    
+    String bookmakerAwayTeamName;
 
     @JsonProperty("sport-id")
     Integer sportId;
@@ -41,6 +47,34 @@ class Event {
     Status status;
     
     List<Market> markets;
+
+    public void setTags(List<MatchbookNavigationEntry> tags) {
+        this.tags = tags;
+        this.bookmakerLeagueId = tags.stream().filter(t -> t.getType() == TagType.COMPETITION)
+                .findFirst().get().getId();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        final String[] names = name.split("vs");
+        this.bookmakerHomeTeamName = names[0].trim();
+        this.bookmakerAwayTeamName = names[1].trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        return id.equals(event.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
 
 @Data
@@ -62,10 +96,10 @@ class Market {
 
     Status status;
 
-    MarketType type;
+    Type type;
     
     @JsonProperty("market-type")
-    String marketType; // enum
+    MarketType marketType;
 
     List<Runner> runners;
 }

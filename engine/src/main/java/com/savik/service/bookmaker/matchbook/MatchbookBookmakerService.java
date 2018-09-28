@@ -17,9 +17,15 @@ import static com.savik.domain.BookmakerType.MATCHBOOK;
 
 @Service
 public class MatchbookBookmakerService extends BookmakerService {
-    
+
     @Autowired
     MatchbookDownloader downloader;
+
+    @Autowired
+    MatchbookCache cache;
+
+    @Autowired
+    MatchbookParser parser;
 
     @Override
     protected BookmakerType getBookmakerType() {
@@ -36,8 +42,10 @@ public class MatchbookBookmakerService extends BookmakerService {
     public void refreshCacheOdds() {
         final List<SportType> sportTypes = Arrays.asList(SportType.values());
         for (SportType sportType : sportTypes) {
-            final MatchbookEventsResponse events = downloader.getEvents(sportType);
+            final MatchbookEventsResponse response = downloader.getEvents(sportType);
+            final List<BookmakerMatchResponse> responses = parser.parse(response.getEvents());
+            cache.addAll(responses);
         }
     }
-    
+
 }
