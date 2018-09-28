@@ -68,6 +68,10 @@ public class HttpClient {
         }
     }
 
+    public String getPinnacleApacheJson(String url) {
+        return getPinnacleApacheJson(url, new HashMap<>());
+    }
+
     public String getPinnacleApacheJson(String url, Map<String, String> headers) {
         try {
             final org.apache.http.client.HttpClient build = HttpClients.custom().build();

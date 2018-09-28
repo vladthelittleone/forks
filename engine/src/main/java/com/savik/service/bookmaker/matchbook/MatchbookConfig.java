@@ -13,7 +13,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "matchbook")
 @Getter
 @Setter
-public class MatchbookConfig {
+class MatchbookConfig {
 
     String url;
 
@@ -25,5 +25,9 @@ public class MatchbookConfig {
 
     public String getNavigationUrl() {
         return url + navigationPrefix;
+    }
+
+    public String getEventsUrl(SportType sportType) {
+        return url + eventsPrefix + "&sport-ids=" + sportIds.get(sportType);
     }
 }

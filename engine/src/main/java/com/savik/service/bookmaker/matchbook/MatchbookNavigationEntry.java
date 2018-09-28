@@ -13,13 +13,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchbookNavigationEntry {
+class MatchbookNavigationEntry {
 
     String name;
     
     Long id;
-    
-    String type; // enum
+
+    TagType type;
     
     @JsonProperty("url-name")
     String url;

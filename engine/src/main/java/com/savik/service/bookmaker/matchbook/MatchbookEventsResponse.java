@@ -38,7 +38,7 @@ class Event {
     @JsonProperty("meta-tags")
     List<MatchbookNavigationEntry> tags;
 
-    String status;
+    Status status;
     
     List<Market> markets;
 }
@@ -55,20 +55,17 @@ class Market {
 
     String name;
 
-    @JsonProperty("sport-id")
-    Integer sportId;
-
     LocalDateTime start;
 
     @JsonProperty("live")
     boolean isLive;
 
-    String status;
-    
-    String type;
+    Status status;
+
+    MarketType type;
     
     @JsonProperty("market-type")
-    String marketType;
+    String marketType; // enum
 
     List<Runner> runners;
 }
