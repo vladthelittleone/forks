@@ -57,7 +57,7 @@ class Event {
     public void setName(String name) {
         this.name = name;
         final String[] names = name.split("vs");
-        if(name.length() == 2) {
+        if(names.length == 2) {
             this.bookmakerHomeTeamName = names[0].trim();
             this.bookmakerAwayTeamName = names[1].trim();
         }

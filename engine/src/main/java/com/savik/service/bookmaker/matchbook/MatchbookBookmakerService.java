@@ -34,7 +34,12 @@ public class MatchbookBookmakerService extends BookmakerService {
 
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper match) {
-        return Optional.empty();
+        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(match);
+        return bookmakerMatchResponse;
+    }
+
+    private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {
+        return cache.find(bookmakerMatchWrapper);
     }
 
 

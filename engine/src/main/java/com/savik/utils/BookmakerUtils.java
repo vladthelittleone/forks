@@ -97,7 +97,7 @@ public class BookmakerUtils {
     }
 
     public Double convertLayCoeff(Double layCoeff) {
-        final Double value = new BigDecimal(layCoeff).divide(new BigDecimal(layCoeff).subtract(BigDecimal.ONE)).doubleValue();
+        final Double value = new BigDecimal(layCoeff).divide(new BigDecimal(layCoeff).subtract(BigDecimal.ONE), DECIMAL32).doubleValue();
         return value;
     }
 

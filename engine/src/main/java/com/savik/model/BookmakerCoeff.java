@@ -78,6 +78,7 @@ public class BookmakerCoeff {
         return "" +
                 "tV= " + typeValue +
                 ", cV= " + coeffValue +
+                ", lay= " + lay +
                 ", ch= " + typeChain +
                 '}';
     }
