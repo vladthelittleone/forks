@@ -17,4 +17,8 @@ enum MarketType {
     BOTH_TO_SCORE,
     @JsonProperty("outright")
     OUTRIGHT,
+    @JsonProperty("money_line")
+    MONEY_LINE,
+    @JsonProperty("place")
+    PLACE,
 }

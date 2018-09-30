@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -50,8 +51,9 @@ class Event {
 
     public void setTags(List<MatchbookNavigationEntry> tags) {
         this.tags = tags;
-        this.bookmakerLeagueId = tags.stream().filter(t -> t.getType() == TagType.COMPETITION)
-                .findFirst().get().getId();
+        Optional<MatchbookNavigationEntry> entry = tags.stream().filter(t -> t.getType() == TagType.COMPETITION)
+                .findFirst();
+        this.bookmakerLeagueId = entry.map(MatchbookNavigationEntry::getId).orElse(null);
     }
 
     public void setName(String name) {

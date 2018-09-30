@@ -175,6 +175,12 @@ Configutation:
           AppenderRef:
             - ref: Marathon_File_Appender
 
+        - name: com.savik.service.bookmaker.matchbook
+          additivity: false
+          level: debug
+          AppenderRef:
+            - ref: Matchbook_File_Appender
+
         - name: com.savik.service.bookmaker.pinnacle
           additivity: false
           level: debug
