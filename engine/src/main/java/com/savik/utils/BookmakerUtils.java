@@ -86,6 +86,21 @@ public class BookmakerUtils {
         return BigDecimal.valueOf(-0.5).subtract(BigDecimal.valueOf(delta)).doubleValue();
     }
 
+    /*
+    * like (-0.0/0.5)
+    * */
+    public Double parseSpecialHandicapString(String handicapTypeWithBraces, String delimeter) {
+        String handicapType = handicapTypeWithBraces.replace("(", "").replace(")", "");
+        final String[] values = handicapType.split(delimeter);
+        final double value = new BigDecimal(values[0]).add(new BigDecimal(values[1])).divide(new BigDecimal(2)).doubleValue();
+        return value;
+    }
+
+    public Double convertLayCoeff(Double layCoeff) {
+        final Double value = new BigDecimal(layCoeff).divide(new BigDecimal(layCoeff).subtract(BigDecimal.ONE)).doubleValue();
+        return value;
+    }
+
     private boolean isPositive(Double value) {
         return value >= 0;
     }

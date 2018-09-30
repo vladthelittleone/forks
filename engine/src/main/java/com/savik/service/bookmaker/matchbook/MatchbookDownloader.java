@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -38,11 +40,22 @@ class MatchbookDownloader {
     public MatchbookEventsResponse getEvents(SportType sportType) {
         try {
             final String navigationUrl = config.getEventsUrl(sportType);
-            String json = new String(Files.readAllBytes(Paths.get("/Users/savushkineo/Projects/java/gradle-test/forks/engine/src/main/resources/config/bookmakers/matchbook/events.json")));
+            String json = getJsonFromFile();
             //final String json = httpClient.getPinnacleApacheJson(navigationUrl);
             final MatchbookEventsResponse matchbookEventsResponse = objectMapper.readValue(json, MatchbookEventsResponse.class);
             return matchbookEventsResponse;
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getJsonFromFile() {
+        try {
+            Path path = Paths.get(getClass().getClassLoader()
+                    .getResource("config/bookmakers/matchbook/events.json").toURI());
+            return new String(Files.readAllBytes(path));
+
+        } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
     }

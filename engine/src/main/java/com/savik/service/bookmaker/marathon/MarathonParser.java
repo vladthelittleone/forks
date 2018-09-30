@@ -5,6 +5,8 @@ import com.savik.model.BookmakerCoeff;
 import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.CoeffType;
+import com.savik.utils.BookmakerUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +26,7 @@ import java.util.Optional;
 class MarathonParser {
 
     final String ADDITIONAL_MARKETS = "\"ADDITIONAL_MARKETS\":\"";
+    public static final String HANDICAP_DELIMTER = ",";
 
     public List<BookmakerCoeff> downloadAndParseMatch(MarathonResponse response, BookmakerMatchWrapper match) {
         Document download = response.getDownload();
@@ -350,9 +353,7 @@ class MarathonParser {
         if (StringUtils.isEmpty(handicapTypeWithBraces)) {
             return null;
         }
-        final String handicapType = handicapTypeWithBraces.substring(1, handicapTypeWithBraces.length() - 1);
-        final String[] values = handicapType.split(",");
-        final double value = new BigDecimal(values[0]).add(new BigDecimal(values[1])).divide(new BigDecimal(2)).doubleValue();
+        final double value = BookmakerUtils.parseSpecialHandicapString(handicapTypeWithBraces, HANDICAP_DELIMTER);
         final String handicapValue = block.select("div.coeff-price > span").text();
         return BookmakerCoeff.of(value, Double.valueOf(handicapValue), types);
     }

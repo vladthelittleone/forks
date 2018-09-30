@@ -57,8 +57,10 @@ class Event {
     public void setName(String name) {
         this.name = name;
         final String[] names = name.split("vs");
-        this.bookmakerHomeTeamName = names[0].trim();
-        this.bookmakerAwayTeamName = names[1].trim();
+        if(name.length() == 2) {
+            this.bookmakerHomeTeamName = names[0].trim();
+            this.bookmakerAwayTeamName = names[1].trim();
+        }
     }
 
     @Override
@@ -102,6 +104,11 @@ class Market {
     MarketType marketType;
 
     List<Runner> runners;
+
+    Double handicap;
+
+    @JsonProperty("asian-handicap")
+    String asianHandicap;
 }
 
 @Data
@@ -125,6 +132,11 @@ class Runner {
     String status;
 
     List<Price> prices;
+
+    Double handicap;
+
+    @JsonProperty("asian-handicap")
+    String asianHandicap;
 }
 
 @Data
@@ -140,8 +152,8 @@ class Price {
     
     @JsonProperty("decimal-odds")
     Double decimalOdds;
-    
-    String side; // enum
+
+    Side side;
     
     @JsonProperty("available-amount")
     Double availableAmount;
