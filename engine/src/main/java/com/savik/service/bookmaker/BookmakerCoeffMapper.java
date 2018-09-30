@@ -240,7 +240,7 @@ class LayCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        if (original.isSame(target) && isBackLay(original, target)) {
+        if (original.isSame(target) && BookmakerUtils.isBackLay(original, target)) {
             for (CoeffValueChecker checker : checkers) {
                 if (checker.isCompatible(original, target)) {
                     return true;
@@ -252,7 +252,7 @@ class LayCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
-        if (original.isSame(target) && isBackLay(original, target)) {
+        if (original.isSame(target) && BookmakerUtils.isBackLay(original, target)) {
             for (CoeffValueChecker checker : checkers) {
                 if (checker.isFork(original, target)) {
                     return true;
@@ -262,9 +262,7 @@ class LayCoeffValueChecker implements CoeffValueChecker {
         return false;
     }
 
-    private boolean isBackLay(BookmakerCoeff original, BookmakerCoeff target) {
-        return (original.isLay() && !target.isLay()) || (!original.isLay() && target.isLay());
-    }
+
 }
 
 class HandicapCoeffValueChecker implements CoeffValueChecker {
@@ -276,12 +274,12 @@ class HandicapCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isHandicapForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isHandicapForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
     }
 
     @Override
     public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
     }
 }
 
@@ -294,12 +292,12 @@ class TotalOverCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isTotalForkAcceptableTypes(target.getTypeValue(), original.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(target.getTypeValue(), original.getTypeValue());
     }
 
     @Override
     public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
     }
 }
 
@@ -312,11 +310,11 @@ class TotalUnderCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isTotalForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
     }
 
     @Override
     public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
-        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
     }
 }

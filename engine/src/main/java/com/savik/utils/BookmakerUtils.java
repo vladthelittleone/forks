@@ -89,16 +89,36 @@ public class BookmakerUtils {
     /*
     * like (-0.0/0.5)
     * */
-    public Double parseSpecialHandicapString(String handicapTypeWithBraces, String delimeter) {
+    public Double parseSpecialHandicapString(String handicapTypeWithBraces, String delimiter) {
         String handicapType = handicapTypeWithBraces.replace("(", "").replace(")", "");
-        final String[] values = handicapType.split(delimeter);
+        final String[] values = handicapType.split(delimiter);
         final double value = new BigDecimal(values[0]).add(new BigDecimal(values[1])).divide(new BigDecimal(2)).doubleValue();
+        return value;
+    }
+
+    /*
+    * like (-0.0/0.5)
+    * */
+    public Double parseMatchbookSpecialHandicapString(String handicapTypeWithBraces, String delimiter) {
+        String handicapType = handicapTypeWithBraces.replace("(", "").replace(")", "");
+        final String[] values = handicapType.split(delimiter);
+        BigDecimal from = new BigDecimal(values[0]);
+        BigDecimal to = new BigDecimal(values[1]);
+        // case when -0.0, so 1/ Double.valueOf(-0.0) = -Infinity
+        if(1/ Double.valueOf(values[0]) < 0 && to.compareTo(BigDecimal.ZERO) > 0) {
+            to = to.negate();
+        }
+        final double value = from.add(to).divide(new BigDecimal(2)).doubleValue();
         return value;
     }
 
     public Double convertLayCoeff(Double layCoeff) {
         final Double value = new BigDecimal(layCoeff).divide(new BigDecimal(layCoeff).subtract(BigDecimal.ONE), DECIMAL32).doubleValue();
         return value;
+    }
+
+    public boolean isBackLay(BookmakerCoeff original, BookmakerCoeff target) {
+        return (original.isLay() && !target.isLay()) || (!original.isLay() && target.isLay());
     }
 
     private boolean isPositive(Double value) {

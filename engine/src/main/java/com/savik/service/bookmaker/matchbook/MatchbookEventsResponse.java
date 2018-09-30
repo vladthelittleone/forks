@@ -111,6 +111,16 @@ class Market {
 
     @JsonProperty("asian-handicap")
     String asianHandicap;
+
+    @Override
+    public String toString() {
+        return "Market{" +
+                "s=" + status +
+                ", t=" + marketType +
+                ", h=" + handicap +
+                ", aH='" + asianHandicap + '\'' +
+                '}';
+    }
 }
 
 @Data

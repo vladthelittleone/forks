@@ -49,8 +49,8 @@ class MatchbookParser {
         for (Market market : handicaps) {
             List<Runner> runners = market.getRunners();
             for (Runner runner : runners) {
-                Double typeValue = runner.getHandicap() != null ? market.getHandicap() :
-                        BookmakerUtils.parseSpecialHandicapString(market.getAsianHandicap(), "/");
+                Double typeValue = runner.getHandicap() != null ? runner.getHandicap() :
+                        BookmakerUtils.parseMatchbookSpecialHandicapString(runner.getAsianHandicap(), "/");
                 CoeffType side = getSideType(event, runner.getName());
                 List<Price> prices = runner.getPrices();
                 for (Price price : prices) {
@@ -71,8 +71,8 @@ class MatchbookParser {
         for (Market total : totals) {
             List<Runner> runners = total.getRunners();
             for (Runner runner : runners) {
-                Double typeValue = runner.getHandicap() != null ? total.getHandicap() :
-                        BookmakerUtils.parseSpecialHandicapString(total.getAsianHandicap(), "/");
+                Double typeValue = runner.getHandicap() != null ? runner.getHandicap() :
+                        BookmakerUtils.parseMatchbookSpecialHandicapString(runner.getAsianHandicap(), "/");
                 CoeffType side = getTotalSideType(runner.getName());
                 List<Price> prices = runner.getPrices();
                 for (Price price : prices) {
