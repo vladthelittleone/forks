@@ -73,6 +73,7 @@ public class FlashscoreLeagues {
         ICELAND_PREMIER("GdxJccH5"),
         FINLAND_YKKONEN("W8IYMbrj"),
         ROMANIA_1("GILi6JC9"),
+        ROMANIA_2("bgStjEJ1"),
         //THAI_PREMIER("hOlyBdW0"),  live ?
         ISRAEL_PREMIER("rHJ2vy1B"),
         RUSSIA_FNL("jizXHcsM"),

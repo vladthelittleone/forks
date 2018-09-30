@@ -39,7 +39,7 @@ public class FlashscoreResponseParser {
 
     private static final String STAGE_INDEX = "AC";
 
-    private static final List<String> liveStageIds = Arrays.asList("12", "13", "36");
+    private static final List<String> liveStageIds = Arrays.asList("12", "13", "36", "38");
     private static final List<String> prematchStageIds = Arrays.asList("1", "4", "43");
 
     public List<Match> parse(Document document) {
