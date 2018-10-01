@@ -3,22 +3,52 @@ package com.savik.service.bookmaker.matchbook;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 enum MarketType {
-    @JsonProperty("handicap")
+    @JsonProperty("Handicap")
     HANDICAP,
-    @JsonProperty("half_time_full_time")
+    
+    @JsonProperty("Half Time/Full Time")
     HALF_FULL_TIME,
-    @JsonProperty("correct_score")
+    
+    @JsonProperty("Correct Score")
     CORRECT_SCORE,
-    @JsonProperty("total")
+    
+    @JsonProperty("Total")
     TOTAL,
-    @JsonProperty("one_x_two")
+    
+    @JsonProperty("Half Time Total")
+    FIRST_HALF_TOTAL,
+    
+    @JsonProperty("Match Odds")
     ONE_X_TWO,
-    @JsonProperty("both_to_score")
+    
+    @JsonProperty("Half Time Result")
+    FIRST_HALF_ONE_X_TWO,
+    
+    @JsonProperty("Both Teams To Score")
     BOTH_TO_SCORE,
-    @JsonProperty("outright")
+
+    @JsonProperty("Winner")
     OUTRIGHT,
+
+    @JsonProperty("Match Odds and BTTS")
+    OUTRIGHT_BTTS,
+    
     @JsonProperty("money_line")
     MONEY_LINE,
+    
     @JsonProperty("place")
     PLACE,
+    
+    @JsonProperty("Team to Score First")
+    TEAM_SCORE_FIRST,
+    
+    @JsonProperty("First Goalscorer")
+    FIRST_GOALSCORER,
+    
+    @JsonProperty("Group Winner")
+    GROUP_WINNER,
+    
+    // the same as handicap 0
+    @JsonProperty("Draw No Bet")
+    DRAW_NO_BET,
 }

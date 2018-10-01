@@ -91,7 +91,7 @@ class Market {
     @JsonProperty("event-id")
     Long eventId;
 
-    String name;
+    //String name;
 
     LocalDateTime start;
 
@@ -102,7 +102,7 @@ class Market {
 
     Type type;
     
-    @JsonProperty("market-type")
+    @JsonProperty("name")
     MarketType marketType;
 
     List<Runner> runners;
