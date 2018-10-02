@@ -48,6 +48,9 @@ enum MarketType {
     @JsonProperty("Group Winner")
     GROUP_WINNER,
     
+    @JsonProperty("To Qualify")
+    TO_QUALIFY,
+    
     // the same as handicap 0
     @JsonProperty("Draw No Bet")
     DRAW_NO_BET,
