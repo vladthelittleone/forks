@@ -251,8 +251,8 @@
                   "available-amount": 227.03498,
                   "currency": "USD",
                   "odds-type": "DECIMAL",
-                  "odds": 2.07,
-                  "decimal-odds": 2.07,
+                  "odds": 2.17,
+                  "decimal-odds": 2.17,
                   "side": "back",
                   "exchange-type": "back-lay"
                 },
@@ -260,8 +260,8 @@
                   "available-amount": 2451.39,
                   "currency": "USD",
                   "odds-type": "DECIMAL",
-                  "odds": 2.13,
-                  "decimal-odds": 2.13,
+                  "odds": 2.19,
+                  "decimal-odds": 2.19,
                   "side": "lay",
                   "exchange-type": "back-lay"
                 }
