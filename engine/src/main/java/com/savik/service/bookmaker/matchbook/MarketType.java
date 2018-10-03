@@ -6,6 +6,9 @@ enum MarketType {
     @JsonProperty("Handicap")
     HANDICAP,
     
+    @JsonProperty("Handciap")
+    HANDICAP_ALSO,
+    
     @JsonProperty("Half Time/Full Time")
     HALF_FULL_TIME,
     

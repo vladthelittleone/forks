@@ -19,6 +19,7 @@ import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.matchbook.MarketType.HANDICAP_ALSO;
 
 @Component
 class MatchbookParser {
@@ -49,7 +50,7 @@ class MatchbookParser {
 
     private List<BookmakerCoeff> parseHandicaps(Event event, List<Market> markets) {
         List<BookmakerCoeff> coeffs = new ArrayList<>();
-        List<Market> handicaps = markets.stream().filter(m -> m.getMarketType() == MarketType.HANDICAP).collect(Collectors.toList());
+        List<Market> handicaps = markets.stream().filter(m -> m.getMarketType() == MarketType.HANDICAP || m.getMarketType() == HANDICAP_ALSO).collect(Collectors.toList());
         for (Market market : handicaps) {
             List<Runner> runners = market.getRunners();
             for (Runner runner : runners) {
