@@ -46,7 +46,7 @@ public class FlashscoreLeagues {
         SLOVENIA_PRVA("dQIMIN5n"),
         LITHUANIA_A("lAYxY2n8"),
         ESTONIA_MEISTR("hvTioR1s"),
-        HUNGARY_NB2("KIZK2ns8"),
+        //HUNGARY_NB2("KIZK2ns8"),
         SOUTH_AFRICA_PREMIER("WYFXQ1KH"),
         POLAND_1("Qo6off6p"),
         USA_MLS("CQv5qrFt"),
@@ -74,7 +74,7 @@ public class FlashscoreLeagues {
         FINLAND_YKKONEN("W8IYMbrj"),
         ROMANIA_1("GILi6JC9"),
         ROMANIA_2("bgStjEJ1"),
-        //THAI_PREMIER("hOlyBdW0"),  live ?
+        THAI_PREMIER("hOlyBdW0"),
         ISRAEL_PREMIER("rHJ2vy1B"),
         RUSSIA_FNL("jizXHcsM"),
         IRELAND_PREMIER("naHiWdnt"),

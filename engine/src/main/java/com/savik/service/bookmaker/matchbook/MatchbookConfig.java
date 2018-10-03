@@ -13,7 +13,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "matchbook")
 @Getter
 @Setter
-class MatchbookConfig {
+public class MatchbookConfig {
 
     String url;
 

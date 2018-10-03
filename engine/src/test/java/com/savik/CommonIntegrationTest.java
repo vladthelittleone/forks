@@ -11,6 +11,7 @@ import com.savik.model.BookmakerCoeff;
 import com.savik.service.EngineService;
 import com.savik.service.bookmaker.BookmakerMatchService;
 import com.savik.service.bookmaker.ForksService;
+import com.savik.service.bookmaker.matchbook.MatchbookConfig;
 import com.savik.service.bookmaker.pinnacle.PinnacleConfig;
 import com.savik.service.bookmaker.sbobet.SbobetConfig;
 import org.jsoup.Jsoup;
@@ -65,7 +66,9 @@ public class CommonIntegrationTest {
     @Autowired
     SbobetConfig sbobetConfig;
 
-
+    @Autowired
+    MatchbookConfig matchbookConfig;
+    
     @Autowired
     BookmakerMatchService bookmakerMatchService;
 
@@ -92,6 +95,10 @@ public class CommonIntegrationTest {
                 .build();
 
         matches = Arrays.asList(FRANCE_PERU);
+
+        // matchbook football
+        when(httpClient.getPinnacleApacheJson(eq(matchbookConfig.getEventsUrl(SportType.FOOTBALL))))
+                .thenReturn(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("matchbook_football_events.json").toURI()))));
 
         // pinnacle football
         when(httpClient.getPinnacleApacheJson(eq(pinnacleConfig.getFixtureUrl(SportType.FOOTBALL)), any(Map.class)))
