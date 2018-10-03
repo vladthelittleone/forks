@@ -81,6 +81,7 @@ public class CommonIntegrationTest {
     List<Match> matches;
 
     Match FRANCE_PERU;
+    Match LOKOMOTIV_SCHALKE;
 
     @BeforeEach
     public void init() throws URISyntaxException, IOException {
@@ -94,7 +95,17 @@ public class CommonIntegrationTest {
                 .flashscoreId("vHWXsRjb")
                 .build();
 
-        matches = Arrays.asList(FRANCE_PERU);
+        LOKOMOTIV_SCHALKE = Match.builder()
+                .flashscoreId("dQGGBkla")
+                .flashscoreLeagueId("xGrwqq16")
+                .sportType(SportType.FOOTBALL)
+                .date(LocalDateTime.parse("2018-10-03T16:55"))
+                .matchStatus(MatchStatus.PREMATCH)
+                .homeTeam(Team.builder().name("Lokomotiv Moscow").flashscoreId("Sjs63WfK").sportType(SportType.FOOTBALL).build())
+                .awayTeam(Team.builder().name("Schalke").flashscoreId("0Ija0Ej9").sportType(SportType.FOOTBALL).build())
+                .build();
+
+        matches = Arrays.asList(FRANCE_PERU, LOKOMOTIV_SCHALKE);
 
         // matchbook football
         when(httpClient.getPinnacleApacheJson(eq(matchbookConfig.getEventsUrl(SportType.FOOTBALL))))
@@ -117,25 +128,28 @@ public class CommonIntegrationTest {
     public void test() {
         CompletableFuture<Void> future = engineService.handle(matches);
         future.join();
-        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(List.class);
-        verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), argument.capture());
-        final List<ForkFoundEvent> forks = argument.getValue();
+        ArgumentCaptor<List> francePeruCapture = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List> lokomotivSchalkeCapture = ArgumentCaptor.forClass(List.class);
+        verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());
+        verify(forksService, times(1)).verifyExistence(eq(LOKOMOTIV_SCHALKE), lokomotivSchalkeCapture.capture());
+        final List<ForkFoundEvent> francePeruForks = francePeruCapture.getValue();
+        final List<ForkFoundEvent> lokomotivSchalkeForks = lokomotivSchalkeCapture.getValue();
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(SBOBET, BookmakerCoeff.of(-1.25, 2.51, MATCH, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(1.25, 1.69, MATCH, AWAY, HANDICAP))
                 )
         ));
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(SBOBET, BookmakerCoeff.of(-0.5, 2.19, FIRST_HALF, HOME, HANDICAP)),
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.88, FIRST_HALF, AWAY, HANDICAP))
                 )
         ));
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(2.5, 2.09, MATCH, COMMON, TOTAL, OVER)),
@@ -143,7 +157,7 @@ public class CommonIntegrationTest {
                 )
         ));
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(1.75, 2.17, MATCH, HOME, TOTAL, OVER)),
@@ -151,7 +165,7 @@ public class CommonIntegrationTest {
                 )
         ));
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 2.0, MATCH, AWAY, TOTAL, OVER)),
@@ -159,7 +173,7 @@ public class CommonIntegrationTest {
                 )
         ));
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(1., 2.25, FIRST_HALF, COMMON, TOTAL, OVER)),
@@ -167,7 +181,7 @@ public class CommonIntegrationTest {
                 )
         ));
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.75, 1.95, FIRST_HALF, HOME, TOTAL, UNDER)),
@@ -175,7 +189,7 @@ public class CommonIntegrationTest {
                 )
         ));
 
-        assertTrue(forks.contains(
+        assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.95, FIRST_HALF, AWAY, TOTAL, UNDER)),

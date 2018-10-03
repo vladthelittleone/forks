@@ -32,6 +32,73 @@
           "resultingUnit": "Regular"
         }
       ]
+    },
+    {
+      "id": 2627,
+      "name": "UEFA - Champions League",
+      "events": [
+        {
+          "id": 901687654,
+          "starts": "2018-10-03T16:55:00Z",
+          "home": "Lokomotiv Moscow",
+          "away": "Schalke 04",
+          "rotNum": "11031",
+          "liveStatus": 1,
+          "status": "I",
+          "parlayRestriction": 2,
+          "parentId": 891186134,
+          "altTeaser": false,
+          "resultingUnit": "Regular"
+        },
+        {
+          "id": 900555699,
+          "starts": "2018-10-24T19:00:00Z",
+          "home": "Lokomotiv Moscow",
+          "away": "FC Porto",
+          "rotNum": "11013",
+          "liveStatus": 0,
+          "status": "I",
+          "parlayRestriction": 2,
+          "altTeaser": false,
+          "resultingUnit": "Regular"
+        },
+        {
+          "id": 891186134,
+          "starts": "2018-10-03T16:55:00Z",
+          "home": "Lokomotiv Moscow",
+          "away": "Schalke 04",
+          "rotNum": "11031",
+          "liveStatus": 2,
+          "status": "O",
+          "parlayRestriction": 2,
+          "altTeaser": false,
+          "resultingUnit": "Regular"
+        },
+        {
+          "id": 900555696,
+          "starts": "2018-10-24T19:00:00Z",
+          "home": "Barcelona",
+          "away": "FC Internazionale",
+          "rotNum": "11007",
+          "liveStatus": 0,
+          "status": "I",
+          "parlayRestriction": 2,
+          "altTeaser": false,
+          "resultingUnit": "Regular"
+        },
+        {
+          "id": 900555695,
+          "starts": "2018-10-24T19:00:00Z",
+          "home": "Paris Saint Germain",
+          "away": "Napoli",
+          "rotNum": "11001",
+          "liveStatus": 0,
+          "status": "I",
+          "parlayRestriction": 2,
+          "altTeaser": false,
+          "resultingUnit": "Regular"
+        }
+      ]
     }
   ]
 }

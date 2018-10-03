@@ -2,6 +2,7 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.SportType;
+import com.savik.exception.ParseException;
 import com.savik.model.BookmakerCoeff;
 import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
@@ -96,32 +97,36 @@ class SbobetParser {
     }
 
     private List<BookmakerMatchResponse> getMatches(Document document) {
-        JSONArray arrayContainer = extractArrayFromHtml(document);
-        List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
-        JSONArray liveAndPrematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
-        // live and prematch
-        if (liveAndPrematchArrays.length() == 2) {
-            bookmakerMatchResponses.addAll(
-                    getMatchesFromArray(
-                            liveAndPrematchArrays.getJSONArray(LIVE_MATCHES_INDEX)
-                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
-                    )
-            );
-            bookmakerMatchResponses.addAll(
-                    getMatchesFromArray(
-                            liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX)
-                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
-                    )
-            );
-        } else if (liveAndPrematchArrays.length() == 1) {         // only prematch
-            bookmakerMatchResponses.addAll(
-                    getMatchesFromArray(
-                            liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX)
-                                    .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
-                    )
-            );
+        try {
+            JSONArray arrayContainer = extractArrayFromHtml(document);
+            List<BookmakerMatchResponse> bookmakerMatchResponses = new ArrayList<>();
+            JSONArray liveAndPrematchArrays = arrayContainer.getJSONArray(MATCHES_ARRAYS_INDEX);
+            // live and prematch
+            if (liveAndPrematchArrays.length() == 2) {
+                bookmakerMatchResponses.addAll(
+                        getMatchesFromArray(
+                                liveAndPrematchArrays.getJSONArray(LIVE_MATCHES_INDEX)
+                                        .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                        )
+                );
+                bookmakerMatchResponses.addAll(
+                        getMatchesFromArray(
+                                liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_EXISTS_INDEX)
+                                        .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                        )
+                );
+            } else if (liveAndPrematchArrays.length() == 1) {         // only prematch
+                bookmakerMatchResponses.addAll(
+                        getMatchesFromArray(
+                                liveAndPrematchArrays.getJSONArray(PREMATCH_MATCHES_WHILE_LIVE_NOT_EXISTS_INDEX)
+                                        .getJSONArray(MATCHES_IN_CONTAINER_INDEX)
+                        )
+                );
+            }
+            return bookmakerMatchResponses;
+        } catch (Exception ex) {
+            throw new ParseException("Failed parse matches", ex);
         }
-        return bookmakerMatchResponses;
 
     }
 

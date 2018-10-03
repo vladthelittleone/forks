@@ -2,8 +2,9 @@ package com.savik.service.bookmaker.sbobet;
 
 import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
+import com.savik.exception.ParseException;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +49,19 @@ public class SbobetBookmakerService extends BookmakerService {
     }
 
     private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatchWrapper bookmakerMatchWrapper) {
-        Match match = bookmakerMatchWrapper.getMatch();
-        log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
-        List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
-        log.debug("Matches were parsed, amount: " + matches.size());
-        cache.addAll(bookmakerMatchWrapper.getDaysFromToday(), matches);
-        return findMatchInCache(bookmakerMatchWrapper);
+        try {
+            Match match = bookmakerMatchWrapper.getMatch();
+            log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
+            List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
+            log.debug("Matches were parsed, amount: " + matches.size());
+            cache.addAll(bookmakerMatchWrapper.getDaysFromToday(), matches);
+            return findMatchInCache(bookmakerMatchWrapper); 
+        } catch (ParseException ex) {
+            log.error("Failed parsing sport={},day: {}", bookmakerMatchWrapper.getMatch().getSportType(), 
+                    bookmakerMatchWrapper.getDaysFromToday());
+            return Optional.empty();
+        }
+        
     }
 
     private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {

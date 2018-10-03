@@ -88,6 +88,7 @@ public class FlashscoreLeagues {
         CHILE_PRIMIER("0KangpCU"),
         MEXICO_PREMIER_A("bm2Vlsfl"),
         SAUDI_PRO("tUxUbLR2"),
+        RUSSIA_2018("lvUBR5F8"),
         UEFA_CHAMPIONS_GROUP_STAGE("xGrwqq16"),
         UEFA_EUROPE_GROUP_STAGE("ClDjv3V5");
 

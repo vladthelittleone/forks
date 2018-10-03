@@ -40,8 +40,8 @@ class MatchbookDownloader {
     public MatchbookEventsResponse getEvents(SportType sportType) {
         try {
             final String navigationUrl = config.getEventsUrl(sportType);
-            String json = getJsonFromFile();
-            //final String json = httpClient.getPinnacleApacheJson(navigationUrl);
+            //String json = getJsonFromFile();
+            final String json = httpClient.getPinnacleApacheJson(navigationUrl);
             final MatchbookEventsResponse matchbookEventsResponse = objectMapper.readValue(json, MatchbookEventsResponse.class);
             return matchbookEventsResponse;
         } catch (IOException e) {
