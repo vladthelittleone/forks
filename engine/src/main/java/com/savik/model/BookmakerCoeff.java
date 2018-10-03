@@ -50,9 +50,7 @@ public class BookmakerCoeff {
     }
 
     public boolean isBetCompatibleByMeaning(BookmakerCoeff anotherCoeff) {
-        CoeffTypeChain selfChain = getTypeChain();
-        CoeffTypeChain anotherChain = anotherCoeff.getTypeChain();
-        return BookmakerCoeffMapper.isAcceptable(selfChain, anotherChain);
+        return BookmakerCoeffMapper.isAcceptable(this, anotherCoeff);
     }
 
     public boolean isBetCompatibleByValue(BookmakerCoeff anotherCoeff) {

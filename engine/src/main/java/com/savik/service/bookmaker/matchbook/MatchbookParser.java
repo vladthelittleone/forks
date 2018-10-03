@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
-import static com.savik.service.bookmaker.CoeffType.*;
+import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
+import static com.savik.service.bookmaker.CoeffType.HANDICAP;
+import static com.savik.service.bookmaker.CoeffType.MATCH;
+import static com.savik.service.bookmaker.CoeffType.OVER;
+import static com.savik.service.bookmaker.CoeffType.TOTAL;
+import static com.savik.service.bookmaker.CoeffType.UNDER;
 
 @Component
 class MatchbookParser {
@@ -39,7 +42,8 @@ class MatchbookParser {
         List<BookmakerCoeff> coeffs = new ArrayList<>();
         List<Market> markets = event.getMarkets();
         coeffs.addAll(parseHandicaps(event, markets));
-        coeffs.addAll(parseTotals(event, markets));
+        coeffs.addAll(parseTotals(MarketType.TOTAL, MATCH, markets));
+        coeffs.addAll(parseTotals(MarketType.FIRST_HALF_TOTAL, FIRST_HALF, markets));
         return coeffs;
     }
 
@@ -65,9 +69,9 @@ class MatchbookParser {
         return coeffs;
     }
 
-    private List<BookmakerCoeff> parseTotals(Event event, List<Market> markets) {
+    private List<BookmakerCoeff> parseTotals(MarketType kindOftotal, CoeffType matchPart, List<Market> markets) {
         List<BookmakerCoeff> coeffs = new ArrayList<>();
-        List<Market> totals = markets.stream().filter(m -> m.getMarketType() == MarketType.TOTAL).collect(Collectors.toList());
+        List<Market> totals = markets.stream().filter(m -> m.getMarketType() == kindOftotal).collect(Collectors.toList());
         for (Market total : totals) {
             List<Runner> runners = total.getRunners();
             for (Runner runner : runners) {
@@ -77,9 +81,9 @@ class MatchbookParser {
                 List<Price> prices = runner.getPrices();
                 for (Price price : prices) {
                     if (price.getSide() == Side.BACK) {
-                        coeffs.add(BookmakerCoeff.of(typeValue, price.getDecimalOdds(), MATCH, COMMON, TOTAL, side));
+                        coeffs.add(BookmakerCoeff.of(typeValue, price.getDecimalOdds(), matchPart, COMMON, TOTAL, side));
                     } else {
-                        coeffs.add(BookmakerCoeff.of(typeValue, BookmakerUtils.convertLayCoeff(price.getDecimalOdds()), MATCH, COMMON, TOTAL, side).lay());
+                        coeffs.add(BookmakerCoeff.of(typeValue, BookmakerUtils.convertLayCoeff(price.getDecimalOdds()), matchPart, COMMON, TOTAL, side).lay());
                     }
                 }
             }

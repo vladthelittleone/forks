@@ -308,6 +308,12 @@
                   "points": 1.25,
                   "over": 3.16,
                   "under": 1.381
+                },
+                {
+                  "altLineId": 7204907686,
+                  "points": 1.5,
+                  "over": 4.0,
+                  "under": 1.11
                 }
               ],
               "teamTotal": {
