@@ -34,8 +34,8 @@ public class MatchbookBookmakerService extends BookmakerService {
 
     @Override
     protected Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper match) {
-        Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(match);
-        return bookmakerMatchResponse;
+        downloadSportEvents(match.getMatch().getSportType(), false);
+        return findMatchInCache(match);
     }
 
     private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {
@@ -43,13 +43,19 @@ public class MatchbookBookmakerService extends BookmakerService {
     }
 
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60, initialDelay = 5_000)
+    @Scheduled(fixedDelay = 1000 * 15, initialDelay = 5_000)
     public void refreshCacheOdds() {
         final List<SportType> sportTypes = Arrays.asList(SportType.values());
         for (SportType sportType : sportTypes) {
+            downloadSportEvents(sportType, true);
+        }
+    }
+
+    private synchronized void downloadSportEvents(SportType sportType, boolean updateAnyway) {
+        if (updateAnyway || !cache.hasSportEvents(sportType)) {
             final MatchbookEventsResponse response = downloader.getEvents(sportType);
-            final List<BookmakerMatchResponse> responses = parser.parse(response.getEvents());
-            cache.addAll(responses);
+            final List<BookmakerMatchResponse> events = parser.parse(response.getEvents());
+            cache.addAll(sportType, events);
         }
     }
 
