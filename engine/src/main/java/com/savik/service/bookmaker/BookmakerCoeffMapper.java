@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.BOTH_NOT_SCORED;
+import static com.savik.service.bookmaker.CoeffType.BOTH_SCORED;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
@@ -29,6 +31,8 @@ public class BookmakerCoeffMapper {
     private static Map<CoeffTypeChain, List<CoeffTypeChain>> acceptableTypes = new HashMap<>();
     private static Map<CoeffTypeChain, List<CoeffValueChecker>> acceptableCheckers = new HashMap<>();
 
+    final static CoeffTypeChain MATCH_BOTH_SCORED= new CoeffTypeChain(MATCH, BOTH_SCORED);
+    final static CoeffTypeChain MATCH_BOTH_NOT_SCORED= new CoeffTypeChain(MATCH, BOTH_NOT_SCORED);
     final static CoeffTypeChain MATCH_AWAY_HANDICAP = new CoeffTypeChain(MATCH, AWAY, HANDICAP);
     final static CoeffTypeChain MATCH_HOME_HANDICAP = new CoeffTypeChain(MATCH, HOME, HANDICAP);
     final static CoeffTypeChain FIRST_HALF_AWAY_HANDICAP = new CoeffTypeChain(FIRST_HALF, AWAY, HANDICAP);
@@ -66,8 +70,14 @@ public class BookmakerCoeffMapper {
         return Arrays.asList(LAY_COEFF_VALUE_CHECKER, checker);
     }
 
+    static List<CoeffValueChecker> commonCheckers() {
+        return Arrays.asList(LAY_COEFF_VALUE_CHECKER);
+    }
+
     static {
 
+        acceptableCheckers.put(MATCH_BOTH_SCORED, commonCheckers());
+        acceptableCheckers.put(MATCH_BOTH_NOT_SCORED, commonCheckers());
         acceptableCheckers.put(MATCH_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
@@ -87,6 +97,13 @@ public class BookmakerCoeffMapper {
         acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_OVER, wrapCommonCheckers(TOTAL_UNDER_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(FIRST_HALF_AWAY_TOTAL_UNDER, wrapCommonCheckers(TOTAL_OVER_COEFF_VALUE_CHECKER));
 
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_BOTH_SCORED,
+                        MATCH_BOTH_NOT_SCORED
+                )
+        );
 
         createMatching(
                 Arrays.asList(

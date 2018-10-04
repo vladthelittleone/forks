@@ -9,6 +9,8 @@ public enum CoeffType {
     SECOND_HALF,
     HANDICAP,
     TOTAL,
+    BOTH_SCORED,
+    BOTH_NOT_SCORED,
     OVER,
     UNDER
 }
