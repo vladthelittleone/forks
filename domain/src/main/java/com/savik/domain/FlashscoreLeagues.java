@@ -43,6 +43,8 @@ public class FlashscoreLeagues {
         GERMANY_NORTH("jV4OhMB1"),
         GERMANY_WEST("nsGIGP38"),
         CHECH_LIGA("hleea1wH"),
+        CHINA_SUPERLIGA("nc9yRmcn"),
+        SWISS_SUPER("KAjTCI1l"),
         SLOVENIA_PRVA("dQIMIN5n"),
         LITHUANIA_A("lAYxY2n8"),
         ESTONIA_MEISTR("hvTioR1s"),
