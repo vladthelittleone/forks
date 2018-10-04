@@ -16,12 +16,14 @@ import java.util.stream.Collectors;
 import static com.savik.service.bookmaker.CoeffType.BOTH_NOT_SCORED;
 import static com.savik.service.bookmaker.CoeffType.BOTH_SCORED;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 import static com.savik.service.bookmaker.matchbook.MarketType.HANDICAP_ALSO;
 
 @Component
@@ -47,6 +49,8 @@ class MatchbookParser {
         List<Market> markets = event.getMarkets();
         coeffs.addAll(parseHandicaps(event, markets));
         coeffs.addAll(parseBTS(markets));
+        coeffs.addAll(parseResults(MarketType.ONE_X_TWO, MATCH, event, markets));
+        coeffs.addAll(parseResults(MarketType.FIRST_HALF_ONE_X_TWO, FIRST_HALF, event, markets));
         coeffs.addAll(parseTotals(MarketType.TOTAL, MATCH, markets));
         coeffs.addAll(parseTotals(MarketType.FIRST_HALF_TOTAL, FIRST_HALF, markets));
         return coeffs;
@@ -96,6 +100,38 @@ class MatchbookParser {
         return coeffs;
     }
 
+    private List<BookmakerCoeff> parseResults(MarketType marketType, CoeffType matchPart, Event event, List<Market> markets) {
+        List<BookmakerCoeff> coeffs = new ArrayList<>();
+        final Optional<Market> bts = markets.stream().filter(m -> m.getMarketType() == marketType).findAny();
+        if(bts.isPresent()) {
+            List<Runner> runners = bts.get().getRunners();
+            for (Runner runner : runners) {
+                CoeffType side = getResultSideType(event, runner.getName());
+                List<Price> prices = runner.getPrices();
+                if(side == DRAW) {
+                    for (Price price : prices) {
+                        if (price.getSide() == Side.BACK) {
+                            coeffs.add(BookmakerCoeff.of(price.getDecimalOdds(), matchPart, DRAW));
+                        } else {
+                            coeffs.add(BookmakerCoeff.of(BookmakerUtils.convertLayCoeff(price.getDecimalOdds()), matchPart, DRAW).lay());
+                        }
+                    } 
+                } else {
+                    for (Price price : prices) {
+                        if (price.getSide() == Side.BACK) {
+                            coeffs.add(BookmakerCoeff.of(price.getDecimalOdds(), matchPart, side, WIN));
+                        } else {
+                            coeffs.add(BookmakerCoeff.of(BookmakerUtils.convertLayCoeff(price.getDecimalOdds()), matchPart, side, WIN).lay());
+                        }
+                    }
+                }
+                
+            }
+        }
+            
+        return coeffs;
+    }
+
     private List<BookmakerCoeff> parseTotals(MarketType kindOftotal, CoeffType matchPart, List<Market> markets) {
         List<BookmakerCoeff> coeffs = new ArrayList<>();
         List<Market> totals = markets.stream().filter(m -> m.getMarketType() == kindOftotal).collect(Collectors.toList());
@@ -124,6 +160,18 @@ class MatchbookParser {
             return CoeffType.HOME;
         } else if (name.equalsIgnoreCase(event.getBookmakerAwayTeamName())) {
             return CoeffType.AWAY;
+        }
+        throw new IllegalArgumentException(String.format("name is incorrect: %s, %s - %s", runnerName,
+                event.getBookmakerHomeTeamName(), event.getBookmakerAwayTeamName()));
+    }
+
+    private CoeffType getResultSideType(Event event, String runnerName) {
+        if (runnerName.equalsIgnoreCase(event.getBookmakerHomeTeamName())) {
+            return CoeffType.HOME;
+        } else if (runnerName.equalsIgnoreCase(event.getBookmakerAwayTeamName())) {
+            return CoeffType.AWAY;
+        } else if (runnerName.startsWith(DRAW.toString())) {
+            return DRAW;
         }
         throw new IllegalArgumentException(String.format("name is incorrect: %s, %s - %s", runnerName,
                 event.getBookmakerHomeTeamName(), event.getBookmakerAwayTeamName()));

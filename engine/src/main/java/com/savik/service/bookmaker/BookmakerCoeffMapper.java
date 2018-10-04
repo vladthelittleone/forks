@@ -13,17 +13,22 @@ import java.util.List;
 import java.util.Map;
 
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.AWAY_X;
 import static com.savik.service.bookmaker.CoeffType.BOTH_NOT_SCORED;
 import static com.savik.service.bookmaker.CoeffType.BOTH_SCORED;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
+import static com.savik.service.bookmaker.CoeffType.HOME_OR_AWAY;
+import static com.savik.service.bookmaker.CoeffType.HOME_X;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 
 public class BookmakerCoeffMapper {
 
@@ -31,24 +36,47 @@ public class BookmakerCoeffMapper {
     private static Map<CoeffTypeChain, List<CoeffTypeChain>> acceptableTypes = new HashMap<>();
     private static Map<CoeffTypeChain, List<CoeffValueChecker>> acceptableCheckers = new HashMap<>();
 
+    final static CoeffTypeChain MATCH_HOME_WIN= new CoeffTypeChain(MATCH, HOME, WIN);
+    final static CoeffTypeChain MATCH_AWAY_WIN= new CoeffTypeChain(MATCH, AWAY, WIN);
+    final static CoeffTypeChain MATCH_HOME_X= new CoeffTypeChain(MATCH, HOME_X);
+    final static CoeffTypeChain MATCH_AWAY_X= new CoeffTypeChain(MATCH, AWAY_X);
+    final static CoeffTypeChain MATCH_DRAW= new CoeffTypeChain(MATCH, DRAW);
+    final static CoeffTypeChain MATCH_HOME_OR_AWAY= new CoeffTypeChain(MATCH, HOME_OR_AWAY);
+    
+    final static CoeffTypeChain FIRST_HALF_HOME_WIN= new CoeffTypeChain(FIRST_HALF, HOME, WIN);
+    final static CoeffTypeChain FIRST_HALF_AWAY_WIN= new CoeffTypeChain(FIRST_HALF, AWAY, WIN);
+    final static CoeffTypeChain FIRST_HALF_HOME_X= new CoeffTypeChain(FIRST_HALF, HOME_X);
+    final static CoeffTypeChain FIRST_HALF_AWAY_X= new CoeffTypeChain(FIRST_HALF, AWAY_X);
+    final static CoeffTypeChain FIRST_HALF_DRAW= new CoeffTypeChain(FIRST_HALF, DRAW);
+    final static CoeffTypeChain FIRST_HALF_HOME_OR_AWAY= new CoeffTypeChain(FIRST_HALF, HOME_OR_AWAY);
+    
     final static CoeffTypeChain MATCH_BOTH_SCORED= new CoeffTypeChain(MATCH, BOTH_SCORED);
     final static CoeffTypeChain MATCH_BOTH_NOT_SCORED= new CoeffTypeChain(MATCH, BOTH_NOT_SCORED);
+    
     final static CoeffTypeChain MATCH_AWAY_HANDICAP = new CoeffTypeChain(MATCH, AWAY, HANDICAP);
     final static CoeffTypeChain MATCH_HOME_HANDICAP = new CoeffTypeChain(MATCH, HOME, HANDICAP);
+    
     final static CoeffTypeChain FIRST_HALF_AWAY_HANDICAP = new CoeffTypeChain(FIRST_HALF, AWAY, HANDICAP);
     final static CoeffTypeChain FIRST_HALF_HOME_HANDICAP = new CoeffTypeChain(FIRST_HALF, HOME, HANDICAP);
+    
     final static CoeffTypeChain SECOND_HALF_AWAY_HANDICAP = new CoeffTypeChain(SECOND_HALF, AWAY, HANDICAP);
     final static CoeffTypeChain SECOND_HALF_HOME_HANDICAP = new CoeffTypeChain(SECOND_HALF, HOME, HANDICAP);
+    
     final static CoeffTypeChain MATCH_COMMON_TOTAL_OVER = new CoeffTypeChain(MATCH, COMMON, TOTAL, OVER);
     final static CoeffTypeChain MATCH_COMMON_TOTAL_UNDER = new CoeffTypeChain(MATCH, COMMON, TOTAL, UNDER);
+    
     final static CoeffTypeChain MATCH_HOME_TOTAL_OVER = new CoeffTypeChain(MATCH, HOME, TOTAL, OVER);
     final static CoeffTypeChain MATCH_HOME_TOTAL_UNDER = new CoeffTypeChain(MATCH, HOME, TOTAL, UNDER);
+    
     final static CoeffTypeChain MATCH_AWAY_TOTAL_OVER = new CoeffTypeChain(MATCH, AWAY, TOTAL, OVER);
     final static CoeffTypeChain MATCH_AWAY_TOTAL_UNDER = new CoeffTypeChain(MATCH, AWAY, TOTAL, UNDER);
+    
     final static CoeffTypeChain FIRST_HALF_COMMON_TOTAL_OVER = new CoeffTypeChain(FIRST_HALF, COMMON, TOTAL, OVER);
     final static CoeffTypeChain FIRST_HALF_COMMON_TOTAL_UNDER = new CoeffTypeChain(FIRST_HALF, COMMON, TOTAL, UNDER);
+    
     final static CoeffTypeChain FIRST_HALF_HOME_TOTAL_OVER = new CoeffTypeChain(FIRST_HALF, HOME, TOTAL, OVER);
     final static CoeffTypeChain FIRST_HALF_HOME_TOTAL_UNDER = new CoeffTypeChain(FIRST_HALF, HOME, TOTAL, UNDER);
+    
     final static CoeffTypeChain FIRST_HALF_AWAY_TOTAL_OVER = new CoeffTypeChain(FIRST_HALF, AWAY, TOTAL, OVER);
     final static CoeffTypeChain FIRST_HALF_AWAY_TOTAL_UNDER = new CoeffTypeChain(FIRST_HALF, AWAY, TOTAL, UNDER);
 
@@ -78,6 +106,21 @@ public class BookmakerCoeffMapper {
 
         acceptableCheckers.put(MATCH_BOTH_SCORED, commonCheckers());
         acceptableCheckers.put(MATCH_BOTH_NOT_SCORED, commonCheckers());
+        
+        acceptableCheckers.put(MATCH_HOME_WIN, commonCheckers());
+        acceptableCheckers.put(MATCH_AWAY_WIN, commonCheckers());
+        acceptableCheckers.put(MATCH_HOME_X, commonCheckers());
+        acceptableCheckers.put(MATCH_AWAY_X, commonCheckers());
+        acceptableCheckers.put(MATCH_DRAW, commonCheckers());
+        acceptableCheckers.put(MATCH_HOME_OR_AWAY, commonCheckers());
+        
+        acceptableCheckers.put(FIRST_HALF_HOME_WIN, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_AWAY_WIN, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_HOME_X, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_AWAY_X, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_DRAW, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_HOME_OR_AWAY, commonCheckers());
+        
         acceptableCheckers.put(MATCH_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(FIRST_HALF_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
@@ -102,6 +145,49 @@ public class BookmakerCoeffMapper {
                 Arrays.asList(
                         MATCH_BOTH_SCORED,
                         MATCH_BOTH_NOT_SCORED
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_HOME_WIN,
+                        MATCH_AWAY_X
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_AWAY_WIN,
+                        MATCH_HOME_X
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_DRAW,
+                        MATCH_HOME_OR_AWAY
+                )
+        );
+        
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_HOME_WIN,
+                        FIRST_HALF_AWAY_X
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_AWAY_WIN,
+                        FIRST_HALF_HOME_X
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_DRAW,
+                        FIRST_HALF_HOME_OR_AWAY
                 )
         );
 

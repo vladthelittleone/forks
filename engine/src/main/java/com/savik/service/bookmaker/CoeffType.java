@@ -3,8 +3,13 @@ package com.savik.service.bookmaker;
 public enum CoeffType {
     COMMON,
     HOME,
+    HOME_X,
     AWAY,
+    AWAY_X,
     MATCH,
+    WIN,
+    DRAW,
+    HOME_OR_AWAY,
     FIRST_HALF,
     SECOND_HALF,
     HANDICAP,
