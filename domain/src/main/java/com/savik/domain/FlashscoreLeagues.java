@@ -1,6 +1,7 @@
 package com.savik.domain;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class FlashscoreLeagues {
     public enum FOOTBALL {
@@ -26,7 +27,7 @@ public class FlashscoreLeagues {
         HOLLAND_EREDIVISIE("Or1bBrWD"),
         ENGLAND_PREMIER("dYlOSQOD"),
         GREECE_SUPERLIGA("d2pwJFHI"),
-        CYPRUS_1("EmZxlqvh"),
+        //CYPRUS_1("EmZxlqvh"),
         //COSTA_RICA("tpC1pUBH"), live ?
         BELGIUM_A("dG2SqPrf"),
         BELGIUM_B("dMwNgPSC"),
@@ -75,7 +76,7 @@ public class FlashscoreLeagues {
         ICELAND_PREMIER("GdxJccH5"),
         FINLAND_YKKONEN("W8IYMbrj"),
         ROMANIA_1("GILi6JC9"),
-        ROMANIA_2("bgStjEJ1"),
+        //ROMANIA_2("bgStjEJ1"),
         THAI_PREMIER("hOlyBdW0"),
         ISRAEL_PREMIER("rHJ2vy1B"),
         RUSSIA_FNL("jizXHcsM"),
@@ -101,7 +102,11 @@ public class FlashscoreLeagues {
         }
 
         public static FOOTBALL getById(String id) {
-            return Arrays.asList(values()).stream().filter(l -> id.equalsIgnoreCase(l.getId())).findFirst().get();
+            final Optional<FOOTBALL> league = Arrays.asList(values()).stream().filter(l -> id.equalsIgnoreCase(l.getId())).findFirst();
+            if(!league.isPresent()) {
+                throw new IllegalArgumentException("league doesn't exist: " + id);
+            }
+            return league.get();
         } 
 
         FOOTBALL(String id) {
