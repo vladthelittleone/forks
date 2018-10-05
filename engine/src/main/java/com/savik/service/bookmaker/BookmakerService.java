@@ -7,8 +7,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Log4j2
@@ -19,6 +23,8 @@ public abstract class BookmakerService {
 
     @Autowired
     BookmakerEventPublisher bookmakerEventPublisher;
+    
+    Map<BookmakerType, Set<String>> cache = new HashMap<>();
 
     protected abstract BookmakerType getBookmakerType();
 
@@ -48,8 +54,13 @@ public abstract class BookmakerService {
                 bookmakerEventPublisher.publishMatchResponse(info.get(), bookmakerMatchWrapper);
             }
         } else {
-            log.info(String.format("Match wasn't found in line: %s, %s, %s", getBookmakerType(), 
-                    bookmakerMatchWrapper.getDefaultLogString(), bookmakerMatchWrapper.getBookmakerLeague().getName()));
+            cache.putIfAbsent(getBookmakerType(), ConcurrentHashMap.newKeySet());
+            if(!cache.get(getBookmakerType()).contains(match.getFlashscoreId())) {
+                log.info(String.format("Match wasn't found in line: %s, %s, %s", getBookmakerType(),
+                        bookmakerMatchWrapper.getDefaultLogString(), bookmakerMatchWrapper.getBookmakerLeague().getName()));
+                cache.get(getBookmakerType()).add(match.getFlashscoreId());
+            }
+            
             if(publish) {
                 bookmakerEventPublisher.publishMatchNotFound(bookmakerMatchWrapper);
             }

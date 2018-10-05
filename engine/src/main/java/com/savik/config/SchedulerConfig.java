@@ -41,7 +41,7 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setThreadNamePrefix("fork-task-pool-");
         threadPoolTaskExecutor.setMaxPoolSize(POOL_SIZE);
-        threadPoolTaskExecutor.setCorePoolSize(2);
+        threadPoolTaskExecutor.setCorePoolSize(4);
         threadPoolTaskExecutor.setDaemon(true);
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
