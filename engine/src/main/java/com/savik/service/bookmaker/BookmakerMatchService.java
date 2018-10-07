@@ -42,26 +42,32 @@ public class BookmakerMatchService {
         boolean somethingWasntFound = false;
         Optional<BookmakerTeam> dbHomeTeam = bookmakerTeamRepository.findById(new BookmakerPK(homeTeam.getFlashscoreId(), bookmakerType));
         final TeamEntry homeTeamEntry = new TeamEntry(homeTeam.getFlashscoreId(), homeTeam.getName(), bookmakerType);
-        if (!dbHomeTeam.isPresent() && !teams.contains(homeTeamEntry)) {
-            log.warn(format("Home team wan't found in db. Team id: %s, name: %s, bookType: %s",
-                    homeTeam.getFlashscoreId(), homeTeam.getName(), bookmakerType));
+        if (!dbHomeTeam.isPresent()) {
             somethingWasntFound = true;
-            teams.add(homeTeamEntry);
+            if(!teams.contains(homeTeamEntry)) {
+                log.warn(format("Home team wan't found in db. Team id: %s, name: %s, bookType: %s",
+                        homeTeam.getFlashscoreId(), homeTeam.getName(), bookmakerType));
+                teams.add(homeTeamEntry);
+            }
         }
         Optional<BookmakerTeam> dbAwayTeam = bookmakerTeamRepository.findById(new BookmakerPK(awayTeam.getFlashscoreId(), bookmakerType));
         final TeamEntry awayTeamEntry = new TeamEntry(homeTeam.getFlashscoreId(), homeTeam.getName(), bookmakerType);
-        if (!dbAwayTeam.isPresent() && !teams.contains(awayTeamEntry)) {
-            log.warn(format("Away team wan't found in db. Team id: %s, name: %s, bookType: %s",
-                    awayTeam.getFlashscoreId(), awayTeam.getName(), bookmakerType));
+        if (!dbAwayTeam.isPresent()) {
             somethingWasntFound = true;
-            teams.add(awayTeamEntry);
+            if(!teams.contains(awayTeamEntry)) {
+                log.warn(format("Away team wan't found in db. Team id: %s, name: %s, bookType: %s",
+                        awayTeam.getFlashscoreId(), awayTeam.getName(), bookmakerType));
+                teams.add(awayTeamEntry);
+            }
         }
         Optional<BookmakerLeague> league = bookmakerLeagueRepository.findById(new BookmakerPK(match.getFlashscoreLeagueId(), bookmakerType));
         final LeagueEntry leagueEntry = new LeagueEntry(match.getFlashscoreLeagueId(), bookmakerType);
-        if (!league.isPresent() && !leagues.contains(leagueEntry)) {
-            log.warn(format("League wan't found in db. League id: %s, bookType: %s, %s", match.getFlashscoreLeagueId(), bookmakerType, FlashscoreLeagues.FOOTBALL.getById(match.getFlashscoreLeagueId())));
+        if (!league.isPresent()) {
             somethingWasntFound = true;
-            leagues.add(leagueEntry);
+            if(!leagues.contains(leagueEntry)) {
+                log.warn(format("League wan't found in db. League id: %s, bookType: %s, %s", match.getFlashscoreLeagueId(), bookmakerType, FlashscoreLeagues.FOOTBALL.getById(match.getFlashscoreLeagueId())));
+                leagues.add(leagueEntry);
+            }
         }
         if (somethingWasntFound) {
             return Optional.empty();

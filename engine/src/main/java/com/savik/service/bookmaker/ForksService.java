@@ -60,8 +60,11 @@ public class ForksService {
         }
         StringBuilder builder = new StringBuilder("\n\n Checking fork for availability: ");
         builder.append(" match ").append(event.getMatch().getDefaultLogString())
-                .append(" old fork ").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
-                .append(" updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(), optionalSecondUpdatedBet.get()))
+                .append(", date= ").append(event.getMatch().getDate())
+                .append("\n old fork ").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
+                .append("\n b1=").append(first).append("\n b2=").append(second)
+                .append("\n updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(), optionalSecondUpdatedBet.get()))
+                .append("\n b1=").append(optionalFirstUpdatedBet.get()).append("\n b2=").append(optionalSecondUpdatedBet.get())
                 .append("\n\n");
         log.info(builder.toString());
         return optionalFirstUpdatedBet.get().isFork(optionalSecondUpdatedBet.get());

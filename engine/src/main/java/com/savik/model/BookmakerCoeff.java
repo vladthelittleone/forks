@@ -68,7 +68,7 @@ public class BookmakerCoeff {
     }
     
     public boolean isSame(BookmakerCoeff coeff) {
-        return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue());
+        return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue()) && coeff.lay == lay;
     }
 
     @Override

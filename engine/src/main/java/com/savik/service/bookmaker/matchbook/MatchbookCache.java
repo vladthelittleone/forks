@@ -23,6 +23,7 @@ class MatchbookCache {
 
     public void addAll(SportType type, Collection<BookmakerMatchResponse> matches) {
         cache.putIfAbsent(type, ConcurrentHashMap.newKeySet());
+        cache.get(type).clear();
         cache.get(type).addAll(matches);
     }
     
