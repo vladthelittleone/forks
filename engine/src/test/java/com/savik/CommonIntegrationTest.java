@@ -45,6 +45,7 @@ import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -200,7 +201,7 @@ public class CommonIntegrationTest {
 
 
         final List<ForkFoundEvent> lokomotivSchalkeForks = lokomotivSchalkeCapture.getValue();
-        assertEquals(2, lokomotivSchalkeForks.size());
+        assertEquals(3, lokomotivSchalkeForks.size());
 
 
         assertTrue(lokomotivSchalkeForks.contains(
@@ -216,6 +217,14 @@ public class CommonIntegrationTest {
                         LOKOMOTIV_SCHALKE,
                         new Bet(PINNACLE, BookmakerCoeff.of(1.5, 4., FIRST_HALF, COMMON, TOTAL, OVER)),
                         new Bet(MATCHBOOK, BookmakerCoeff.of(1.5, 1.342466, FIRST_HALF, COMMON, TOTAL, OVER).lay()) // lay 3.92
+                )
+        ));
+
+        assertTrue(lokomotivSchalkeForks.contains(
+                new ForkFoundEvent(
+                        LOKOMOTIV_SCHALKE,
+                        new Bet(PINNACLE, BookmakerCoeff.of(3.9, MATCH, HOME, WIN)),
+                        new Bet(MATCHBOOK, BookmakerCoeff.of(1.34965, MATCH, HOME, WIN).lay()) // lay 3.86
                 )
         ));
 

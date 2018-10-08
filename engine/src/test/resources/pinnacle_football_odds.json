@@ -198,15 +198,17 @@
                 }
               ],
               "moneyline": {
-                "home": 3.77,
+                "home": 3.9,
                 "away": 2.22,
-                "draw": 3.3
+                "draw": 3.3,
+                "fork": "3 arb, pinnacle home for 3.9, matchbook  lay home for 1.35 ( lay 3.86 )"
               },
               "totals": [
                 {
                   "points": 2,
                   "over": 1.884,
-                  "under": 2.04
+                  "under": 2.04,
+                  "fork": "1 arb, pinnacle total > 2 for 1.884, matchbook < 2 for 2.17"
                 },
                 {
                   "altLineId": 7204900550,
@@ -313,7 +315,8 @@
                   "altLineId": 7204907686,
                   "points": 1.5,
                   "over": 4.0,
-                  "under": 1.11
+                  "under": 1.11,
+                  "fork": "2 arb, first half pinnacle > 1.5 for 4. , matchbook > 1.5 lay for 1.342466 ( 3.92 )"
                 }
               ],
               "teamTotal": {

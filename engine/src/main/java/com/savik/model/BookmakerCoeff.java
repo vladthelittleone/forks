@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Builder
 @Getter
@@ -17,12 +18,13 @@ public class BookmakerCoeff {
     Double coeffValue;
 
     CoeffTypeChain typeChain;
-    
+
     boolean lay = false;
 
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, CoeffType... types) {
         return of(typeValue, coeffValue, Arrays.asList(types));
     }
+
     public static BookmakerCoeff of(Double coeffValue, CoeffType... types) {
         return of(null, coeffValue, Arrays.asList(types));
     }
@@ -30,7 +32,7 @@ public class BookmakerCoeff {
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, List<CoeffType> types) {
         return new BookmakerCoeff(typeValue, coeffValue, new CoeffTypeChain(types));
     }
-    
+
     public BookmakerCoeff lay() {
         this.lay = true;
         return this;
@@ -66,13 +68,13 @@ public class BookmakerCoeff {
         }
         return BookmakerCoeffMapper.isFork(this, anotherCoeff);
     }
-    
+
     public boolean isSame(BookmakerCoeff coeff) {
         return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue()) && coeff.lay == lay;
     }
-    
+
     public boolean isBackLaySame(BookmakerCoeff coeff) {
-        return typeChain.equals(coeff.getTypeChain()) && typeValue.equals(coeff.getTypeValue()) && coeff.lay != lay;
+        return typeChain.equals(coeff.getTypeChain()) && Objects.equals(typeValue, coeff.getTypeValue()) && coeff.lay != lay;
     }
 
     @Override
@@ -113,15 +115,15 @@ public class BookmakerCoeff {
         public CoeffTypeChain(List<CoeffType> chain) {
             this.chain = chain;
         }
-        
+
         public CoeffTypeChain(CoeffType... types) {
             this(Arrays.asList(types));
         }
-        
+
         public CoeffType get(int index) {
             return chain.get(index);
         }
-        
+
         public int size() {
             return chain.size();
         }
@@ -147,7 +149,7 @@ public class BookmakerCoeff {
 
         @Override
         public int hashCode() {
-            return  chain.stream().map(Enum::toString).mapToInt(s -> s.hashCode()).sum();
+            return chain.stream().map(Enum::toString).mapToInt(s -> s.hashCode()).sum();
         }
     }
 }

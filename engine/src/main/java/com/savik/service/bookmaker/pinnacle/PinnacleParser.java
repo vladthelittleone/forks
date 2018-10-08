@@ -13,6 +13,7 @@ import java.util.Set;
 import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -21,6 +22,7 @@ import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.SECOND_HALF;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 
 @Component
 class PinnacleParser {
@@ -37,12 +39,17 @@ class PinnacleParser {
                             BookmakerUtils.convertAsianBookmakerWinToHandicap(odds.getHomeScore(), odds.getAwayScore(), SideType.HOME),
                             moneyline.getHome(), partType, HOME, HANDICAP
                     ));
+                    bookmakerCoeffs.add(of(moneyline.getHome(), partType, HOME, WIN));
                 }
                 if (moneyline.getAway() != null) {
                     bookmakerCoeffs.add(of(
                             BookmakerUtils.convertAsianBookmakerWinToHandicap(odds.getHomeScore(), odds.getAwayScore(), SideType.AWAY), 
                             moneyline.getAway(), partType, AWAY, HANDICAP
                     ));
+                    bookmakerCoeffs.add(of(moneyline.getAway(), partType, AWAY, WIN));
+                }
+                if (moneyline.getDraw() != null) {
+                    bookmakerCoeffs.add(of(moneyline.getDraw(), partType, DRAW));
                 }
             }
             List<OddsSpread> spreads = period.getSpreads();
