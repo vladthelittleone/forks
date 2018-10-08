@@ -288,7 +288,7 @@ public class BookmakerCoeffMapper {
     }
 
     public static boolean isAcceptable(BookmakerCoeff origin, BookmakerCoeff target) {
-        if(origin.isSame(target) && BookmakerUtils.isBackLay(origin, target)) {
+        if(origin.isBackLaySame(target)) {
             return true;
         }
         List<CoeffTypeChain> types = acceptableTypes.get(origin.getTypeChain());
@@ -346,7 +346,7 @@ class LayCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return original.isSame(target) && BookmakerUtils.isBackLay(original, target);
+        return original.isBackLaySame(target);
     }
 
     @Override
