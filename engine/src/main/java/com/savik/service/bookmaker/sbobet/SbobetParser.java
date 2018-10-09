@@ -21,16 +21,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
+import static com.savik.service.bookmaker.CoeffType.AWAY_X;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
+import static com.savik.service.bookmaker.CoeffType.HOME_OR_AWAY;
+import static com.savik.service.bookmaker.CoeffType.HOME_X;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
 import static com.savik.service.bookmaker.CoeffType.UNDER;
+import static com.savik.service.bookmaker.CoeffType.WIN;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.AWAY_MATCH_TOTAL;
+import static com.savik.service.bookmaker.sbobet.SbobetParser.DOUBLE_CHANCES;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HOME_MATCH_TOTAL;
@@ -66,6 +72,7 @@ class SbobetParser {
     public static final int FIRST_HALF__HOME_OR_AWAY = 8;
     public static final int FIRST_HALF_HANDICAP = 7;
     public static final int FIRST_HALF__TOTAL = 9;
+    public static final int DOUBLE_CHANCES = 15;
     public static final int HOME_MATCH_TOTAL = 545;
     public static final int FIRST_HALF_HOME_MATCH_TOTAL = 546;
     public static final int FIRST_HALF_AWAY_MATCH_TOTAL = 548;
@@ -83,6 +90,7 @@ class SbobetParser {
             add(new AwayMatchTotal());
             add(new MatchHomeOrAway());
             add(new FirstHalfHomeOrAway());
+            add(new DoubleChances());
         }
     };
 
@@ -286,8 +294,32 @@ class HomeOrAway extends BetParser {
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
         bookmakerCoeffs.add(underCoeff);
+        bookmakerCoeffs.add(of(homeCoeffValue, period, HOME, WIN));
+        bookmakerCoeffs.add(of(guestCoeffValue, period, AWAY, WIN));
         return bookmakerCoeffs;
     }
+}
+
+class DoubleChances extends BetParser {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType.equals(DOUBLE_CHANCES);
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
+        double homeOrX = coeffValueArray.getDouble(2);
+        double awayOrX = coeffValueArray.getDouble(0);
+        double homeOrAway = coeffValueArray.getDouble(1);
+        List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
+        bookmakerCoeffs.add(of(homeOrX, MATCH, HOME_X));
+        bookmakerCoeffs.add(of(awayOrX, MATCH, AWAY_X));
+        bookmakerCoeffs.add(of(homeOrAway, MATCH, HOME_OR_AWAY));
+        return bookmakerCoeffs;
+    }
+    
 }
 
 class MatchHomeOrAway extends HomeOrAway {

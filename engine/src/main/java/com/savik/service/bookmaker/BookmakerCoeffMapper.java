@@ -86,13 +86,15 @@ public class BookmakerCoeffMapper {
     final static TotalUnderCoeffValueChecker TOTAL_UNDER_COEFF_VALUE_CHECKER = new TotalUnderCoeffValueChecker();
     final static WinCoeffValueChecker WIN_COEFF_VALUE_CHECKER = new WinCoeffValueChecker();
     final static DrawCoeffValueChecker DRAW_COEFF_VALUE_CHECKER = new DrawCoeffValueChecker();
+    final static HomeOrAwayCoeffValueChecker HOME_OR_AWAY_COEFF_VALUE_CHECKER = new HomeOrAwayCoeffValueChecker();
     final static LayCoeffValueChecker LAY_COEFF_VALUE_CHECKER = createLayChecker();
 
     static LayCoeffValueChecker createLayChecker() {
         final LayCoeffValueChecker checker = new LayCoeffValueChecker();
         checker.setCheckers(
                 Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, TOTAL_OVER_COEFF_VALUE_CHECKER, 
-                        TOTAL_UNDER_COEFF_VALUE_CHECKER, WIN_COEFF_VALUE_CHECKER, DRAW_COEFF_VALUE_CHECKER)
+                        TOTAL_UNDER_COEFF_VALUE_CHECKER, WIN_COEFF_VALUE_CHECKER, DRAW_COEFF_VALUE_CHECKER,
+                        HOME_OR_AWAY_COEFF_VALUE_CHECKER)
         );
         return checker;
     }
@@ -114,15 +116,15 @@ public class BookmakerCoeffMapper {
         acceptableCheckers.put(MATCH_AWAY_WIN, commonCheckers());
         acceptableCheckers.put(MATCH_HOME_X, commonCheckers());
         acceptableCheckers.put(MATCH_AWAY_X, commonCheckers());
-        acceptableCheckers.put(MATCH_DRAW, commonCheckers());
-        acceptableCheckers.put(MATCH_HOME_OR_AWAY, commonCheckers());
+        acceptableCheckers.put(MATCH_DRAW, wrapCommonCheckers(HOME_OR_AWAY_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(MATCH_HOME_OR_AWAY, wrapCommonCheckers(DRAW_COEFF_VALUE_CHECKER));
         
         acceptableCheckers.put(FIRST_HALF_HOME_WIN, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_AWAY_WIN, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_HOME_X, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_AWAY_X, commonCheckers());
-        acceptableCheckers.put(FIRST_HALF_DRAW, commonCheckers());
-        acceptableCheckers.put(FIRST_HALF_HOME_OR_AWAY, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_DRAW,  wrapCommonCheckers(HOME_OR_AWAY_COEFF_VALUE_CHECKER));
+        acceptableCheckers.put(FIRST_HALF_HOME_OR_AWAY, wrapCommonCheckers(DRAW_COEFF_VALUE_CHECKER));
         
         acceptableCheckers.put(MATCH_AWAY_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_HOME_HANDICAP, wrapCommonCheckers(HANDICAP_COEFF_VALUE_CHECKER));
@@ -454,6 +456,24 @@ class DrawCoeffValueChecker implements CoeffValueChecker {
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
         return !BookmakerUtils.isBackLay(original, target) && original.isSame(target);
+    }
+
+    @Override
+    public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
+        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+    }
+}
+
+class HomeOrAwayCoeffValueChecker implements CoeffValueChecker {
+
+    @Override
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == HOME_OR_AWAY;
+    }
+
+    @Override
+    public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
+        return !BookmakerUtils.isBackLay(original, target);
     }
 
     @Override

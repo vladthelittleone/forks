@@ -38,9 +38,11 @@ import static com.savik.domain.BookmakerType.PINNACLE;
 import static com.savik.domain.BookmakerType.SBOBET;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
+import static com.savik.service.bookmaker.CoeffType.HOME_OR_AWAY;
 import static com.savik.service.bookmaker.CoeffType.MATCH;
 import static com.savik.service.bookmaker.CoeffType.OVER;
 import static com.savik.service.bookmaker.CoeffType.TOTAL;
@@ -136,7 +138,7 @@ public class CommonIntegrationTest {
         verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());
         verify(forksService, times(1)).verifyExistence(eq(LOKOMOTIV_SCHALKE), lokomotivSchalkeCapture.capture());
         final List<ForkFoundEvent> francePeruForks = francePeruCapture.getValue();
-        assertEquals(8, francePeruForks.size());
+        assertEquals(9, francePeruForks.size());
         assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
@@ -196,6 +198,14 @@ public class CommonIntegrationTest {
                         FRANCE_PERU,
                         new Bet(PINNACLE, BookmakerCoeff.of(0.5, 1.95, FIRST_HALF, AWAY, TOTAL, UNDER)),
                         new Bet(SBOBET, BookmakerCoeff.of(0.5, 3.12, FIRST_HALF, AWAY, TOTAL, OVER))
+                )
+        ));
+
+        assertTrue(francePeruForks.contains(
+                new ForkFoundEvent(
+                        FRANCE_PERU,
+                        new Bet(PINNACLE, BookmakerCoeff.of(4.2, MATCH, DRAW)),
+                        new Bet(SBOBET, BookmakerCoeff.of(1.35, MATCH, HOME_OR_AWAY))
                 )
         ));
 

@@ -3,6 +3,7 @@ package com.savik.service.bookmaker;
 import com.savik.aop.MatchIdLogging;
 import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class BookmakerAggregationService {
         this.bookmakerServices = bookmakerServices;
     }
 
-    //@Async
+    @Async
     @MatchIdLogging
     public CompletableFuture<Void> handle(Match match) {
         List<CompletableFuture<Optional<BookmakerMatchResponse>>> futures = new ArrayList<>();
