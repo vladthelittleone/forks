@@ -34,7 +34,7 @@ public class SbobetBookmakerService extends BookmakerService {
     @Override
     public Optional<BookmakerMatchResponse> handle(BookmakerMatchWrapper bookmakerMatchWrapper) {
         Optional<BookmakerMatchResponse> bookmakerMatchResponse = findMatchInCache(bookmakerMatchWrapper);
-        if (!bookmakerMatchResponse.isPresent() && !cache.dayWasParsed(bookmakerMatchWrapper.getDaysFromToday())) {
+        if (!bookmakerMatchResponse.isPresent()) {
             bookmakerMatchResponse = tryToFindMatch(bookmakerMatchWrapper);
         }
 
@@ -49,19 +49,21 @@ public class SbobetBookmakerService extends BookmakerService {
     }
 
     private synchronized Optional<BookmakerMatchResponse> tryToFindMatch(BookmakerMatchWrapper bookmakerMatchWrapper) {
-        try {
-            Match match = bookmakerMatchWrapper.getMatch();
-            log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
-            List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
-            log.debug("Matches were parsed, amount: " + matches.size());
-            cache.addAll(bookmakerMatchWrapper.getDaysFromToday(), matches);
-            return findMatchInCache(bookmakerMatchWrapper); 
-        } catch (ParseException ex) {
-            log.error("Failed parsing sport={},day: {}", bookmakerMatchWrapper.getMatch().getSportType(), 
-                    bookmakerMatchWrapper.getDaysFromToday());
-            return Optional.empty();
+        if(!cache.dayWasParsed(bookmakerMatchWrapper.getDaysFromToday())) {
+            try {
+                Match match = bookmakerMatchWrapper.getMatch();
+                log.debug("Start parsing sport day page: sport={}, days from today={}", match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
+                List<BookmakerMatchResponse> matches = sbobetParser.getMatchesBySport(match.getSportType(), bookmakerMatchWrapper.getDaysFromToday());
+                log.debug("Matches were parsed, amount: " + matches.size());
+                cache.addAll(bookmakerMatchWrapper.getDaysFromToday(), matches);
+                return findMatchInCache(bookmakerMatchWrapper);
+            } catch (ParseException ex) {
+                log.error("Failed parsing sport={},day: {}", bookmakerMatchWrapper.getMatch().getSportType(),
+                        bookmakerMatchWrapper.getDaysFromToday());
+                return Optional.empty();
+            } 
         }
-        
+        return Optional.empty();
     }
 
     private Optional<BookmakerMatchResponse> findMatchInCache(BookmakerMatchWrapper bookmakerMatchWrapper) {

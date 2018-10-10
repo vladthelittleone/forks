@@ -298,7 +298,7 @@ abstract class CorrectScore extends BetParser {
         for(int i = 0; i < 5; i++) {
             for(int j = 0; j < 5; j++) {
                 final double coeff = coeffValueArray.getDouble(5 * i + j);
-                bookmakerCoeffs.add(BookmakerCoeff.of(i + " - " + j, coeff, period, CORRECT_SCORE));
+                bookmakerCoeffs.add(BookmakerCoeff.of(i + "-" + j, coeff, period, CORRECT_SCORE));
             }
         }
         bookmakerCoeffs.add(BookmakerCoeff.of("AOS", coeffValueArray.getDouble(25), period, CORRECT_SCORE));

@@ -124,9 +124,14 @@ public class CommonIntegrationTest {
 
         // sbobet football
         when(httpClient.getAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, FRANCE_PERU.getDaysFromToday())))
-                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football.html").toURI())))));
+                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_france_peru_day.html").toURI())))));
+        when(httpClient.getAntibot(sbobetConfig.getSportUrl(SportType.FOOTBALL, LOKOMOTIV_SCHALKE.getDaysFromToday())))
+                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_lokomotiv_schalke_day.html").toURI())))));
+        
         when(httpClient.getAntibot(sbobetConfig.getMatchUrl("2276353", bookmakerMatchService.createFromMatch(FRANCE_PERU, SBOBET).get())))
                 .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_france_peru.html").toURI())))));
+        when(httpClient.getAntibot(sbobetConfig.getMatchUrl("2276354", bookmakerMatchService.createFromMatch(LOKOMOTIV_SCHALKE, SBOBET).get())))
+                .thenReturn(Jsoup.parse(new String(Files.readAllBytes(Paths.get(getClass().getClassLoader().getResource("sbobet_football_match_lokomotiv_schalke.html").toURI())))));
     }
 
     @Test
