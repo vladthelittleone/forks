@@ -10,6 +10,7 @@ public enum CoeffType {
     WIN,
     DRAW,
     HOME_OR_AWAY,
+    CORRECT_SCORE,
     FIRST_HALF,
     SECOND_HALF,
     HANDICAP,

@@ -17,6 +17,7 @@ import static com.savik.service.bookmaker.CoeffType.AWAY_X;
 import static com.savik.service.bookmaker.CoeffType.BOTH_NOT_SCORED;
 import static com.savik.service.bookmaker.CoeffType.BOTH_SCORED;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.CORRECT_SCORE;
 import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
@@ -42,6 +43,7 @@ public class BookmakerCoeffMapper {
     final static CoeffTypeChain MATCH_AWAY_X= new CoeffTypeChain(MATCH, AWAY_X);
     final static CoeffTypeChain MATCH_DRAW= new CoeffTypeChain(MATCH, DRAW);
     final static CoeffTypeChain MATCH_HOME_OR_AWAY= new CoeffTypeChain(MATCH, HOME_OR_AWAY);
+    final static CoeffTypeChain MATCH_CORRECT_SCORE= new CoeffTypeChain(MATCH, CORRECT_SCORE);
     
     final static CoeffTypeChain FIRST_HALF_HOME_WIN= new CoeffTypeChain(FIRST_HALF, HOME, WIN);
     final static CoeffTypeChain FIRST_HALF_AWAY_WIN= new CoeffTypeChain(FIRST_HALF, AWAY, WIN);
@@ -49,6 +51,7 @@ public class BookmakerCoeffMapper {
     final static CoeffTypeChain FIRST_HALF_AWAY_X= new CoeffTypeChain(FIRST_HALF, AWAY_X);
     final static CoeffTypeChain FIRST_HALF_DRAW= new CoeffTypeChain(FIRST_HALF, DRAW);
     final static CoeffTypeChain FIRST_HALF_HOME_OR_AWAY= new CoeffTypeChain(FIRST_HALF, HOME_OR_AWAY);
+    final static CoeffTypeChain FIRST_HALF_CORRECT_SCORE= new CoeffTypeChain(FIRST_HALF, CORRECT_SCORE);
     
     final static CoeffTypeChain MATCH_BOTH_SCORED= new CoeffTypeChain(MATCH, BOTH_SCORED);
     final static CoeffTypeChain MATCH_BOTH_NOT_SCORED= new CoeffTypeChain(MATCH, BOTH_NOT_SCORED);
@@ -116,6 +119,7 @@ public class BookmakerCoeffMapper {
         acceptableCheckers.put(MATCH_AWAY_WIN, commonCheckers());
         acceptableCheckers.put(MATCH_HOME_X, commonCheckers());
         acceptableCheckers.put(MATCH_AWAY_X, commonCheckers());
+        acceptableCheckers.put(MATCH_CORRECT_SCORE, commonCheckers());
         acceptableCheckers.put(MATCH_DRAW, wrapCommonCheckers(HOME_OR_AWAY_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(MATCH_HOME_OR_AWAY, wrapCommonCheckers(DRAW_COEFF_VALUE_CHECKER));
         
@@ -123,6 +127,7 @@ public class BookmakerCoeffMapper {
         acceptableCheckers.put(FIRST_HALF_AWAY_WIN, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_HOME_X, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_AWAY_X, commonCheckers());
+        acceptableCheckers.put(FIRST_HALF_CORRECT_SCORE, commonCheckers());
         acceptableCheckers.put(FIRST_HALF_DRAW,  wrapCommonCheckers(HOME_OR_AWAY_COEFF_VALUE_CHECKER));
         acceptableCheckers.put(FIRST_HALF_HOME_OR_AWAY, wrapCommonCheckers(DRAW_COEFF_VALUE_CHECKER));
         
@@ -383,7 +388,7 @@ class HandicapCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isHandicapForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isHandicapForkAcceptableTypes(original.getTypeValueAsDouble(), target.getTypeValueAsDouble());
     }
 
     @Override
@@ -401,7 +406,7 @@ class TotalOverCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(target.getTypeValue(), original.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(target.getTypeValueAsDouble(), original.getTypeValueAsDouble());
     }
 
     @Override
@@ -419,7 +424,7 @@ class TotalUnderCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(original.getTypeValue(), target.getTypeValue());
+        return !BookmakerUtils.isBackLay(original, target) && BookmakerUtils.isTotalForkAcceptableTypes(original.getTypeValueAsDouble(), target.getTypeValueAsDouble());
     }
 
     @Override

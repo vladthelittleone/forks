@@ -25,6 +25,7 @@ import static com.savik.model.BookmakerCoeff.of;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.AWAY_X;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.CORRECT_SCORE;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
 import static com.savik.service.bookmaker.CoeffType.HOME;
@@ -38,6 +39,7 @@ import static com.savik.service.bookmaker.CoeffType.WIN;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.AWAY_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.DOUBLE_CHANCES;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_AWAY_MATCH_TOTAL;
+import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_CORRESCT_SCORE;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF_HOME_MATCH_TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF__HOME_OR_AWAY;
@@ -45,6 +47,7 @@ import static com.savik.service.bookmaker.sbobet.SbobetParser.FIRST_HALF__TOTAL;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.GUEST_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_COEFF_INDEX;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.HOME_MATCH_TOTAL;
+import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_CORRESCT_SCORE;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HANDICAP;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_HOME_OR_AWAY;
 import static com.savik.service.bookmaker.sbobet.SbobetParser.MATCH_TOTAL;
@@ -68,10 +71,12 @@ class SbobetParser {
 
     public static final int MATCH_HANDICAP = 1;
     public static final int MATCH_TOTAL = 3;
+    public static final int MATCH_CORRESCT_SCORE = 4;
     public static final int MATCH_HOME_OR_AWAY = 5;
     public static final int FIRST_HALF__HOME_OR_AWAY = 8;
     public static final int FIRST_HALF_HANDICAP = 7;
     public static final int FIRST_HALF__TOTAL = 9;
+    public static final int FIRST_HALF_CORRESCT_SCORE = 14;
     public static final int DOUBLE_CHANCES = 15;
     public static final int HOME_MATCH_TOTAL = 545;
     public static final int FIRST_HALF_HOME_MATCH_TOTAL = 546;
@@ -91,6 +96,8 @@ class SbobetParser {
             add(new MatchHomeOrAway());
             add(new FirstHalfHomeOrAway());
             add(new DoubleChances());
+            add(new MatchCorrectScore());
+            add(new FirstHalfCorrectScore());
         }
     };
 
@@ -219,7 +226,7 @@ abstract class BetParser {
     abstract List<BookmakerCoeff> apply(JSONArray betArrayContainer);
 }
 
-class CommonHandicap extends BetParser {
+abstract class CommonHandicap extends BetParser {
 
     @Override
     public boolean couldApply(Integer betType) {
@@ -246,7 +253,7 @@ class CommonHandicap extends BetParser {
     }
 }
 
-class CommonTotal extends BetParser {
+abstract class CommonTotal extends BetParser {
 
     @Override
     public boolean couldApply(Integer betType) {
@@ -273,6 +280,32 @@ class CommonTotal extends BetParser {
     }
 }
 
+abstract class CorrectScore extends BetParser {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        throw new UnsupportedOperationException();
+    }
+
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer, CoeffType period) {
+        JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
+        List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
+        for(int i = 0; i < 5; i++) {
+            for(int j = 0; j < 5; j++) {
+                final double coeff = coeffValueArray.getDouble(5 * i + j);
+                bookmakerCoeffs.add(BookmakerCoeff.of(i + " - " + j, coeff, period, CORRECT_SCORE));
+            }
+        }
+        bookmakerCoeffs.add(BookmakerCoeff.of("AOS", coeffValueArray.getDouble(25), period, CORRECT_SCORE));
+        return bookmakerCoeffs;
+    }
+}
+
 class HomeOrAway extends BetParser {
 
     @Override
@@ -289,7 +322,7 @@ class HomeOrAway extends BetParser {
         JSONArray coeffValueArray = betArrayContainer.getJSONArray(2);
         double homeCoeffValue = coeffValueArray.getDouble(0);
         double guestCoeffValue = coeffValueArray.getDouble(2);
-        BookmakerCoeff overCoeff = BookmakerCoeff.of( BookmakerUtils.convertAsianBookmakerWinToHandicap(homeScore, awayScore, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
+        BookmakerCoeff overCoeff = BookmakerCoeff.of(BookmakerUtils.convertAsianBookmakerWinToHandicap(homeScore, awayScore, SideType.HOME), homeCoeffValue, period, HOME, HANDICAP);
         BookmakerCoeff underCoeff = BookmakerCoeff.of(BookmakerUtils.convertAsianBookmakerWinToHandicap(homeScore, awayScore, SideType.AWAY), guestCoeffValue, period, AWAY, HANDICAP);
         List<BookmakerCoeff> bookmakerCoeffs = new ArrayList<>();
         bookmakerCoeffs.add(overCoeff);
@@ -319,7 +352,7 @@ class DoubleChances extends BetParser {
         bookmakerCoeffs.add(of(homeOrAway, MATCH, HOME_OR_AWAY));
         return bookmakerCoeffs;
     }
-    
+
 }
 
 class MatchHomeOrAway extends HomeOrAway {
@@ -449,6 +482,32 @@ class AwayMatchTotal extends CommonTotal {
     @Override
     public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
         return apply(betArrayContainer, MATCH, AWAY);
+    }
+}
+
+class MatchCorrectScore extends CorrectScore {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType.equals(MATCH_CORRESCT_SCORE);
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, MATCH);
+    }
+}
+
+class FirstHalfCorrectScore extends CorrectScore {
+
+    @Override
+    public boolean couldApply(Integer betType) {
+        return betType.equals(FIRST_HALF_CORRESCT_SCORE);
+    }
+
+    @Override
+    public List<BookmakerCoeff> apply(JSONArray betArrayContainer) {
+        return apply(betArrayContainer, MATCH);
     }
 }
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 public class BookmakerCoeff {
 
-    Double typeValue;
+    String typeValue;
 
     Double coeffValue;
 
@@ -25,12 +25,16 @@ public class BookmakerCoeff {
         return of(typeValue, coeffValue, Arrays.asList(types));
     }
 
+    public static BookmakerCoeff of(String typeValue, Double coeffValue, CoeffType... types) {
+        return new BookmakerCoeff(typeValue, coeffValue, new CoeffTypeChain(types));
+    }
+
     public static BookmakerCoeff of(Double coeffValue, CoeffType... types) {
         return of(null, coeffValue, Arrays.asList(types));
     }
 
     public static BookmakerCoeff of(Double typeValue, Double coeffValue, List<CoeffType> types) {
-        return new BookmakerCoeff(typeValue, coeffValue, new CoeffTypeChain(types));
+        return new BookmakerCoeff(String.valueOf(typeValue), coeffValue, new CoeffTypeChain(types));
     }
 
     public BookmakerCoeff lay() {
@@ -38,17 +42,21 @@ public class BookmakerCoeff {
         return this;
     }
 
-    public BookmakerCoeff(Double typeValue, Double coeffValue, CoeffTypeChain typeChain) {
+    public BookmakerCoeff(String typeValue, Double coeffValue, CoeffTypeChain typeChain) {
         this.typeValue = typeValue;
         this.coeffValue = coeffValue;
         this.typeChain = typeChain;
     }
 
-    public BookmakerCoeff(Double typeValue, Double coeffValue, CoeffTypeChain typeChain, boolean lay) {
+    public BookmakerCoeff(String typeValue, Double coeffValue, CoeffTypeChain typeChain, boolean lay) {
         this.typeValue = typeValue;
         this.coeffValue = coeffValue;
         this.typeChain = typeChain;
         this.lay = lay;
+    }
+
+    public Double getTypeValueAsDouble() {
+        return Double.valueOf(typeValue);
     }
 
     public boolean isBetCompatibleByMeaning(BookmakerCoeff anotherCoeff) {
