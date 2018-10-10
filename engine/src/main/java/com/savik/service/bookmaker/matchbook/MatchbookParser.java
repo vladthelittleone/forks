@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static com.savik.service.bookmaker.CoeffType.BOTH_NOT_SCORED;
 import static com.savik.service.bookmaker.CoeffType.BOTH_SCORED;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.CORRECT_SCORE;
 import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
@@ -49,6 +50,7 @@ class MatchbookParser {
         List<Market> markets = event.getMarkets();
         coeffs.addAll(parseHandicaps(event, markets));
         coeffs.addAll(parseBTS(markets));
+        coeffs.addAll(parseCorrectScores(markets));
         coeffs.addAll(parseResults(MarketType.ONE_X_TWO, MATCH, event, markets));
         coeffs.addAll(parseResults(MarketType.FIRST_HALF_ONE_X_TWO, FIRST_HALF, event, markets));
         coeffs.addAll(parseTotals(MarketType.TOTAL, MATCH, markets));
@@ -96,7 +98,28 @@ class MatchbookParser {
                 }
             }
         }
-            
+        
+        return coeffs;
+    }
+
+    private List<BookmakerCoeff> parseCorrectScores(List<Market> markets) {
+        List<BookmakerCoeff> coeffs = new ArrayList<>();
+        final Optional<Market> bts = markets.stream().filter(m -> m.getMarketType() == MarketType.CORRECT_SCORE).findAny();
+        if(bts.isPresent()) {
+            List<Runner> runners = bts.get().getRunners();
+            for (Runner runner : runners) {
+                final String name = runner.getName();
+                List<Price> prices = runner.getPrices();
+                for (Price price : prices) {
+                    if (price.getSide() == Side.BACK) {
+                        coeffs.add(BookmakerCoeff.of(name, price.getDecimalOdds(), MATCH, CORRECT_SCORE));
+                    } else {
+                        coeffs.add(BookmakerCoeff.of(name, BookmakerUtils.convertLayCoeff(price.getDecimalOdds()), MATCH, CORRECT_SCORE).lay());
+                    }
+                }
+            }
+        }
+        
         return coeffs;
     }
 

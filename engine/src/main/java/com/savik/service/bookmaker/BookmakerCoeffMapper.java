@@ -90,6 +90,7 @@ public class BookmakerCoeffMapper {
     final static WinCoeffValueChecker WIN_COEFF_VALUE_CHECKER = new WinCoeffValueChecker();
     final static DrawCoeffValueChecker DRAW_COEFF_VALUE_CHECKER = new DrawCoeffValueChecker();
     final static HomeOrAwayCoeffValueChecker HOME_OR_AWAY_COEFF_VALUE_CHECKER = new HomeOrAwayCoeffValueChecker();
+    final static CorrectScoreCoeffValueChecker CORRECT_SCORE_COEFF_VALUE_CHECKER = new CorrectScoreCoeffValueChecker();
     final static LayCoeffValueChecker LAY_COEFF_VALUE_CHECKER = createLayChecker();
 
     static LayCoeffValueChecker createLayChecker() {
@@ -97,7 +98,7 @@ public class BookmakerCoeffMapper {
         checker.setCheckers(
                 Arrays.asList(HANDICAP_COEFF_VALUE_CHECKER, TOTAL_OVER_COEFF_VALUE_CHECKER, 
                         TOTAL_UNDER_COEFF_VALUE_CHECKER, WIN_COEFF_VALUE_CHECKER, DRAW_COEFF_VALUE_CHECKER,
-                        HOME_OR_AWAY_COEFF_VALUE_CHECKER)
+                        HOME_OR_AWAY_COEFF_VALUE_CHECKER, CORRECT_SCORE_COEFF_VALUE_CHECKER)
         );
         return checker;
     }
@@ -155,6 +156,20 @@ public class BookmakerCoeffMapper {
                 Arrays.asList(
                         MATCH_BOTH_SCORED,
                         MATCH_BOTH_NOT_SCORED
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        MATCH_CORRECT_SCORE,
+                        MATCH_CORRECT_SCORE
+                )
+        );
+
+        createMatching(
+                Arrays.asList(
+                        FIRST_HALF_CORRECT_SCORE,
+                        FIRST_HALF_CORRECT_SCORE
                 )
         );
 
@@ -479,6 +494,24 @@ class HomeOrAwayCoeffValueChecker implements CoeffValueChecker {
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
         return !BookmakerUtils.isBackLay(original, target);
+    }
+
+    @Override
+    public boolean isFork(BookmakerCoeff original, BookmakerCoeff target) {
+        return BookmakerUtils.isFork(original.getCoeffValue(), target.getCoeffValue());
+    }
+}
+
+class CorrectScoreCoeffValueChecker implements CoeffValueChecker {
+
+    @Override
+    public boolean canCheck(CoeffTypeChain targetChain) {
+        return targetChain.getLastChild() == CORRECT_SCORE;
+    }
+
+    @Override
+    public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
+        return BookmakerUtils.isBackLay(original, target) && original.isSame(target);
     }
 
     @Override

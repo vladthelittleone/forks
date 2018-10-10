@@ -301,7 +301,6 @@ abstract class CorrectScore extends BetParser {
                 bookmakerCoeffs.add(BookmakerCoeff.of(i + "-" + j, coeff, period, CORRECT_SCORE));
             }
         }
-        bookmakerCoeffs.add(BookmakerCoeff.of("AOS", coeffValueArray.getDouble(25), period, CORRECT_SCORE));
         return bookmakerCoeffs;
     }
 }

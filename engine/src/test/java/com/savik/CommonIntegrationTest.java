@@ -32,12 +32,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static com.savik.domain.BookmakerType.MATCHBOOK;
 import static com.savik.domain.BookmakerType.PINNACLE;
 import static com.savik.domain.BookmakerType.SBOBET;
 import static com.savik.service.bookmaker.CoeffType.AWAY;
 import static com.savik.service.bookmaker.CoeffType.COMMON;
+import static com.savik.service.bookmaker.CoeffType.CORRECT_SCORE;
 import static com.savik.service.bookmaker.CoeffType.DRAW;
 import static com.savik.service.bookmaker.CoeffType.FIRST_HALF;
 import static com.savik.service.bookmaker.CoeffType.HANDICAP;
@@ -141,7 +143,6 @@ public class CommonIntegrationTest {
         ArgumentCaptor<List> francePeruCapture = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> lokomotivSchalkeCapture = ArgumentCaptor.forClass(List.class);
         verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());
-        verify(forksService, times(1)).verifyExistence(eq(LOKOMOTIV_SCHALKE), lokomotivSchalkeCapture.capture());
         final List<ForkFoundEvent> francePeruForks = francePeruCapture.getValue();
         assertEquals(9, francePeruForks.size());
         assertTrue(francePeruForks.contains(
@@ -215,8 +216,9 @@ public class CommonIntegrationTest {
         ));
 
 
-        final List<ForkFoundEvent> lokomotivSchalkeForks = lokomotivSchalkeCapture.getValue();
-        assertEquals(3, lokomotivSchalkeForks.size());
+        verify(forksService, times(2)).verifyExistence(eq(LOKOMOTIV_SCHALKE), lokomotivSchalkeCapture.capture());
+        final List<ForkFoundEvent> lokomotivSchalkeForks = lokomotivSchalkeCapture.getAllValues().stream().flatMap(List<ForkFoundEvent>::stream).collect(Collectors.toList());
+        assertEquals(7, lokomotivSchalkeForks.size());
 
 
         assertTrue(lokomotivSchalkeForks.contains(
@@ -240,6 +242,38 @@ public class CommonIntegrationTest {
                         LOKOMOTIV_SCHALKE,
                         new Bet(PINNACLE, BookmakerCoeff.of(3.9, MATCH, HOME, WIN)),
                         new Bet(MATCHBOOK, BookmakerCoeff.of(1.34965, MATCH, HOME, WIN).lay()) // lay 3.86
+                )
+        ));
+
+        assertTrue(lokomotivSchalkeForks.contains(
+                new ForkFoundEvent(
+                        LOKOMOTIV_SCHALKE,
+                        new Bet(SBOBET, BookmakerCoeff.of("1-3",65., MATCH, CORRECT_SCORE)),
+                        new Bet(MATCHBOOK, BookmakerCoeff.of("1-3",1.038462, MATCH, CORRECT_SCORE).lay()) // lay 27
+                )
+        ));
+
+        assertTrue(lokomotivSchalkeForks.contains(
+                new ForkFoundEvent(
+                        LOKOMOTIV_SCHALKE,
+                        new Bet(SBOBET, BookmakerCoeff.of("0-3",135., MATCH, CORRECT_SCORE)),
+                        new Bet(MATCHBOOK, BookmakerCoeff.of("0-3",1.037037, MATCH, CORRECT_SCORE).lay()) // lay 28
+                )
+        ));
+
+        assertTrue(lokomotivSchalkeForks.contains(
+                new ForkFoundEvent(
+                        LOKOMOTIV_SCHALKE,
+                        new Bet(SBOBET, BookmakerCoeff.of("0-0",10.5, MATCH, CORRECT_SCORE)),
+                        new Bet(MATCHBOOK, BookmakerCoeff.of("0-0",1.121951, MATCH, CORRECT_SCORE).lay()) // lay 9.2
+                )
+        ));
+
+        assertTrue(lokomotivSchalkeForks.contains(
+                new ForkFoundEvent(
+                        LOKOMOTIV_SCHALKE,
+                        new Bet(SBOBET, BookmakerCoeff.of("0-1",13.5, MATCH, CORRECT_SCORE)),
+                        new Bet(MATCHBOOK, BookmakerCoeff.of("0-1",1.15625, MATCH, CORRECT_SCORE).lay()) // lay 7.4
                 )
         ));
 
