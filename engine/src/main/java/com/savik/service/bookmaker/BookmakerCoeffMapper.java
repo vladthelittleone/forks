@@ -475,7 +475,7 @@ class DrawCoeffValueChecker implements CoeffValueChecker {
 
     @Override
     public boolean isCompatible(BookmakerCoeff original, BookmakerCoeff target) {
-        return !BookmakerUtils.isBackLay(original, target) && original.isSame(target);
+        return !BookmakerUtils.isBackLay(original, target);
     }
 
     @Override

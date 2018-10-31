@@ -146,7 +146,6 @@ public class CommonIntegrationTest {
         ArgumentCaptor<List> lokomotivSchalkeCapture = ArgumentCaptor.forClass(List.class);
         verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());
         final List<ForkFoundEvent> francePeruForks = francePeruCapture.getValue();
-        assertEquals(9, francePeruForks.size());
         assertTrue(francePeruForks.contains(
                 new ForkFoundEvent(
                         FRANCE_PERU,
@@ -216,11 +215,11 @@ public class CommonIntegrationTest {
                         new Bet(SBOBET, BookmakerCoeff.of(1.35, MATCH, HOME_OR_AWAY))
                 )
         ));
+        assertEquals(9, francePeruForks.size());
 
 
         verify(forksService, times(2)).verifyExistence(eq(LOKOMOTIV_SCHALKE), lokomotivSchalkeCapture.capture());
         final List<ForkFoundEvent> lokomotivSchalkeForks = lokomotivSchalkeCapture.getAllValues().stream().flatMap(List<ForkFoundEvent>::stream).collect(Collectors.toList());
-        assertEquals(7, lokomotivSchalkeForks.size());
 
 
         assertTrue(lokomotivSchalkeForks.contains(
@@ -278,6 +277,7 @@ public class CommonIntegrationTest {
                         new Bet(MATCHBOOK, BookmakerCoeff.of("0-1",1.15625, MATCH, CORRECT_SCORE).lay()) // lay 7.4
                 )
         ));
+        assertEquals(7, lokomotivSchalkeForks.size());
 
     }
 }
