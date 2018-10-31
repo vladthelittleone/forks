@@ -48,6 +48,17 @@ public class SchedulerConfig implements SchedulingConfigurer, AsyncConfigurer {
     }
 
     @Bean
+    public Executor slowBookmakersExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setThreadNamePrefix("slow-bookmakers-task-pool-");
+        threadPoolTaskExecutor.setMaxPoolSize(POOL_SIZE);
+        threadPoolTaskExecutor.setCorePoolSize(4);
+        threadPoolTaskExecutor.setDaemon(true);
+        threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
+    }
+
+    @Bean
     public Executor arbPrechecker() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setThreadNamePrefix("arb-prechecker-");

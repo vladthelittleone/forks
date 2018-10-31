@@ -1,27 +1,46 @@
 package com.savik.config;
 
+import com.savik.service.EngineService;
+import com.savik.service.bookmaker.BookmakerAggregationService;
+import com.savik.service.bookmaker.BookmakerService;
+import com.savik.service.bookmaker.FastBookmaker;
+import com.savik.service.bookmaker.SlowBookmaker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.Executor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 public class EngineConfiguration {
-
+    
+    @Autowired
+    List<BookmakerService> bookmakerServices;
+    
     @Bean
-    public Executor asyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(60);
-        executor.setMaxPoolSize(60);
-        executor.setQueueCapacity(10000);
-        executor.setAllowCoreThreadTimeOut(true);
-        executor.setThreadNamePrefix("Engine-");
-        executor.initialize();
-        return executor;
+    public BookmakerAggregationService slowAggregationService() {
+        return new BookmakerAggregationService(bookmakerServices.stream()
+                .filter(b -> b.getClass().getAnnotation(SlowBookmaker.class) != null).collect(Collectors.toList()));
+    }
+    
+    @Bean
+    public BookmakerAggregationService fastAggregationService() {
+        return new BookmakerAggregationService(bookmakerServices.stream()
+                .filter(b -> b.getClass().getAnnotation(FastBookmaker.class) != null).collect(Collectors.toList()));
+    }
+    
+    @Bean
+    public EngineService slowBooksEngineService() {
+        return new EngineService(slowAggregationService());
+    }
+    
+    @Bean
+    public EngineService fastBooksEngineService() {
+        return new EngineService(fastAggregationService());
     }
 
     @Bean

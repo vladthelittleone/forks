@@ -4,7 +4,6 @@ import com.savik.aop.MatchIdLogging;
 import com.savik.domain.Match;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
-@Service
 @Log4j2
 public class BookmakerAggregationService {
 

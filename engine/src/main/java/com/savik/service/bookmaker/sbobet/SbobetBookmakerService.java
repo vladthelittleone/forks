@@ -6,6 +6,7 @@ import com.savik.exception.ParseException;
 import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
+import com.savik.service.bookmaker.SlowBookmaker;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Log4j2
+@SlowBookmaker
 public class SbobetBookmakerService extends BookmakerService {
 
     @Autowired

@@ -63,7 +63,7 @@ public class ForksService {
                 .append(", date= ").append(event.getMatch().getDate())
                 .append("\n old fork ").append(BookmakerUtils.formatFork(first.getBookmakerCoeff(), second.getBookmakerCoeff()))
                 .append("\n b1=").append(first).append("\n b2=").append(second)
-                .append("\n updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(), optionalSecondUpdatedBet.get()))
+                .append("\n\n updated fork ").append(BookmakerUtils.formatFork(optionalFirstUpdatedBet.get(), optionalSecondUpdatedBet.get()))
                 .append("\n b1=").append(optionalFirstUpdatedBet.get()).append("\n b2=").append(optionalSecondUpdatedBet.get())
                 .append("\n\n");
         log.info(builder.toString());

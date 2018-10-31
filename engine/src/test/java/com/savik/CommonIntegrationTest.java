@@ -31,7 +31,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.savik.domain.BookmakerType.MATCHBOOK;
@@ -65,7 +64,10 @@ public class CommonIntegrationTest {
 
 
     @Autowired
-    EngineService engineService;
+    EngineService slowBooksEngineService;
+
+    @Autowired
+    EngineService fastBooksEngineService;
 
     @Autowired
     PinnacleConfig pinnacleConfig;
@@ -138,8 +140,8 @@ public class CommonIntegrationTest {
 
     @Test
     public void test() {
-        CompletableFuture<Void> future = engineService.handle(matches);
-        future.join();
+        slowBooksEngineService.handle(matches).join();
+        fastBooksEngineService.handle(matches).join();
         ArgumentCaptor<List> francePeruCapture = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> lokomotivSchalkeCapture = ArgumentCaptor.forClass(List.class);
         verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());

@@ -23,7 +23,7 @@ public abstract class BookmakerService {
 
     @Autowired
     BookmakerEventPublisher bookmakerEventPublisher;
-    
+
     Map<BookmakerType, Set<String>> cache = new HashMap<>();
 
     protected abstract BookmakerType getBookmakerType();
@@ -33,14 +33,14 @@ public abstract class BookmakerService {
     public CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match) {
         return handle(match, true);
     }
-    
+
     public CompletableFuture<Optional<BookmakerMatchResponse>> handleWithoutPublishing(Match match) {
         return handle(match, false);
     }
 
     private CompletableFuture<Optional<BookmakerMatchResponse>> handle(Match match, boolean publish) {
         Optional<BookmakerMatchWrapper> bookmakerMatchOptional = bookmakerMatchService.createFromMatch(match, getBookmakerType());
-        if(!bookmakerMatchOptional.isPresent()) {
+        if (!bookmakerMatchOptional.isPresent()) {
             log.debug(String.format("Match bookmaker matching wasn't found. %s, id: %s. %s-%s", getBookmakerType(),
                     match.getFlashscoreId(), match.getHomeTeam().getName(), match.getAwayTeam().getName()));
             bookmakerEventPublisher.publishMatchInfoNotFoundForBookmaker(match, getBookmakerType());
@@ -50,18 +50,18 @@ public abstract class BookmakerService {
         Optional<BookmakerMatchResponse> info = handle(bookmakerMatchWrapper);
         if (info.isPresent()) {
             log.trace("Match was parsed:" + info.get());
-            if(publish) {
+            if (publish) {
                 bookmakerEventPublisher.publishMatchResponse(info.get(), bookmakerMatchWrapper);
             }
         } else {
             cache.putIfAbsent(getBookmakerType(), ConcurrentHashMap.newKeySet());
-            if(!cache.get(getBookmakerType()).contains(match.getFlashscoreId())) {
+            if (!cache.get(getBookmakerType()).contains(match.getFlashscoreId())) {
                 log.info(String.format("Match wasn't found in line: %s, %s, %s", getBookmakerType(),
                         bookmakerMatchWrapper.getDefaultLogString(), bookmakerMatchWrapper.getBookmakerLeague().getName()));
                 cache.get(getBookmakerType()).add(match.getFlashscoreId());
             }
-            
-            if(publish) {
+
+            if (publish) {
                 bookmakerEventPublisher.publishMatchNotFound(bookmakerMatchWrapper);
             }
         }

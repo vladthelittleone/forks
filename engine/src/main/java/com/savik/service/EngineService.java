@@ -3,19 +3,19 @@ package com.savik.service;
 import com.savik.domain.Match;
 import com.savik.service.bookmaker.BookmakerAggregationService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Service
 @Log4j2
 public class EngineService {
 
-    @Autowired
     BookmakerAggregationService bookmakerAggregationService;
+
+    public EngineService(BookmakerAggregationService bookmakerAggregationService) {
+        this.bookmakerAggregationService = bookmakerAggregationService;
+    }
 
     public CompletableFuture<Void> handle(List<Match> matches) {
         log.info("Start handling matches, size = " + matches.size());

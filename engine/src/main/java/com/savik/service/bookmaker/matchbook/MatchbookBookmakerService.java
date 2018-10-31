@@ -5,6 +5,7 @@ import com.savik.domain.SportType;
 import com.savik.model.BookmakerMatchWrapper;
 import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
+import com.savik.service.bookmaker.FastBookmaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static com.savik.domain.BookmakerType.MATCHBOOK;
 
 @Service
+@FastBookmaker
 public class MatchbookBookmakerService extends BookmakerService {
 
     @Autowired

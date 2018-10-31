@@ -1,9 +1,10 @@
 package com.savik.service.bookmaker.pinnacle;
 
 import com.savik.domain.BookmakerType;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
+import com.savik.service.bookmaker.FastBookmaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
+@FastBookmaker
 public class PinnacleBookmakerService extends BookmakerService {
 
     @Autowired
