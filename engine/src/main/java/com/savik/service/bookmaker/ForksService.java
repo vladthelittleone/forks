@@ -29,7 +29,7 @@ public class ForksService {
     @Autowired
     BookmakerEventPublisher bookmakerEventPublisher;
 
-    @Async(value = "arbPrechecker")
+    @Async("arbPrechecker")
     public void verifyExistence(Match match, List<ForkFoundEvent> forks) {
         final Set<BookmakerType> bookmakers = forks.stream()
                 .map(e -> Arrays.asList(e.getFirst().getBookmakerType(), e.getSecond().getBookmakerType()))

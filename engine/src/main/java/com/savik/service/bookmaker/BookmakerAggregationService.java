@@ -27,9 +27,18 @@ public class BookmakerAggregationService {
         this.bookmakerServices = bookmakerServices;
     }
 
-    @Async
+    @Async("slowBookmakersExecutor")
+    public CompletableFuture<Void> slowHandle(Match match) {
+        return handle(match);
+    }
+
+    @Async("fastBookmakersExecutor")
+    public CompletableFuture<Void> fastHandle(Match match) {
+        return handle(match);
+    }
+
     @MatchIdLogging
-    public CompletableFuture<Void> handle(Match match) {
+    private CompletableFuture<Void> handle(Match match) {
         List<CompletableFuture<Optional<BookmakerMatchResponse>>> futures = new ArrayList<>();
         for (BookmakerService bookmakerService : bookmakerServices) {
             log.info(String.format("Start handling match. matchId: %s, bookmaker service: %s, ", match.getFlashscoreId(), bookmakerService.getBookmakerType()));

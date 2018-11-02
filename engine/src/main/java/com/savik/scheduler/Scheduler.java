@@ -29,12 +29,12 @@ public class Scheduler {
 
     @Scheduled(fixedDelay = 1000 * 60 * 5, initialDelay = 5_000)
     public void slowBookmakersTodayMatches() {
-        handle(matches -> slowBooksEngineService.handle(matches));
+        handle(matches -> slowBooksEngineService.slowHandle(matches));
     }
 
     @Scheduled(fixedDelay = 1, initialDelay = 5_000)
     public void fastBookmakersTodayMatches() {
-        handle(matches -> fastBooksEngineService.handle(matches));
+        handle(matches -> fastBooksEngineService.fastHandle(matches));
     }
 
     private void handle(Function<List<Match>, CompletableFuture<Void>> matchesHandler) {

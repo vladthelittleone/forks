@@ -140,8 +140,8 @@ public class CommonIntegrationTest {
 
     @Test
     public void test() {
-        slowBooksEngineService.handle(matches).join();
-        fastBooksEngineService.handle(matches).join();
+        slowBooksEngineService.slowHandle(matches).join();
+        fastBooksEngineService.fastHandle(matches).join();
         ArgumentCaptor<List> francePeruCapture = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> lokomotivSchalkeCapture = ArgumentCaptor.forClass(List.class);
         verify(forksService, times(1)).verifyExistence(eq(FRANCE_PERU), francePeruCapture.capture());

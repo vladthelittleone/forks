@@ -4,20 +4,21 @@ import com.savik.domain.BookmakerType;
 import com.savik.domain.Match;
 import com.savik.domain.MatchStatus;
 import com.savik.model.BookmakerCoeff;
-import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.model.BookmakerMatchWrapper;
+import com.savik.service.bookmaker.BookmakerMatchResponse;
 import com.savik.service.bookmaker.BookmakerService;
+import com.savik.service.bookmaker.SlowBookmaker;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.savik.domain.BookmakerType.MARATHON;
 
-@Component
+//@Component
 @Log4j2
+@SlowBookmaker
 public class MarathonBookmakerService extends BookmakerService {
 
     @Autowired
