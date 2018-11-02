@@ -95,30 +95,25 @@ public class Parser {
         System.out.println("return matches;");
 
 
-        final List<BookmakerType> types = Arrays.asList(BookmakerType.values());
-        for (BookmakerType type : types) {
-            Set<String> ids = new HashSet<>();
-            System.out.println("\n\n\n\n");
+        Set<String> ids = new HashSet<>();
+        System.out.println("\n\n\n\n");
 
-            for (Map.Entry<String, List<Match>> entry : matchesByLeague.entrySet()) {
-                final String leagueId = entry.getKey();
-                System.out.println("/*  " + leagueId + ", " + FlashscoreLeagues.FOOTBALL.getById(leagueId) + " */");
-                final List<Match> value = entry.getValue();
-                for (Match match : value) {
-                    final Optional<BookmakerTeam> homeTeam = teamRepository.findById(new BookmakerPK(match.getHomeTeam().getFlashscoreId(), BookmakerType.SBOBET));
-                    if (!homeTeam.isPresent() && !ids.contains(match.getHomeTeam().getFlashscoreId())) {
-                        ids.add(match.getHomeTeam().getFlashscoreId());
-                        System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getHomeTeam().getFlashscoreId() + "', '', '" + match.getHomeTeam().getName() + "');");
-                    }
-                    final Optional<BookmakerTeam> awayTeam = teamRepository.findById(new BookmakerPK(match.getAwayTeam().getFlashscoreId(), BookmakerType.SBOBET));
-                    if (!awayTeam .isPresent() && !ids.contains(match.getAwayTeam().getFlashscoreId())) {
-                        ids.add(match.getAwayTeam().getFlashscoreId());
-                        System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('" + type + "', '" + match.getAwayTeam().getFlashscoreId() + "', '', '" + match.getAwayTeam().getName() + "');");
-                    }
+        for (Map.Entry<String, List<Match>> entry : matchesByLeague.entrySet()) {
+            final String leagueId = entry.getKey();
+            System.out.println("/*  " + leagueId + ", " + FlashscoreLeagues.FOOTBALL.getById(leagueId) + " */");
+            final List<Match> value = entry.getValue();
+            for (Match match : value) {
+                final Optional<BookmakerTeam> homeTeam = teamRepository.findById(new BookmakerPK(match.getHomeTeam().getFlashscoreId(), BookmakerType.SBOBET));
+                if (!homeTeam.isPresent() && !ids.contains(match.getHomeTeam().getFlashscoreId())) {
+                    ids.add(match.getHomeTeam().getFlashscoreId());
+                    System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('SBOBET', '" + match.getHomeTeam().getFlashscoreId() + "', '', '" + match.getHomeTeam().getName() + "');");
+                }
+                final Optional<BookmakerTeam> awayTeam = teamRepository.findById(new BookmakerPK(match.getAwayTeam().getFlashscoreId(), BookmakerType.SBOBET));
+                if (!awayTeam .isPresent() && !ids.contains(match.getAwayTeam().getFlashscoreId())) {
+                    ids.add(match.getAwayTeam().getFlashscoreId());
+                    System.out.println("INSERT INTO PUBLIC.BOOKMAKER_TEAM(BOOKMAKER_TYPE, ITEM_FLASHSCORE_ID, BOOKMAKER_ID, NAME) VALUES('SBOBET', '" + match.getAwayTeam().getFlashscoreId() + "', '', '" + match.getAwayTeam().getName() + "');");
                 }
             }
-            
-            
         }
 
 
